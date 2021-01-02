@@ -1,0 +1,33 @@
+extend layout
+
+block content
+    .salis(style={"margin-left":"20%","margin-right":"20%", "border":"Solid", "border-color":"blue", "height":"85vh", "margin-top":"1%"})
+        h2(style={"text-align":"center", "margin-top":"2%"}) Register
+        hr
+        form( action="/register" method="post" enctype="multipart/form-data")
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-6
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) First Name
+                    input(type="text" class="form-control" name="fname" style={"margin-right": "10px"})
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Last Name
+                    input(type="text" class="form-control" name="lname" style={"margin-right": "10px"})
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) School
+                    input(type="text" class="form-control" name="school" style={"margin-right": "10px"})
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Department
+                    input(type="text" class="form-control" name="dept" style={"margin-right": "10px"})
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Email
+                    input(type="text" class="form-control" name="email" style={"margin-right": "10px"})
+                    
+                .col-md-6
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Level
+                    input(type="text" class="form-control" name="lvl" style={"margin-right": "10px"})
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Username
+                    input(type="text" class="form-control" name="user" style={"margin-right": "10px"})
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Password
+                    input(type="password" class="form-control" name="pwd" style={"margin-right": "10px"})
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Confirm Password
+                    input(type="password" class="form-control" name="cpwd" style={"margin-right": "10px"})
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Profile Pic
+                    input(type="file" class="form-control" name="pic" style={"margin-right": "10px"})
+            
+                button(type='submit' class='btn btn-primary' id="rmf3b", style={"margin-left":"20%","margin-right":"20%","margin-top":"2%", "width":"98%"}) Register
