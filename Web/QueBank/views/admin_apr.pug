@@ -1,0 +1,53 @@
+block header
+    link(rel='stylesheet', href='/stylesheets/slider.css')
+
+block content
+    div(style={"overflow":"auto", "height":"85vh"})
+        h4 Use this panel to Approve or Delete Questions
+        hr
+        .salis(style={"margin-left":"15%","margin-right":"15%", "border":"Solid", "border-color":"blue", "height":"35vh", "margin-top":"1%", "background-color":"lightblue"})
+            h2(style={"text-align":"center", "margin-top":"2%"}) Select
+            hr
+            form(action="/approve", method='post')
+                .row(style={"width":"98%", "margin-left":"15px"})
+                    .col-md-3
+                        p(style={"margin-right": "10px"}) No of Questions
+                        input(type="text" class="form-control" name="noOfQ" style={"margin-right": "10px"} id="noOfQ")
+
+                    .col-md-3
+                        p(style={"margin-right": "10px"}) Course
+                        select.custom-select(style={"margin-right": "10px"}, name="course", id='course', onchange='getSC()')
+                            option(selected='') Select Course
+                            option(value='ana') Anatomy
+                            option(value='phy') Physiology
+                            option(value='bio') Biochemistry
+                            option(value='fmt') Forensic Medicine and Toxicology
+                            option(value='mcb') Microbiology
+                            option(value='pth') Pathology
+                            option(value='phm') Pharmacology
+                            option(value='ans') Anesthesiology
+                            option(value='cms') Community Medicine
+                            option(value='dav') Dermatology and Venereology
+                            option(value='obg') Obstetrics and Gynecology
+                            option(value='opt') Ophthalmology
+                            option(value='ort') Orthopaedics
+                            option(value='oto') Otorhinolaryngology
+                            option(value='pea') Paediatrics
+                            option(value='psy') Psychiatry
+                            option(value='sgy') Surgery   
+                        
+                    .col-md-3
+                        p(style={"margin-right": "10px"}) Sub Course
+                        select.custom-select(style={"margin-right": "10px"}, name="subcourse", id='subcourse', onchange='getTopics()')
+                            option(selected='') Sub Course
+
+                    .col-md-3
+                        p(style={"margin-right": "10px"}) Topic
+                        select.custom-select(style={"margin-right": "10px"}, name="topic", id='topic')
+                            option(selected='') Select Topic
+                button(type="submit" style={"color":"white", "width":"90%", "margin-top":"20px", "margin-right":"20px"} class="btn btn-primary float-right") Get Questions
+
+
+        
+block scripts
+    script(src='/javascripts/slider.js')
