@@ -1,0 +1,35 @@
+extend layout
+
+block content
+    .row(style={"margin-top": "3%", "width":"96%"})
+        .col-md-3()
+        
+        .col-md-6(style={"background-color": "lightblue", "border-color:":"white", "width":"96%"})
+            .salis(style={"width":"98%", "margin":"1%", "border":"Solid", "border-color":"blue", "height":"50vh", "overflow": "auto"})
+                h2(style={"text-align":"center", "margin-top":"2%"}) Add Essay Question
+                hr
+                form(action="/registeress", method="post")
+                    .row(style={"width":"96%", "margin-left":"15px"})
+                        .col-md-3
+                            p(style={"margin-top":"10px",}) Past Question
+                        .col-md-9
+                            select.custom-select(style={"margin-right": "10px"}, name="pastq", id="pastq")
+                                option(selected='') Select Past Question
+                                - if(data.length > 0)
+                                    - for(i of data)
+                                        option(value=`${i}`) !{i}
+                    .row(style={"width":"96%", "margin-left":"15px", "margin-top":"10px"})
+                        .col-md-3
+                            p(style={"margin-right": "10px"}) Question label
+                        .col-md-9
+                            input(type="text" class="form-control" id="qlabel" name="qlabel" style={"margin-right": "10px"})
+                                
+                    .row(style={"width":"96%", "margin-left":"15px", "margin-top":"10px"})
+                        .col-md-3
+                            p(style={"margin-top":"10px",}) Question
+                        .col-md-9
+                            textarea.autofocus(autofocus name="Question" id="question" class="md-textarea form-control" rows="3")
+
+                    button(type='submit' style={"color":"white", "width":"90%", "margin-top":"20px", "margin-right":"20px"} class="btn btn-primary float-right") Add Question
+                    
+        .col-md-3()

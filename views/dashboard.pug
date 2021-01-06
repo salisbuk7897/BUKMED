@@ -1,0 +1,34 @@
+extend layout
+
+block content
+    div(style={"margin-left":"2%", "width":"96%"})
+        .row(style={"width":"98%","margin-top":"2%"})
+            .col-md-6.float-right
+                img(src=`data:image/gif;base64,${pic}`, class="float-right" style={"border-radius":"50%", "height":"130px", "width":"110px"})
+            .col.md-6(style={"margin":"auto"})
+                h3(style={"color":"blue"}) !{fname} !{lname}
+                h5(style={"color":"blue"}) Level: !{clevel}
+        hr
+        h3 Information
+        hr(style={"margin":"0"})
+        .row
+            .col-md-6
+                h5(style={"margin-top":"10px"}) School: 
+                p(style={"color":"blue","font-size":"18px"}) !{school}
+                h5(style={"margin-top":"10px"}) Department:
+                p(style={"color":"blue","font-size":"18px"}) !{dept}
+            .col-md-6
+                h5(style={"margin-top":"10px"}) Email:
+                p(style={"color":"blue","font-size":"18px"}) !{email}
+                h5(style={"margin-top":"10px"}) Level:
+                p(style={"color":"blue","font-size":"18px"}) !{lvl}
+        br
+        h3 Contributions
+        hr(style={"margin":"0"})
+        .row
+            .col-md-6
+                h5(style={"margin-top":"10px", "text-align":"center"}) Number Of Questions Contributed: 
+                p(style={"font-size":"72px", "text-align":"center","color":"blue"}) !{noq}
+            .col-md-6
+                h5(style={"margin-top":"10px", "text-align":"center"}) Number Of Questions Approved: 
+                p(style={"font-size":"72px", "text-align":"center","color":"blue"}) !{qap}

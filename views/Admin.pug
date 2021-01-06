@@ -1,0 +1,39 @@
+extend layout
+
+block content
+    div(class="sidenav")
+        a(href="javascript:as()" class="daa") Overview
+        a(href="javascript:adminque()" class="daa") Questions
+        a(href="javascript:adminapr()" class="daa") Approve
+        a(href="javascript:as()" class="daa") Account
+
+    div(class="main", style={"overflow" : "auto"})
+        h4 Welcome to admin panel
+
+    
+
+block scripts
+    script(src='https://code.jquery.com/jquery-3.5.1.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.bundle.min.js')
+    script.
+        function adminque(){
+            $.ajax({
+                url: '/adminque',
+            })
+            .done(function(e){
+                $('.main').html(e);
+            });
+            
+        }
+        function adminapr(){
+            $.ajax({
+                url: '/adminapr',
+            })
+            .done(function(e){
+                $('.main').html(e);
+            });
+            
+        }
+
+    

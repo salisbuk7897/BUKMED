@@ -1,0 +1,38 @@
+block header
+    link(rel='stylesheet', href='/stylesheets/slider.css')
+
+block content
+    div(style={"overflow":"auto", "height":"85vh"})
+        h4 Use this panel to Approve or Delete Questions
+        hr
+        .salis(style={"width":"99%", "margin-left":"1%","margin-right":"1%", "border":"Solid", "border-color":"blue", "height":"35vh", "overflow":"auto", "margin-top":"1%", "background-color":"lightblue"})
+            h2(style={"text-align":"center", "margin-top":"2%"}) Select
+            hr
+            form(action="/approve", method='post')
+                .row(style={"width":"98%", "margin-left":"15px"})
+                    .col-md-3
+                        p(style={"margin-right": "1%"}) No of Questions
+                        input(type="text" class="form-control" name="noOfQ" style={"margin-right": "1%"} id="noOfQ")
+
+                    .col-md-3
+                        p(style={"margin-right": "1%"}) Course
+                        select.custom-select(style={"margin-right": "1%"}, name="course", id='course', onchange='getSC()')
+                            option(selected='') Select Course
+                            option(value='pth') Pathology
+                            option(value='phm') Pharmacology
+                        
+                    .col-md-3
+                        p(style={"margin-right": "1%"}) Sub Course
+                        select.custom-select(style={"margin-right": "1%"}, name="subcourse", id='subcourse', onchange='getTopics()')
+                            option(selected='') Sub Course
+
+                    .col-md-3
+                        p(style={"margin-right": "1%"}) Topic
+                        select.custom-select(style={"margin-right": "1%"}, name="topic", id='topic')
+                            option(selected='') Select Topic
+                button(type="submit" style={"color":"white", "width":"98%", "margin-top":"20px", "margin-right":"1%"} class="btn btn-primary float-right") Get Questions
+
+
+        
+block scripts
+    script(src='/javascripts/slider.js')
