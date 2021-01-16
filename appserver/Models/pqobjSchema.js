@@ -2,6 +2,7 @@ var mongoose = require( 'mongoose' );
 
 //subdocument
 var objSchema = new mongoose.Schema({
+    _id : {type : Number, required: true},
     question: {type: String, required: true},
     option1: {type: String, required: true},
     option2: {type: String, required: true},
@@ -19,11 +20,13 @@ var objSchema = new mongoose.Schema({
 });
 
 var pqobjSchema = new mongoose.Schema({
+    _id : {type : Number, required: true},
     name : {type: String, required: true},
     year : {type: String, required: true},
     type : {type: String, required: true},
     owner : {type: String, required: true},
     version : {type : Number, required: true},
+    qnum : {type : Number, required: true},
     questions : [objSchema]
 });
 

@@ -1,0 +1,97 @@
+extend layout
+
+block content
+    .salis(style={"margin-left":"15%","margin-right":"15%", "border":"Solid", "border-color":"blue","background-color":"lightblue", "height":"85vh","overflow":"auto", "margin-top":"1%"})
+        h2(style={"text-align":"center", "margin-top":"2%"}, onload=`notify("${notice}")`) Add Past Question
+        hr
+        form(action="/addscqpq" method="post" enctype="multipart/form-data")
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-3
+                    p(style={"margin-top":"10px",}) Past Question
+                .col-md-9
+                    select.custom-select(style={"margin-right": "10px"}, name="pastq", id="pastq")
+                        option(selected='') Select Past Question
+                        - if(data.length > 0)
+                            - for(i of data)
+                                option(value=`${i}`) !{i}
+            hr
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-9
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Question
+                    input(type="text" class="form-control" name="Question" style={"margin-right": "10px"} id="que")
+                .col-md-3
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Picture (If any)
+                    input(type="file" class="form-control" name="question_pic" style={"margin-right": "10px"} id="pic")
+            
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-2
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 1
+                .col-md-7
+                    input(type="text" class="form-control" name="opt1" style={"margin-top":"10px","margin-right": "10px"} id="opt1")
+                .col-md-3
+                    br
+                    input(type="radio" id="ans1" name="ans" value="A")
+                    label(for="ans1" style={"margin-left":"2%"}) Option 1 is the answer
+                    
+
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-2
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 2
+                .col-md-7
+                    input(type="text" class="form-control" name="opt2" style={"margin-top":"10px","margin-right": "10px"} id="opt2")
+                .col-md-3
+                    br
+                    input(type="radio" id="ans2" name="ans" value="B")
+                    label(for="ans2" style={"margin-left":"2%"}) Option 2 is the answer
+                    
+
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-2
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 3
+                .col-md-7
+                    input(type="text" class="form-control" name="opt3" style={"margin-top":"10px","margin-right": "10px"} id="opt3")
+                .col-md-3
+                    br
+                    input(type="radio" id="ans3" name="ans" value="C")
+                    label(for="ans3" style={"margin-left":"2%"}) Option 3 is the answer
+                    
+
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-2
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 4
+                .col-md-7
+                    input(type="text" class="form-control" name="opt4" style={"margin-top":"10px","margin-right": "10px"} id="opt4")
+                .col-md-3
+                    br
+                    input(type="radio" id="ans4" name="ans" value="D")
+                    label(for="ans4" style={"margin-left":"2%"})  Option 4 is the answer
+                    
+
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-2
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 5
+                .col-md-7
+                    input(type="text" class="form-control" name="opt5" style={"margin-top":"10px","margin-right": "10px"} id="opt5")
+                .col-md-3
+                    br
+                    input(type="radio" id="ans5" name="ans" value="E")
+                    label(for="ans5" style={"margin-left":"2%"}) Option 5 is the answer
+                    
+
+            button(type='submit' style={"color":"white", "width":"90%", "margin-top":"10px", "margin-right":"5%", "margin-left":"5%"} class='btn btn-primary' ) Save Question
+                                                              
+
+block scripts
+    script(src='https://code.jquery.com/jquery-3.5.1.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.bundle.min.js')
+    script.
+        function notify(a){
+            if(a == "get"){
+                alert("Question Added Successfully");
+            }else if(a == 'post'){
+                alert("Question Added Successfully");
+            }else{
+                alert("Question Added Successfully");
+            }
+        }

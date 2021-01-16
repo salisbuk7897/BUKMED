@@ -2,10 +2,9 @@ extend layout
 
 block content
     div(class="sidenav")
-        a(href="javascript:as()" class="daa") Overview
         a(href="javascript:adminque()" class="daa") Questions
         a(href="javascript:adminapr()" class="daa") Approve
-        a(href="javascript:as()" class="daa") Account
+        a(href="javascript:adminupg()" class="daa") Account
 
     div(class="main", style={"overflow" : "auto"})
         h4 Welcome to admin panel
@@ -24,7 +23,6 @@ block scripts
             .done(function(e){
                 $('.main').html(e);
             });
-            
         }
         function adminapr(){
             $.ajax({
@@ -32,8 +30,15 @@ block scripts
             })
             .done(function(e){
                 $('.main').html(e);
-            });
-            
+            });   
+        }
+        function adminupg(){
+            $.ajax({
+                url: '/adminupg',
+            })
+            .done(function(e){
+                $('.main').html(e);
+            });   
         }
 
     

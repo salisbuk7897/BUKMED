@@ -70,6 +70,68 @@ module.exports.userLogin = function(req, res){
     }
 }
 
+module.exports.upgUser = function(req, res){
+    if (dbauth === 'true'){ // if user has specified database authentication
+        MongoClient.connect(dbURIAuth, function(err, db) {
+            var dbo = db.db(dbname); // use dbname from Zconfig file
+            dbo.collection('users').updateOne({username:(req.body.user).toUpperCase()} ,{$set: {role: "Admin"}}, function(err, result){ //make an array of all data in cpcactivities 
+                if (err) throw err; //if there is an error, throw it
+                if(result.result.n === 1){
+                    console.log(`${req.body.user} Upgraded to Admin`);
+                }
+                res.send('')
+                db.close(); //close database connection
+            })
+        });
+    }else{
+        //db auth not in use
+        MongoClient.connect(dbURI, function(err, db) {
+            var dbo = db.db(dbname); // use dbname from Zconfig file
+            dbo.collection('users').updateOne({username:(req.body.user).toUpperCase()} ,{$set: {role: "Admin"}}, function(err, result){ //make an array of all data in cpcactivities 
+                if (err) throw err; //if there is an error, throw it
+                if(result.result.n === 1){
+                    console.log(`${req.body.user} Upgraded to Admin`);
+                }
+                res.send('')
+                db.close(); //close database connection
+            })
+        });
+    }
+}
+
+module.exports.GetUserAccount = function(req, res){
+    try{
+        if (dbauth === 'true'){
+            MongoClient.connect(dbURIAuth, function(err, db) {
+                var dbo = db.db(dbname); // use dbname from Zconfig file
+                const collection = dbo.collection('users');
+                collection.find({username: (req.body.user).toUpperCase()}).toArray(function(err, result){
+                    //console.log(result);
+                    if(result.length === 0){ //user not available, register it
+                        //res.render("login", {lgmsg: "Wrong Username and Password"});
+                    }else{// user available, ignore
+                        res.render("adminupg2", {username: result[0].username, fname: result[0].firstName, lname:result[0].lastName, clevel:result[0].clevel, school:result[0].school, lvl:result[0].level, dept:result[0].dept, email:result[0].email, pic:result[0].pic});
+                    }
+                });
+            });
+        }else{
+            MongoClient.connect(dbURI, function(err, db) {
+                var dbo = db.db(dbname); // use dbname from Zconfig file
+                const collection = dbo.collection('users');
+                collection.find({username: (req.body.name).toUpperCase()}).toArray(function(err, result){
+                    //console.log(result);
+                    if(result.length === 0){ //user not available, register it
+                        //res.render("login", {lgmsg: "Wrong Username and Password"});
+                    }else{// user available, ignore
+                        res.render("adminupg2", {username: result[0].username, fname: result[0].firstName, lname:result[0].lastName, clevel:result[0].clevel, school:result[0].school, lvl:result[0].level, dept:result[0].dept, email:result[0].email, pic:result[0].pic});
+                    }
+                });
+            });
+        }
+    }catch(e){
+        //res.render("login", {lgmsg: "Login Failed"});
+    }
+}
 
 module.exports.getDash = function(req, res){
     //console.log(req.body);
@@ -84,8 +146,7 @@ module.exports.getDash = function(req, res){
                     if(result.length === 0){ //user not available, register it
                         //res.render("login", {lgmsg: "Wrong Username and Password"});
                     }else{// user available, ignore
-                        res.render("dashboard", {fname: result[0].firstName, lname:result[0].lastName, clevel:result[0].clevel, school:result[0].school, lvl:result[0].level, dept:result[0].dept, email:result[0].email, noq:result[0].noOfQ, qap:result[0].qApproved, msg:"logged in", name:req.session.name, pic:result[0].pic})
-                        
+                        res.render("dashboard", {username: result[0].username, fname: result[0].firstName, lname:result[0].lastName, clevel:result[0].clevel, school:result[0].school, lvl:result[0].level, dept:result[0].dept, email:result[0].email, noq:result[0].noOfQ, qap:result[0].qApproved, msg:"logged in", name:req.session.name, pic:result[0].pic, pastq:result[0].pastq});
                     }
                 });
             });
@@ -98,7 +159,7 @@ module.exports.getDash = function(req, res){
                     if(result.length === 0){ //user not available, register it
                         //res.render("login", {lgmsg: "Wrong Username and Password"});
                     }else{// user available, ignore
-                        
+                        res.render("dashboard", {username: result[0].username, fname: result[0].firstName, lname:result[0].lastName, clevel:result[0].clevel, school:result[0].school, lvl:result[0].level, dept:result[0].dept, email:result[0].email, noq:result[0].noOfQ, qap:result[0].qApproved, msg:"logged in", name:req.session.name, pic:result[0].pic, pastq:result[0].pastq});
                     }
                 });
             });

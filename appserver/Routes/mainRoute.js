@@ -7,6 +7,7 @@ const fs = require('fs');
 var ctrlStatic = require('../Controller/question');
 var regController = require('../Controller/Register');
 var login = require('../Controller/login');
+var jwt = require('../../jwt');
 // handler for fie storage in /uploads
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -34,12 +35,56 @@ var sessionChecker = (req, res, next) => {
   }else{
     res.render('noaccess');
   }
-  
 });*/
+
+router.post("/login", jwt.login) 
+
+//router.post("/UpdatePassword", jwt.authenticateToken, Auth.updatePassword)
+
+router.post("/token", jwt.token)
+
+router.post('/upgUser', login.upgUser);
+
+router.post("/getUserAccount", login.GetUserAccount);
+
+router.get('/adminupg', function(req, res, next) {
+  res.render('accountupg');
+});
+
+//Essay Approve Questions
+router.post("/deleteadessaypq", ctrlStatic.DeleteEssayPQ); ///modify and approve through ajav in slider.js
+
+router.post("/modifyessaypq", ctrlStatic.ModifyEssayPQ); ///modify and approve through ajav in slider.js
+
+router.post("/appressaypq", ctrlStatic.ApproveEssayPQ); ///approve through ajav in slider.js
+
+router.get("/esss", function(req, res){
+  res.render("appessaypq", {data: [{'_id':"2", 'label':"1a", 'question':"What is this", 'picture':'No Picture'}], pqid:1});
+})
+
+//MCQ Approve Past Questions
+router.post("/deleteadmcqpq", ctrlStatic.DeleteMCQPQ); ///modify and approve through ajav in slider.js
+
+router.post("/modifymcqpq", ctrlStatic.ModifyMCQPQ); ///modify and approve through ajav in slider.js
+
+router.post("/apprmcqpq", ctrlStatic.ApproveMCQPQ); ///approve through ajav in slider.js
+
+//SCQ Approve Past Questions
+router.post("/deleteadscqpq", ctrlStatic.DeleteSCQPQ); ///modify and approve through ajav in slider.js
+
+router.post("/modifyscqpq", ctrlStatic.ModifySCQPQ); ///modify and approve through ajav in slider.js
+
+router.post('/managepq', ctrlStatic.managePQ);
+
+router.post("/apprscqpq", ctrlStatic.ApproveSCQPQ); ///approve through ajav in slider.js
 
 router.get('/admin', function(req, res, next) {
   res.render('Admin');
 });
+
+router.get('/add_scqpq', sessionChecker, ctrlStatic.getSCQPQ);
+
+router.post("/addscqpq", upload.single('question_pic'), ctrlStatic.addSCQPQ);
 
 //For Adding Subcourse
 router.post('/addsc', function(req, res){
@@ -126,15 +171,13 @@ router.get('/i', function(req, res, next) {
   res.send('index');
 });
 
-/*router.get('/register', function(req, res, next) {
+router.get('/register', function(req, res, next) {
     res.render('Register');
-});*/
+});
 
 router.get('/add_question', sessionChecker, function(req, res, next) {
     res.render('Questions', {msg:"li", name:req.session.name});
 });
-
-
 
 router.get('/add_objpq', sessionChecker, ctrlStatic.getPQ);
 

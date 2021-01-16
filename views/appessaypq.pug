@@ -1,0 +1,48 @@
+extend layout
+
+block header
+    link(rel='stylesheet', href='/stylesheets/slider.css')
+
+block content
+    div(style={"overflow":"auto", "height":"85vh"}, id='main')
+        if(data)                
+            .salis(style={"margin-left":"15%","margin-right":"15%", "border":"Solid", "border-color":"blue","overflow":"auto", "max-height":"80vh", "margin-top":"1%", "background-color":"lightblue"})
+                .slideshow-container
+                    -for(dat of data)
+                        .mySlides.faded
+                            .row
+                                .col-md-6.float-right
+                                    p(style={"margin-top":"20px", "margin-right": "10px","float":"right"}) Question Number
+                                .col-md-6
+                                    input(readonly type="text" class="form-control" name="qnum" value=`${dat._id}` style={"width":"10%","margin-top":"10px","margin-right": "10px"} id="qnum")
+                            hr
+                            .row(style={"width":"98%", "margin-left":"15px"})
+                                .col-md-3
+                                    p(style={"margin-top":"10px", "margin-right": "10px"}) Question label
+                                .col-md-9
+                                    input(type="text" class="form-control" name="opt1" value=`${dat.label}` style={"margin-top":"10px","margin-right": "10px"} id=`label${dat._id}`)
+
+                            .row(style={"width":"98%", "margin-left":"15px"})
+                                p(style={"margin-top":"10px", "margin-right": "10px"}) Question
+                                textarea.autofocus(autofocus name="Question" id=`que${dat._id}` class="md-textarea form-control" rows="3") !{dat.question}
+                            
+                                    
+                            .row
+                                .col-md-2
+                                    a(href="javascript:plusSlides(-1)" style={"color":"white", "width":"90%", "margin-top":"20px", } class="btn btn-primary float-right") Previous
+                                .col-md-2
+                                    a(href=`javascript:deleteadessaypq(${pqid}, ${dat._id})` class='btn btn-danger float-right' id="rmf3b", style={"width":"90%", "margin-top":"20px", "margin-right":"5px"}) Delete
+                                .col-md-3
+                                    a(href=`javascript:MaAppressaypq(${pqid}, ${dat._id})` class='btn btn-primary float-right' id="rmf3b", style={"width":"90%", "margin-top":"20px", "margin-right":"20px"}) Modify and Approve
+                                .col-md-2
+                                    a(href=`javascript:approveessaypq(${pqid}, ${dat._id})` class='btn btn-primary float-right' id="rmf3b", style={"width":"90%", "margin-top":"20px", "margin-right":"20px"}) Approve
+                                .col.md-2
+                                    a(href="javascript:plusSlides(1)" style={"color":"white", "width":"90%", "margin-top":"20px", "margin-right":"20px"} class="btn btn-primary float-right") Next
+                            br
+
+
+block scripts
+    script(src='/javascripts/slider.js')
+    script(src='https://code.jquery.com/jquery-3.5.1.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.bundle.min.js')

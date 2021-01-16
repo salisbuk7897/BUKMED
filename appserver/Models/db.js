@@ -16,10 +16,12 @@ var authSource = Zconfig['authSource'];
 var conn;
 let coursesdoc = require("./coursesSchema")
 var MongoClient = require('mongodb').MongoClient;
+var dbURIAuth1 = `mongodb://${dbuser}:${dbpwd}@${mongourl}:${mongoport}/${dbname}?authMechanism=DEFAULT&authSource=${authSource}`; 
 
 var dbURI = `mongodb://${mongourl}:${mongoport}/${dbname}?compressors=zlib`; //no authentication
 var dbURIAuth = `mongodb://${mongourl}:${mongoport}/${dbname}?authSource=${authSource}&compressors=zlib`; //with authentication
 
+var ls =["scqpq", "mcqpq", "essaypq"];
 var allCourses = [
     ["ana", "Anatomy", "Not Selected"],
     ["bio", "Biochemistry", "Not Selected"],
@@ -49,7 +51,7 @@ if (dbauth === 'true'){
         pass: dbpwd
     }).then(() => {
         console.log('Authentication successful');
-        conn = mongoose.createConnection(dbURIAuth);
+        conn = mongoose.createConnection(dbURIAuth1);
         conn.on('open', function(){
             conn.db.listCollections({name: 'coursesactivities'})
             .next(async function(err, collinfo) {
@@ -79,6 +81,9 @@ if (dbauth === 'true'){
                         addCounter(allCourses[i][0]);
                     }
                     reg.createAdmin();
+                    for(i in ls){
+                        addCounter(ls[i]);
+                    }
                 }
             });
         });
@@ -116,8 +121,11 @@ if (dbauth === 'true'){
                             }
                         );
                         addCounter(allCourses[i][0]);
-                    }
+                    }  
                     reg.createAdmin();
+                    for(i in ls){
+                        addCounter(ls[i]);
+                    }
                 }
             });
         });

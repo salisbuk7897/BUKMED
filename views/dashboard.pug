@@ -1,7 +1,7 @@
 extend layout
 
 block content
-    div(style={"margin-left":"2%", "width":"96%"})
+    div(style={"margin-left":"2%", "width":"98%", 'height':"90vh", "overflow":"auto"})
         .row(style={"width":"98%","margin-top":"2%"})
             .col-md-6.float-right
                 img(src=`data:image/gif;base64,${pic}`, class="float-right" style={"border-radius":"50%", "height":"130px", "width":"110px"})
@@ -11,7 +11,7 @@ block content
         hr
         h3 Information
         hr(style={"margin":"0"})
-        .row
+        .row(style={"width":"96%", "margin-left":"2%"})
             .col-md-6
                 h5(style={"margin-top":"10px"}) School: 
                 p(style={"color":"blue","font-size":"18px"}) !{school}
@@ -25,10 +25,23 @@ block content
         br
         h3 Contributions
         hr(style={"margin":"0"})
-        .row
+        .row(style={"width":"96%", "margin-left":"2%"})
             .col-md-6
                 h5(style={"margin-top":"10px", "text-align":"center"}) Number Of Questions Contributed: 
                 p(style={"font-size":"72px", "text-align":"center","color":"blue"}) !{noq}
             .col-md-6
                 h5(style={"margin-top":"10px", "text-align":"center"}) Number Of Questions Approved: 
                 p(style={"font-size":"72px", "text-align":"center","color":"blue"}) !{qap}
+        br
+        h3 Past Questions
+        hr(style={"margin":"0"})
+        .row(style={"width":"96%", "margin-left":"2%"})
+            -for(dat of pastq)
+                .col-md-4(style={})
+                    form(action=`/managepq?user=${username}&pqname=${dat.name}&type=${dat.type}`, method='post')
+                        div(style={"border":"solid", "border-color":"blue", "width":'96%', "margin":"1%", "padding":"10%", "padding-top":"1%", 'border-style': 'outset'})
+                            h5(style={"margin-top":"10px", "text-align":"center"}) Name: !{dat.name} 
+                            p(style={}) Year: !{dat.year}
+                            p(style={}) Type: !{(dat.type).toUpperCase()}
+                            button(type="submit" style={ "margin-bottom":"1%"} class="btn btn-primary float-right") Manage
+                

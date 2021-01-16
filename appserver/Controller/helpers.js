@@ -53,6 +53,148 @@ module.exports.nextID = async function(sq, fn){
     
 }
 
+module.exports.nextPQID = async function(sq, tp, fn){
+    if (dbauth === 'true'){
+        MongoClient.connect(dbURIAuth, function(err, db) {
+            var b ;
+            var dbo = db.db(dbname); // use dbname from Zconfig file 
+            if(tp === 'scq'){
+                var sd = dbo.collection('pqscqactivities').updateOne({name: sq},{$inc:{qnum:1}});
+                dbo.collection('pqscqactivities').find({name: sq}).toArray(function(err, result){
+                    console.log(result);
+                    b = parseInt(result[0].qnum);
+                    //console.log(`sd:  ${b}`);
+                    db.close();
+                    fn(b);
+                });
+            }else if(tp === "mcq"){
+                var sd = dbo.collection('pqobjactivities').updateOne({name: sq},{$inc:{qnum:1}});
+                dbo.collection('pqobjactivities').find({name: sq}).toArray(function(err, result){
+                    console.log(result);
+                    b = parseInt(result[0].qnum);
+                    //console.log(`sd:  ${b}`);
+                    db.close();
+                    fn(b);
+                });
+            }else if(tp === "essay"){
+                var sd = dbo.collection('pqessactivities').updateOne({name: sq},{$inc:{qnum:1}});
+                dbo.collection('pqessactivities').find({name: sq}).toArray(function(err, result){
+                    console.log(result);
+                    b = parseInt(result[0].qnum);
+                    //console.log(`sd:  ${b}`);
+                    db.close();
+                    fn(b);
+                });
+            }
+        });
+    }else{
+        MongoClient.connect(dbURI, function(err, db) {
+            var b ;
+            var dbo = db.db(dbname); // use dbname from Zconfig file 
+            if(tp === 'scq'){
+                var sd = dbo.collection('pqscqactivities').updateOne({name: sq},{$inc:{qnum:1}});
+                dbo.collection('pqscqactivities').find({name: sq}).toArray(function(err, result){
+                    console.log(result);
+                    b = parseInt(result[0].qnum);
+                    //console.log(`sd:  ${b}`);
+                    db.close();
+                    fn(b);
+                });
+            }else if(tp === "mcq"){
+                var sd = dbo.collection('pqobjactivities').updateOne({name: sq},{$inc:{qnum:1}});
+                dbo.collection('pqobjactivities').find({name: sq}).toArray(function(err, result){
+                    console.log(result);
+                    b = parseInt(result[0].qnum);
+                    //console.log(`sd:  ${b}`);
+                    db.close();
+                    fn(b);
+                });
+            }else if(tp === "essay"){
+                var sd = dbo.collection('pqessactivities').updateOne({name: sq},{$inc:{qnum:1}});
+                dbo.collection('pqessactivities').find({name: sq}).toArray(function(err, result){
+                    console.log(result);
+                    b = parseInt(result[0].qnum);
+                    //console.log(`sd:  ${b}`);
+                    db.close();
+                    fn(b);
+                });
+            }
+        });
+
+    }
+    
+}
+
+module.exports.nextPQVersion = async function(sq, tp){
+    if (dbauth === 'true'){
+        MongoClient.connect(dbURIAuth, function(err, db) {
+            var b ;
+            var dbo = db.db(dbname); // use dbname from Zconfig file 
+            if(tp === 'scq'){
+                var sd = dbo.collection('pqscqactivities').updateOne({name: sq},{$inc:{version:1}});
+                var b ;
+                dbo.collection('pqscqactivities').find({name: sq}).toArray(function(err, result){
+                    console.log(result);
+                    b = parseInt(result[0].qnum);
+                    //console.log(`sd:  ${b}`);
+                    db.close();
+                });
+            }else if(tp === "mcq"){
+                var sd = dbo.collection('pqobjactivities').updateOne({name: sq},{$inc:{version:1}});
+                var b ;
+                dbo.collection('pqobjactivities').find({name: sq}).toArray(function(err, result){
+                    console.log(result);
+                    b = parseInt(result[0].qnum);
+                    //console.log(`sd:  ${b}`);
+                    db.close();
+                });
+            }else if(tp === "essay"){
+                var sd = dbo.collection('pqessactivities').updateOne({name: sq},{$inc:{version:1}});
+                var b ;
+                dbo.collection('pqessactivities').find({name: sq}).toArray(function(err, result){
+                    console.log(result);
+                    b = parseInt(result[0].qnum);
+                    //console.log(`sd:  ${b}`);
+                    db.close();
+                });
+            } 
+        });
+    }else{
+        MongoClient.connect(dbURI, function(err, db) {
+            var b ;
+            var dbo = db.db(dbname); // use dbname from Zconfig file 
+            if(tp === 'scq'){
+                var sd = dbo.collection('pqscqactivities').updateOne({name: sq},{$inc:{version:1}});
+                var b ;
+                dbo.collection('pqscqactivities').find({name: sq}).toArray(function(err, result){
+                    console.log(result);
+                    b = parseInt(result[0].qnum);
+                    //console.log(`sd:  ${b}`);
+                    db.close();
+                });
+            }else if(tp === "mcq"){
+                var sd = dbo.collection('pqobjactivities').updateOne({name: sq},{$inc:{version:1}});
+                var b ;
+                dbo.collection('pqobjactivities').find({name: sq}).toArray(function(err, result){
+                    console.log(result);
+                    b = parseInt(result[0].qnum);
+                    //console.log(`sd:  ${b}`);
+                    db.close();
+                });
+            }else if(tp === "essay"){
+                var sd = dbo.collection('pqessactivities').updateOne({name: sq},{$inc:{version:1}});
+                var b ;
+                dbo.collection('pqessactivities').find({name: sq}).toArray(function(err, result){
+                    console.log(result);
+                    b = parseInt(result[0].qnum);
+                    //console.log(`sd:  ${b}`);
+                    db.close();
+                });
+            }
+        });
+    }
+}
+
 module.exports.getBase64Data = function(av, fn){
     var c = path.join(__dirname, `../../uploads/${av}`)
     let buff = fs.readFileSync(c);

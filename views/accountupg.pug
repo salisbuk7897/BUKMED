@@ -1,0 +1,27 @@
+block content
+    form(style={"margin":"5%"} action="/getUserAccount", method='post')
+        .row
+            .col-md-9
+                input(type="text" id="user" name="user" class="form-control")
+            .col-md-3
+                button(type="submit", class="btn btn-primary") Get Account
+
+
+
+block scripts
+    script(src='https://code.jquery.com/jquery-3.5.1.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.bundle.min.js')
+    script.
+        function getUser(){
+            var data = {user: $("#user").val()};
+            $.ajax({
+                dataType: "json",
+                type: 'post',
+                url: '/getUserAccount',
+                data: data,
+            })
+            .done(function(e){
+                $('.ress').html(e);
+            });
+        }

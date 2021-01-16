@@ -1,5 +1,10 @@
 var mongoose = require( 'mongoose' );
 
+var pastqSchema = new mongoose.Schema({
+    name: {type: String, required: true},
+    type: {type: String, required: true},
+    year: {type: String, required: true},
+});
 //subdocument
 var userSchema = new mongoose.Schema({
     firstName: {type: String, required: true},
@@ -12,8 +17,10 @@ var userSchema = new mongoose.Schema({
     role: {type: String, required: true},
     password: {type: String, required: true},
     clevel: {type: Number, required: true},
+    pic: {type: String},
     noOfQ: {type: Number, required: true},
     qApproved: {type: Number, required: true},
+    pastq: [pastqSchema]
 });
 
-module.exports.userdocs = mongoose.model('Users', userSchema);
+module.exports = mongoose.model('Users', userSchema);

@@ -7,6 +7,7 @@ const fs = require('fs');
 var ctrlStatic = require('../Controller/question');
 var regController = require('../Controller/Register');
 var login = require('../Controller/login');
+var jwt = require('../../jwt');
 // handler for fie storage in /uploads
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -32,4 +33,11 @@ router.get('/gettopics',async function(req, res){
 });
 
 router.get('/getquestions', ctrlStatic.getAllQuestions)
+
+router.get('/getpqs', ctrlStatic.getPQUpdates);
+
+router.post('/jwtgetpqs', jwt.authenticateToken, ctrlStatic.getPQUpdates)
+
+router.post('/app_register', jwt.authenticateToken, regController.Appregister);
+
 module.exports = router;

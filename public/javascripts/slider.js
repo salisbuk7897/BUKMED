@@ -102,3 +102,121 @@ function MaAppr(a, b) {
     
   });
 }
+
+function approvepq(a, b) {
+  var data = {pqid: a, id: b}
+  $.ajax({
+      dataType: "json",
+      type: 'post',
+      url: '/apprscqpq',
+      data: data,
+  })
+  .done(function(e){
+      
+  });
+}
+
+function deleteadpq(a, b) {
+  var data = {pqid: a, id: b,};
+  $.ajax({
+      dataType: "json",
+      type: 'post',
+      url: '/deleteadscqpq',
+      data: data,
+  })
+  .done(function(e){
+      
+  });
+}
+
+function MaApprpq(a, b) {
+  var data = {pqid: a, id: b, que:$(`#que${b}`).val(), opt1:$(`#opti${b}`).val(), opt2:$(`#optii${b}`).val(), opt3:$(`#optiii${b}`).val(), opt4:$(`#optiv${b}`).val(), opt5:$(`#optv${b}`).val(), ans:$(`#ans${b}`).val()};
+  $.ajax({
+      dataType: "json",
+      type: 'post',
+      url: '/modifyscqpq',
+      data: data,
+  })
+  .done(function(e){
+      
+  });
+}
+
+function approvemcqpq(a, b) {
+  var data = {pqid: a, id: b};
+  $.ajax({
+      dataType: "json",
+      type: 'post',
+      url: '/apprmcqpq',
+      data: data,
+  })
+  .done(function(e){
+      
+  });
+}
+
+function deleteadmcqpq(a, b) {
+  var data = {pqid: a, id: b};
+  $.ajax({
+      dataType: "json",
+      type: 'post',
+      url: '/deleteadmcqpq',
+      data: data,
+  })
+  .done(function(e){
+      
+  });
+}
+
+function MaApprmcqpq(a, b) {
+  var data = {pqid: a, id: b, que:$(`#que${b}`).val(), opt1:$(`#opti${b}`).val(), ans1:$(`#ansi${b}`).val(), opt2:$(`#optii${b}`).val(), ans2:$(`#ansii${b}`).val(), opt3:$(`#optiii${b}`).val(), ans3:$(`#ansiii${b}`).val(), opt4:$(`#optiv${b}`).val(), ans4:$(`#ansiv${b}`).val(), opt5:$(`#optv${b}`).val(), ans5:$(`#ansv${b}`).val()};
+  $.ajax({
+      dataType: "json",
+      type: 'post',
+      url: '/modifymcqpq',
+      data: data,
+  })
+  .done(function(e){
+      
+  });
+}
+
+function approveessaypq(a, b) {
+  var data = {pqid: a, id: b};
+  $.ajax({
+      dataType: "json",
+      type: 'post',
+      url: '/appressaypq',
+      data: data,
+  })
+  .done(function(e){
+      
+  });
+}
+
+function deleteadessaypq(a, b) {
+  var data = {pqid: a, id: b};
+  $.ajax({
+      dataType: "json",
+      type: 'post',
+      url: '/deleteadessaypq',
+      data: data,
+  })
+  .done(function(e){
+      
+  });
+}
+
+function MaAppressaypq(a, b) {
+  var data = {pqid: a, id: b, que:$(`#que${b}`).val(), label:$(`#label${b}`).val()};
+  $.ajax({
+      dataType: "json",
+      type: 'post',
+      url: '/modifyessaypq',
+      data: data,
+  })
+  .done(function(e){
+      
+  });
+}
+
