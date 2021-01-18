@@ -12,12 +12,14 @@ block header
       width: 100%;
       position: relative;
       height: 58vh;
-      background-size: cover
+      background-size: cover;
+      background-image: url('/images/phoo.jpeg');
     }
 
     /* Caption text */
     .text {
-      color: blue;
+      font-family: "Times New Roman", Times, serif;
+      color: gold;
       font-size: 20px;
       font-weight: bold;
       padding: 8px 12px;
@@ -29,7 +31,8 @@ block header
 
     /* Number text (1/3 etc) */
     .numbertext {
-      color: #f2f2f2;
+      font-family: "Times New Roman", Times, serif;
+      color: gold;
       font-size: 12px;
       padding: 8px 12px;
       position: absolute;
@@ -43,6 +46,24 @@ block header
       animation-name: fade;
       animation-duration: 1.5s;
     }
+
+    .imgclass {
+      width:50%;
+      height: 50vh;
+    }
+
+    .htext{
+      font-family: "Times New Roman", Times, serif;
+      text-align: center;
+      color: blue;
+    }
+
+    .ptext{
+      font-family: "Times New Roman", Times, serif;
+      font-size: 18px;
+      text-align: center;
+    }
+
 
     @-webkit-keyframes faded {
       from {opacity: .4} 
@@ -58,32 +79,77 @@ block header
     @media only screen and (max-width: 300px) {
       .text {font-size: 11px}
     }
+    
+    @media screen and (max-width: 720px) {
+      .imgclass {
+        width: 100%;
+        height: 45vh;
+      }
+
+      .slideshow-container {
+        width: 100%;
+        position: relative;
+        height: 50vh;
+        background-color: white;
+      }
+
+      .text {
+        font-family: "Times New Roman", Times, serif;
+        color: gold;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 8px 12px;
+        position: absolute;
+        bottom: 8px;
+        width: 96%;
+        text-align: center;
+      }
+
+      .htext{
+        font-family: "Times New Roman", Times, serif;
+        font-size: 18px;
+        text-align: center;
+        color: blue;
+      }
+
+      .ptext{
+        font-family: "Times New Roman", Times, serif;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      .row{
+        margin-left: 1%;
+      }
+
+
+    }
 
 block content
-  .slideshow-container(style={"background-image":"url('/images/phoo.jpeg')"})
+  .slideshow-container
     .mySlides.faded
       div(class='numbertext') 1 / 2
-      img(src="/images/bg1.png" style={"width":"50%","height":"50vh", 'min-width': '480px'})
-      div(class="text") Acessible via Andoid and Web Browsers
+      img(class="imgclass", src="/images/bg1.png")
+      div(class="text") Accessible via Andoid and Web Browsers
 
     .mySlides.faded
       div(class='numbertext') 2 / 2
-      img(src="/images/bg2.png" style={"width":"50%","height":"50vh", 'min-width': '480px'})
-      div(class="text") Acessible via Andoid and Web Browsers
+      img(class="imgclass", src="/images/bg2.png")
+      div(class="text") Accessible via Andoid and Web Browsers
   br
-  .row(style={'width':'99%'})
+  .row(style={'width':'98%', 'margin-left':"1%"})
     .col-md-4
-      h3(style={'text-align':'center', 'color':"blue"}) Mission
+      h3(class= "htext") Mission
       hr
-      p(style={'text-align':'center', 'font-size':"18px"}) To create a centralised MBBS question storage and provide flexible practice modes to aid in preperation of Medical Exams, Test or Quiz.
+      p(class= "ptext") To create a centralised MBBS question storage and provide flexible practice modes to aid in preperation of Medical Exams, Test or Quiz.
     .col-md-4
-      h3(style={'text-align':'center', 'color':"blue"}) Vision
+      h3(class= "htext") Vision
       hr
-      p(style={'text-align':'center', 'font-size':"18px"}) To have a large storage of Verified and Reliable MBBS Practice questions that can be used for internal and external MBBS Exam Preparation.
+      p(class= "ptext") To have a large storage of Verified and Reliable MBBS Practice questions that can be used for internal and external MBBS Exam Preparation.
     .col-md-4
-      h3(style={'text-align':'center', 'color':"blue"}) Support
+      h3(class= "htext") Support
       hr
-      p(style={'text-align':'center', 'font-size':"18px"}) Quebank will be build by the students, for the students. It will be maintained by volunteer contributors and managed by BUKMEDS.
+      p(class= "ptext") Quebank will be build by the students, for the students. It will be maintained by volunteer contributors and managed by BUKMEDS.
   br
 
 

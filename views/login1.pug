@@ -1,0 +1,18 @@
+extend layout
+
+block content
+    .salis(style={"margin":"auto", "margin-top":"5%", "border":"Solid", "border-color":"blue", "height":"65vh", "min-width":"320px", "max-width":"700px"})
+            h2(style={"text-align":"center", "margin-top":"2%"}) LOGIN
+            hr
+            if(lgmsg)
+                div(class="alert alert-danger" role="alert") !{lgmsg}
+            .sali(style={"margin": "5%"})
+                form( action=`/log_in` method="post")
+                    h4 Username:
+                    input(type="text" class="form-control" name="name" style={"margin-right": "10px"})
+                    br
+                    h4 Password:
+                    input(type="password" class="form-control" name="password" style={"margin-right": "10px"})
+                    br
+                    br
+                    button(type='submit' class='btn btn-primary' id="rmf3b", style={"margin-top":"7px", "width":"100%"}) Log In

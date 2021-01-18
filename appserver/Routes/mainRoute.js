@@ -29,13 +29,13 @@ var sessionChecker = (req, res, next) => {
 };
 
 //Rnder Admin
-/*router.get('/admin', sessionChecker, function(req, res, next) {
+router.get('/admin', sessionChecker, function(req, res, next) {
   if(req.session.role === 'Admin'){
     res.render('Admin');
   }else{
     res.render('noaccess');
   }
-});*/
+});
 
 router.post("/login", jwt.login) 
 
@@ -78,9 +78,9 @@ router.post('/managepq', ctrlStatic.managePQ);
 
 router.post("/apprscqpq", ctrlStatic.ApproveSCQPQ); ///approve through ajav in slider.js
 
-router.get('/admin', function(req, res, next) {
+/*router.get('/admin', function(req, res, next) {
   res.render('Admin');
-});
+});*/
 
 router.get('/add_scqpq', sessionChecker, ctrlStatic.getSCQPQ);
 
@@ -159,10 +159,10 @@ router.get('/', function(req, res, next) {
     if(req.session.name){ //Check if User login session is available
       res.render("index",{msg:"logged in", name:req.session.name, title: 'Express'}); // render the homepage wih Admin previledge
     }else{ // if login session not available
-      res.render('index', { title: 'Express' }); //render the homepage with user previledge
+      res.render('index', { title: 'QueBank' }); //render the homepage with user previledge
     }
   }catch(e){
-    res.render('index', { title: 'Express' });
+    res.render('index', { title: 'QueBank' });
   }
   
 });

@@ -38,6 +38,10 @@ router.get('/getpqs', ctrlStatic.getPQUpdates);
 
 router.post('/jwtgetpqs', jwt.authenticateToken, ctrlStatic.getPQUpdates)
 
-router.post('/app_register', jwt.authenticateToken, regController.Appregister);
+router.post('/app_dashboard', jwt.authenticateToken, jwt.getDash)
+
+router.post('/app_register', regController.Appregister);
+
+router.post('/getpq', jwt.authenticateToken, jwt.getPQ);
 
 module.exports = router;

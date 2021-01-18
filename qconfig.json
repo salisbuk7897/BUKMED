@@ -1,12 +1,12 @@
 {
-    "appurl": "localhost",
+    "appurl": "148.100.78.14",
     "appport": "2020",
     "httptype": "http",
-    "mongourl": "localhost",
+    "mongourl": "148.100.78.14",
     "dbname": "QueBank",
     "mongoport": "27017",
     "useDbAuth": "true",
-    "dbUser": "myUserAdmin",
-    "dbPassword": "salisu",
+    "dbUser": "salisu",
+    "dbPassword": "bukmeds",
     "authSource": "admin"
 }
