@@ -1,10 +1,83 @@
+block header
+    style.
+        form {
+            --background: white;
+            --border: rgba(0, 0, 0, 0.125);
+            --borderDark: rgba(0, 0, 0, 0.25);
+            --borderDarker: rgba(0, 0, 0, 0.5);
+            --bgColorH: 0;
+            --bgColorS: 0%;
+            --bgColorL: 98%;
+            --fgColorH: 210;
+            --fgColorS: 50%;
+            --fgColorL: 38%;
+            --shadeDark: 0.3;
+            --shadeLight: 0.7;
+            --shadeNormal: 0.5;
+            --borderRadius: 0.125rem;
+            --highlight: #306090;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--borderRadius);
+            box-shadow: 0 1rem 1rem -0.75rem var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topa{
+            margin: auto;
+            width: 60%;
+            border: 5px;
+            padding: 10px;
+        }
+
+        .clegend{
+            font-family: 'Calisto MT';
+        }
+
+        @media screen and (max-width: 720px) {
+            body{margin:0px;}
+            .topa{
+                margin:auto;
+                padding:1%;
+                width:100%;
+                border: 0px;
+                padding: 1%;
+            }
+
+            .bnt{
+                float: right;
+                margin-top: 10px;
+            }
+
+            form {
+                width: 98%;
+                position: absolute;
+                margin-bottom: 20px;
+            }
+
+            .clegend{
+                font-size:20px;
+                font-family: "Times New Roman", Times, serif;
+            }
+        }
+        
 block content
-    form(style={"margin":"5%"} action="/getUserAccount", method='post')
-        .row
-            .col-md-9
-                input(type="text" id="user" name="user" class="form-control")
-            .col-md-3
-                button(type="submit", class="btn btn-primary") Get Account
+    div(class='topa')
+        form(action="/getUserAccount", method='post')
+            legend
+                center
+                    h2
+                        b(class='clegend') Enter an Account Username
+            .row
+                .col-md-9
+                    input(type="text" id="user" name="user" class="form-control")
+                .col-md-3
+                    div(class='bnt')
+                        button(type="submit", style={'width':'100%'} class="btn btn-primary") Get Account
 
 
 

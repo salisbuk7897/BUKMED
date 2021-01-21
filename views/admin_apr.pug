@@ -1,36 +1,107 @@
 block header
     link(rel='stylesheet', href='/stylesheets/slider.css')
+    style.
+        form {
+            --background: white;
+            --border: rgba(0, 0, 0, 0.125);
+            --borderDark: rgba(0, 0, 0, 0.25);
+            --borderDarker: rgba(0, 0, 0, 0.5);
+            --bgColorH: 0;
+            --bgColorS: 0%;
+            --bgColorL: 98%;
+            --fgColorH: 210;
+            --fgColorS: 50%;
+            --fgColorL: 38%;
+            --shadeDark: 0.3;
+            --shadeLight: 0.7;
+            --shadeNormal: 0.5;
+            --borderRadius: 0.125rem;
+            --highlight: #306090;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--borderRadius);
+            box-shadow: 0 1rem 1rem -0.75rem var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topa{
+            width:100%;
+            margin: auto;
+            border: 1%;
+            padding: 10px;
+            margin-top: 10vh;
+        }
+        .hdd{
+            font-family: 'Calisto MT';
+            font-size: 25px;
+        }
+
+        .clegend{
+            font-family: 'Calisto MT';
+        }
+
+        @media screen and (max-width: 720px) {
+            body{
+                margin:0px;
+                font-family: "Times New Roman", Times, serif
+            }
+            .hdd{
+                font-family: "Times New Roman", Times, serif;
+                font-size: 16px;
+            }
+            .topa{
+                width:  100%;
+                margin: auto;
+                border: 5px;
+                padding: 1%;
+            }
+            .clegend{
+                font-size:25px;
+                font-family: "Times New Roman", Times, serif;
+            }
+            
+        }
 
 block content
     div(style={"overflow":"auto", "height":"85vh"})
-        h4 Use this panel to Approve or Delete Questions
+        p(class='hdd') Use this panel to Approve or Delete Questions
         hr
-        .salis(style={"width":"99%", "margin-left":"1%","margin-right":"1%", "border":"Solid", "border-color":"blue", "height":"35vh", "overflow":"auto", "margin-top":"1%", "background-color":"lightblue"})
-            h2(style={"text-align":"center", "margin-top":"2%"}) Select
-            hr
+        div(class='topa')
             form(action="/approve", method='post')
-                .row(style={"width":"98%", "margin-left":"15px"})
+                legend
+                    center
+                        h2
+                            b(class='clegend') Select Questions
+                .row
                     .col-md-3
-                        p(style={"margin-right": "1%"}) No of Questions
-                        input(type="text" class="form-control" name="noOfQ" style={"margin-right": "1%"} id="noOfQ")
+                        div(class="form-group")
+                            label(for="noOfQ") No of Questions
+                            input(type="text" class="form-control" name="noOfQ" id="noOfQ")
 
                     .col-md-3
-                        p(style={"margin-right": "1%"}) Course
-                        select.custom-select(style={"margin-right": "1%"}, name="course", id='course', onchange='getSC()')
-                            option(selected='') Select Course
-                            option(value='pth') Pathology
-                            option(value='phm') Pharmacology
+                        div(class="form-group")
+                            label(for="course") Course
+                            select.custom-select( name="course", id='course', onchange='getSC()')
+                                option(selected='') Select Course
+                                option(value='pth') Pathology
+                                option(value='phm') Pharmacology
                         
                     .col-md-3
-                        p(style={"margin-right": "1%"}) Sub Course
-                        select.custom-select(style={"margin-right": "1%"}, name="subcourse", id='subcourse', onchange='getTopics()')
-                            option(selected='') Sub Course
+                        div(class="form-group")
+                            label(for="subcourse") Sub Course
+                            select.custom-select( name="subcourse", id='subcourse', onchange='getTopics()')
+                                option(selected='') Sub Course
 
                     .col-md-3
-                        p(style={"margin-right": "1%"}) Topic
-                        select.custom-select(style={"margin-right": "1%"}, name="topic", id='topic')
-                            option(selected='') Select Topic
-                button(type="submit" style={"color":"white", "width":"98%", "margin-top":"20px", "margin-right":"1%"} class="btn btn-primary float-right") Get Questions
+                        div(class="form-group")
+                            label(for="topic") Topic
+                            select.custom-select( name="topic", id='topic')
+                                option(selected='') Select Topic
+                button(type="submit" style={"margin-top":"20px"} class="btn btn-primary float-right") Get Questions
 
 
         

@@ -37,6 +37,14 @@ router.get('/admin', sessionChecker, function(req, res, next) {
   }
 });
 
+/*router.get('/admin', function(req, res, next) {
+  res.render('Admin');
+}); */
+
+/*router.get("/tesss", function(req, res){
+  res.render("appmcqpq", {data: [{'_id':"2", 'question':"What is this", 'picture':'No Picture', 'course':'aaa', 'option1':"Option1", 'option2':"Option2", 'option3':"Option3", 'option4':"Option4", 'option5':"Option5", 'answer1':'answer1', 'answer2':'answer2', 'answer3':'answer3', 'answer4':'answer4', 'answer5':'answer5'}], pqid:1});
+})*/
+
 router.post("/login", jwt.login) 
 
 //router.post("/UpdatePassword", jwt.authenticateToken, Auth.updatePassword)
@@ -58,9 +66,9 @@ router.post("/modifyessaypq", ctrlStatic.ModifyEssayPQ); ///modify and approve t
 
 router.post("/appressaypq", ctrlStatic.ApproveEssayPQ); ///approve through ajav in slider.js
 
-router.get("/esss", function(req, res){
+/*router.get("/esss", function(req, res){
   res.render("appessaypq", {data: [{'_id':"2", 'label':"1a", 'question':"What is this", 'picture':'No Picture'}], pqid:1});
-})
+})*/
 
 //MCQ Approve Past Questions
 router.post("/deleteadmcqpq", ctrlStatic.DeleteMCQPQ); ///modify and approve through ajav in slider.js
@@ -77,10 +85,6 @@ router.post("/modifyscqpq", ctrlStatic.ModifySCQPQ); ///modify and approve throu
 router.post('/managepq', ctrlStatic.managePQ);
 
 router.post("/apprscqpq", ctrlStatic.ApproveSCQPQ); ///approve through ajav in slider.js
-
-/*router.get('/admin', function(req, res, next) {
-  res.render('Admin');
-});*/
 
 router.get('/add_scqpq', sessionChecker, ctrlStatic.getSCQPQ);
 
@@ -157,7 +161,7 @@ router.use("/log_out", (req, res, next) => {
 router.get('/', function(req, res, next) {
   try{
     if(req.session.name){ //Check if User login session is available
-      res.render("index",{msg:"logged in", name:req.session.name, title: 'Express'}); // render the homepage wih Admin previledge
+      res.render("index",{msg:"logged in", name:req.session.name, title: 'Quebank'}); // render the homepage wih Admin previledge
     }else{ // if login session not available
       res.render('index', { title: 'QueBank' }); //render the homepage with user previledge
     }

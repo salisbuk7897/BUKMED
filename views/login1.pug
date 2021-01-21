@@ -1,18 +1,81 @@
 extend layout
+block header
+    style.
+        form {
+            --background: white;
+            --border: rgba(0, 0, 0, 0.125);
+            --borderDark: rgba(0, 0, 0, 0.25);
+            --borderDarker: rgba(0, 0, 0, 0.5);
+            --bgColorH: 0;
+            --bgColorS: 0%;
+            --bgColorL: 98%;
+            --fgColorH: 210;
+            --fgColorS: 50%;
+            --fgColorL: 38%;
+            --shadeDark: 0.3;
+            --shadeLight: 0.7;
+            --shadeNormal: 0.5;
+            --borderRadius: 0.125rem;
+            --highlight: #306090;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--borderRadius);
+            box-shadow: 0 1rem 1rem -0.75rem var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topa{
+            width:450px;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            top:50%; 
+            left: 50%;
+        }
+
+        @media screen and (max-width: 720px) {
+            body{margin:0px;}
+            .topa{
+                margin:0 auto;
+                padding:1%;
+                width:96%;
+                top: 25%;
+                left:57%;
+                transform: translate(-50%, -50%);
+                position: absolute;
+            }
+
+            form {
+                position: absolute;
+                margin-bottom: 20px;
+            }
+        }
 
 block content
-    .salis(style={"margin":"auto", "margin-top":"5%", "border":"Solid", "border-color":"blue", "height":"65vh", "min-width":"320px", "max-width":"700px"})
-            h2(style={"text-align":"center", "margin-top":"2%"}) LOGIN
-            hr
-            if(lgmsg)
-                div(class="alert alert-danger" role="alert") !{lgmsg}
-            .sali(style={"margin": "5%"})
-                form( action=`/log_in` method="post")
-                    h4 Username:
-                    input(type="text" class="form-control" name="name" style={"margin-right": "10px"})
-                    br
-                    h4 Password:
-                    input(type="password" class="form-control" name="password" style={"margin-right": "10px"})
-                    br
-                    br
-                    button(type='submit' class='btn btn-primary' id="rmf3b", style={"margin-top":"7px", "width":"100%"}) Log In
+    div(class='topa')
+        if(lgmsg)
+            div(class="alert alert-danger" role="alert") !{lgmsg}
+        form( action=`/log_in` method="post")
+            legend
+                center
+                    h2
+                        b(style={'font-family': 'Calisto MT'}) Login
+            div(class="form-group")
+                label(for="name") Username
+                div(class="input-group mb-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") 
+                            i(class="fas fa-user")
+                    input(type="text" class="form-control" name='name' id="name" placeholder="Username")
+            div(class="form-group")
+                label(for="password") Password
+                div(class="input-group mb-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") 
+                            i(class="fas fa-key")
+                    input(type="password" class="form-control" name='password' id="password" placeholder="Password")
+            
+            button(type='submit' class='btn btn-primary' id="rmf3b", style={"margin-top":"7px", "width":"100%"}) Log In
