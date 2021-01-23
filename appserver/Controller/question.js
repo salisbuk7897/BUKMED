@@ -24,6 +24,7 @@ let objdoc = require("../Models/pqobjSchema");
 let essdoc = require("../Models/pqessSchema");
 let scqdoc = require('../Models/pqscqSchema');
 let userdoc = require('../Models/Users');
+var helper = require("./helpers");
 
 module.exports.managePQ = function(req, res){
     //console.log(req.query);
@@ -141,10 +142,9 @@ module.exports.DeleteEssayPQ = function(req, res){
             dbo.collection('pqessactivities').updateMany({_id: parseInt(req.body.pqid)} ,{$pull: {questions: {_id: parseInt(req.body.id)}},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.id} Deleted`);
+                    db.close();
+                    res.send(`Question ${req.body.id} Deleted`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }else{
@@ -160,10 +160,9 @@ module.exports.ModifyEssayPQ = function(req, res){
             dbo.collection('pqessactivities').updateMany({_id:parseInt(req.body.pqid), 'questions._id': parseInt(req.body.id)} ,{$set: {'questions.$.approved': "true", 'questions.$.question': req.body.que, 'questions.$.label': req.body.label},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.id} Modified and Approved`);
+                    db.close();
+                    res.send(`Question ${req.body.id} Modified and Approved`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }else{
@@ -178,10 +177,9 @@ module.exports.ApproveEssayPQ = function(req, res){
             dbo.collection('pqessactivities').updateMany({_id:parseInt(req.body.pqid), 'questions._id': parseInt(req.body.id)} ,{$set: {'questions.$.approved': "true"}, $inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.id} Approved`);
+                    db.close();
+                    res.send(`Question ${req.body.id} Approved Successfully`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }else{
@@ -191,10 +189,9 @@ module.exports.ApproveEssayPQ = function(req, res){
             dbo.collection('pqessactivities').updateMany({_id:parseInt(req.body.id)} ,{$set: {approved: "true"},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.id} Approved`);
+                    db.close();
+                    res.send(`Question ${req.body.id} Approved Successfully`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }
@@ -202,17 +199,16 @@ module.exports.ApproveEssayPQ = function(req, res){
 
 //For Approving MCQ Past Question
 module.exports.DeleteMCQPQ = function(req, res){
-    console.log(req.body);
+    //console.log(req.body);
     if (dbauth === 'true'){ // if user has specified database authentication
         MongoClient.connect(dbURIAuth, function(err, db) {
             var dbo = db.db(dbname); // use dbname from Zconfig file
             dbo.collection('pqobjactivities').updateMany({_id: parseInt(req.body.pqid)} ,{$pull: {questions: {_id: parseInt(req.body.id)}},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.id} Deleted`);
+                    db.close();
+                    res.send(`Question ${req.body.id} Deleted`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }else{
@@ -221,17 +217,16 @@ module.exports.DeleteMCQPQ = function(req, res){
 }
 
 module.exports.ModifyMCQPQ = function(req, res){
-    console.log(req.body);
+    //console.log(req.body);
     if (dbauth === 'true'){ // if user has specified database authentication
         MongoClient.connect(dbURIAuth, function(err, db) {
             var dbo = db.db(dbname); // use dbname from Zconfig file
             dbo.collection('pqobjactivities').updateMany({_id:parseInt(req.body.pqid), 'questions._id': parseInt(req.body.id)} ,{$set: {'questions.$.approved': "true", 'questions.$.question': req.body.que, 'questions.$.option1': req.body.opt1, 'questions.$.option2': req.body.opt2, 'questions.$.option3': req.body.opt3, 'questions.$.option4': req.body.opt4, 'questions.$.option5': req.body.opt5, 'questions.$.answer1': req.body.ans1, 'questions.$.answer2': req.body.ans2, 'questions.$.answer3': req.body.ans3, 'questions.$.answer4': req.body.ans4, 'questions.$.answer5': req.body.ans5},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.id} Modified and Approved`);
+                    db.close();
+                    res.send(`Question ${req.body.id} Modified and Approved`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }else{
@@ -239,30 +234,28 @@ module.exports.ModifyMCQPQ = function(req, res){
 }
 
 module.exports.ApproveMCQPQ = function(req, res){
-    console.log(req.body);
+    //console.log(req.body);
     if (dbauth === 'true'){ // if user has specified database authentication
         MongoClient.connect(dbURIAuth, function(err, db) {
             var dbo = db.db(dbname); // use dbname from Zconfig file
             dbo.collection('pqobjactivities').updateMany({_id:parseInt(req.body.pqid), 'questions._id': parseInt(req.body.id)} ,{$set: {'questions.$.approved': "true"}, $inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.id} Approved`);
+                    db.close();
+                    res.send(`Question ${req.body.id} Approved Successfully`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }else{
         //db auth not in use
         MongoClient.connect(dbURI, function(err, db) {
             var dbo = db.db(dbname); // use dbname from Zconfig file
-            dbo.collection('pqobjactivities').updateMany({_id:parseInt(req.body.id)} ,{$set: {approved: "true"},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
+            dbo.collection('pqobjactivities').updateMany({_id:parseInt(req.body.pqid), 'questions._id': parseInt(req.body.id)} ,{$set: {'questions.$.approved': "true"}, $inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.id} Approved`);
+                    db.close();
+                    res.send(`Question ${req.body.id} Approved Successfully`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }
@@ -277,10 +270,9 @@ module.exports.DeleteSCQPQ = function(req, res){
             dbo.collection('pqscqactivities').updateOne({_id: parseInt(req.body.pqid)} ,{$pull: {questions: {_id: parseInt(req.body.id)}}}, function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.id} Deleted`);
+                    db.close();
+                    res.send(`Question ${req.body.id} Deleted`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }else{
@@ -296,10 +288,9 @@ module.exports.ModifySCQPQ = function(req, res){
             dbo.collection('pqscqactivities').updateMany({_id:parseInt(req.body.pqid), 'questions._id': parseInt(req.body.id)} ,{$set: {'questions.$.approved': "true", 'questions.$.question': req.body.que, 'questions.$.option1': req.body.opt1, 'questions.$.option2': req.body.opt2, 'questions.$.option3': req.body.opt3, 'questions.$.option4': req.body.opt4, 'questions.$.option5': req.body.opt5, 'questions.$.answer': req.body.ans},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.id} Modified and Approved`);
+                    db.close();
+                    res.send(`Question ${req.body.id} Modified and Approved`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }else{
@@ -314,23 +305,21 @@ module.exports.ApproveSCQPQ = function(req, res){
             dbo.collection('pqscqactivities').updateMany({_id:parseInt(req.body.pqid), 'questions._id': parseInt(req.body.id)} ,{$set: {'questions.$.approved': "true"}, $inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.id} Approved`);
+                    db.close();
+                    res.send(`Question ${req.body.id} Approved Successfully`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }else{
         //db auth not in use
         MongoClient.connect(dbURI, function(err, db) {
             var dbo = db.db(dbname); // use dbname from Zconfig file
-            dbo.collection('pqscqactivities').updateMany({_id:parseInt(req.body.id)} ,{$set: {approved: "true"},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
+            dbo.collection('pqscqactivities').updateMany({_id:parseInt(req.body.pqid), 'questions._id': parseInt(req.body.id)} ,{$set: {'questions.$.approved': "true"}, $inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.id} Approved`);
+                    db.close();
+                    res.send(`Question ${req.body.id} Approved Successfully`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }
@@ -404,17 +393,18 @@ module.exports.addEssay = function(req, res){
                 });
                 existingDoc.save((err, existingDoc) => { // save Subdocument to existing Document
                     if(err){
-                      console.log(`error Adding Essay Question ${req.body.qlabel} to ${req.body.pastq}`);
+                        getEssayPQTitle(function(e){
+                            res.render("registeress", {data: e, msg:`error Adding Essay Question ${req.body.qlabel} to ${req.body.pastq}`});
+                        });
                     } else{
-                      console.log(`${req.body.pastq} Updated with ${req.body.qlabel}`);
                       helper.nextPQVersion(req.body.pastq, 'essay');
+                      getEssayPQTitle(function(e){
+                        res.render("registeress", {data: e, msg:`${req.body.pastq} Updated with ${req.body.qlabel}`});
+                      });
                     }
                 })
             });
         };
-        getEssayPQTitle(function(e){
-            res.render("registeress", {data: e});
-        });
     });
 }
 function getEssayPQTitle(fn){
@@ -477,67 +467,86 @@ async function addReqPQtoUser(owner, name, year, type){
 
 module.exports.registerpq = async function(req, res){
     //console.log(req.body);
+    var c;
     if(req.body.qtype == 'essay'){
-        helper.nextID('essaypq', function(e){
-            var essDoc = new essdoc({
-                _id: e,
-                name : req.body.name,
-                year : req.body.year,
-                type : req.body.qtype,
-                owner : req.session.name,
-                qnum : 0,
-                version : 1, 
-            });
-            essDoc.save((err, essDoc) => {  
-                if(err){
-                console.log(`error saving ${req.body.name} past Question`);
-                } else{
-                console.log(`${req.body.name} saved Successfully`);
-                }
-            });
-        });
-        
+        essdoc.exists({name : req.body.name, year : req.body.year}, async function(err, result){
+            if(result === false){
+                helper.nextID('essaypq', function(e){
+                    var essDoc = new essdoc({
+                        _id: e,
+                        name : req.body.name,
+                        year : req.body.year,
+                        type : req.body.qtype,
+                        owner : req.session.name,
+                        qnum : 0,
+                        version : 1, 
+                    });
+                    essDoc.save(async (err, essDoc) => {
+                        if(err){
+                            res.render('registerpq', {msg: `error saving ${req.body.name} ${req.body.year} ${req.body.qtype} past Question`});
+                        } else{
+                            await addReqPQtoUser(req.session.name, req.body.name, req.body.year, req.body.qtype);
+                            res.render('registerpq', {msg: `${req.body.name} ${req.body.year} ${req.body.qtype} saved Successfully`});
+                        }
+                    });
+                });
+            }else{
+                res.render('registerpq', {msg: `${req.body.name} ${req.body.year} ${req.body.qtype} past Question Already Exist`});
+            }
+        })
     }else if(req.body.qtype == 'mcq'){
-        helper.nextID('mcqpq', function(e){
-            var objDoc = new objdoc({
-                _id: e,
-                name : req.body.name,
-                year : req.body.year,
-                type : req.body.qtype,
-                owner : req.session.name,
-                version : 1, 
-                qnum: 0,
-            });
-            objDoc.save((err, objDoc) => {  
-                if(err){
-                console.log(`error saving ${req.body.name} past Question`);
-                } else{
-                console.log(`${req.body.name} saved Successfully`);
-                }
-            });
-        }); 
+        objdoc.exists({name : req.body.name, year : req.body.year}, async function(err, result){
+            if(result === false){
+                helper.nextID('mcqpq', function(e){
+                    var objDoc = new objdoc({
+                        _id: e,
+                        name : req.body.name,
+                        year : req.body.year,
+                        type : req.body.qtype,
+                        owner : req.session.name,
+                        version : 1, 
+                        qnum: 0,
+                    });
+                    objDoc.save(async (err, objDoc) => {  
+                        if(err){
+                            res.render('registerpq', {msg: `error saving ${req.body.name} ${req.body.year} ${req.body.qtype} past Question`});
+                        } else{
+                            await addReqPQtoUser(req.session.name, req.body.name, req.body.year, req.body.qtype);
+                            res.render('registerpq', {msg: `${req.body.name} ${req.body.year} ${req.body.qtype} saved Successfully`});
+                        }
+                    });
+                });
+            }else{
+                res.render('registerpq', {msg: `${req.body.name} ${req.body.year} ${req.body.qtype} past Question Already Exist`});
+            }
+        })
     }else if(req.body.qtype == 'scq'){
-        helper.nextID('scqpq', function(e){
-            var objDoc = new scqdoc({
-                _id: e,
-                name : req.body.name, 
-                year : req.body.year,
-                type : req.body.qtype,
-                owner : req.session.name,
-                version : 1,
-                qnum: 0,
-            });
-            objDoc.save((err, objDoc) => {  
-                if(err){
-                console.log(`error saving ${req.body.name} past Question`);
-                } else{
-                console.log(`${req.body.name} saved Successfully`);
-                }
-            });
-        });
+        scqdoc.exists({name : req.body.name, year : req.body.year}, async function(err, result){
+            if(result === false){
+                helper.nextID('scqpq', function(e){
+                    var objDoc = new scqdoc({
+                        _id: e,
+                        name : req.body.name, 
+                        year : req.body.year,
+                        type : req.body.qtype,
+                        owner : req.session.name,
+                        version : 1,
+                        qnum: 0,
+                    });
+                    objDoc.save(async (err, objDoc) => {  
+                        if(err){
+                            res.render('registerpq', {msg: `error saving ${req.body.name} ${req.body.year} ${req.body.qtype} past Question`});
+                        } else{
+                            await addReqPQtoUser(req.session.name, req.body.name, req.body.year, req.body.qtype);
+                            res.render('registerpq', {msg: `${req.body.name} ${req.body.year} ${req.body.qtype} saved Successfully`});
+                        }
+                    });
+                });
+            }else{
+                res.render('registerpq', {msg: `${req.body.name} ${req.body.year} ${req.body.qtype} past Question Already Exist`});
+            }
+        })
     }
-    await addReqPQtoUser(req.session.name, req.body.name, req.body.year, req.body.qtype);
-    res.render('registerpq');
 }
 
 module.exports.getSCQPQ = function(req, res, fn){
@@ -610,9 +619,13 @@ module.exports.getPQ = function(req, res, fn){
 
 module.exports.addSCQPQ = function(req, res){
     if(req.body.pastq === 'Select Past Question'){
-        console.log("PQ not selected");
+        getSCQPQTitle(function(b){
+            res.render('scqpq', {data: b, notice:'post', msg: `PQ not selected`});
+        })
     }else if(req.body.pastq === ''){
-        console.log("PQ not selected");
+        getSCQPQTitle(function(b){
+            res.render('scqpq', {data: b, notice:'post', msg: `PQ not selected`});
+        })
     }else{
         try{
             let file = req.file;
@@ -646,10 +659,14 @@ module.exports.addSCQPQ = function(req, res){
                             });
                             existingDoc.save((err, existingDoc) => { // save Subdocument to existing Document
                                 if(err){
-                                  console.log(`error saving ${req.body.pastq}`);
+                                    getSCQPQTitle(function(b){
+                                        res.render('scqpq', {data: b, notice:'post', msg: `Error Updating ${req.body.pastq} with Question ${e}`});
+                                    })
                                 } else{
-                                  console.log(`${req.body.pastq} Updated`);
                                   helper.nextPQVersion(req.body.pastq, 'scq');
+                                  getSCQPQTitle(function(b){
+                                        res.render('scqpq', {data: b, notice:'post', msg: `${req.body.pastq} Updated with Question ${e}`});
+                                  })
                                 }
                             })
                         });
@@ -686,10 +703,14 @@ module.exports.addSCQPQ = function(req, res){
                                 });
                                 existingDoc.save((err, existingDoc) => { // save Subdocument to existing Document
                                     if(err){
-                                      console.log(`error saving ${req.body.pastq}`);
+                                        getSCQPQTitle(function(b){
+                                            res.render('scqpq', {data: b, notice:'post', msg: `Error Updating ${req.body.pastq} with Question ${e}`});
+                                        })
                                     } else{
-                                      console.log(`${req.body.pastq} Updated`);
                                       helper.nextPQVersion(req.body.pastq, 'scq');
+                                      getSCQPQTitle(function(b){
+                                            res.render('scqpq', {data: b, notice:'post', msg: `${req.body.pastq} Updated with Question ${e}`});
+                                      })
                                     }
                                 })
                             });
@@ -698,14 +719,12 @@ module.exports.addSCQPQ = function(req, res){
                 });
             }
         }catch(e){
-            console.log(e);
-            res.end();
+            getSCQPQTitle(function(b){
+                res.render('scqpq', {data: b, notice:'post', msg: `Caught Error Updating ${req.body.pastq}`});
+            })
         }
     }
-    //console.log(req.body);
-    getSCQPQTitle(function(b){
-        res.render('scqpq', {data: b, notice:'post'});
-    })
+    
 }
 
 function getSCQPQTitle(fn){
@@ -744,9 +763,13 @@ function getSCQPQTitle(fn){
 
 module.exports.addPQ = function(req, res){
     if(req.body.pastq === 'Select Past Question'){
-        console.log("PQ not selected");
+        getPQTitle(function(b){
+            res.render('objpq', {data: b, msg:`PQ not selected`});
+        })
     }else if(req.body.pastq === ''){
-        console.log("PQ not selected");
+        getPQTitle(function(b){
+            res.render('objpq', {data: b, msg:`PQ not selected`});
+        })
     }else{
         try{
             let file = req.file;
@@ -784,10 +807,14 @@ module.exports.addPQ = function(req, res){
                             });
                             existingDoc.save((err, existingDoc) => { // save Subdocument to existing Document
                                 if(err){
-                                  console.log(`error saving ${req.body.pastq}`);
+                                    getPQTitle(function(b){
+                                        res.render('objpq', {data: b, msg:`Error Updating ${req.body.pastq} with Question ${e}`});
+                                    })
                                 } else{
-                                  console.log(`${req.body.pastq} Updated`);
-                                  helper.nextPQVersion(req.body.pastq, 'mcq');
+                                    helper.nextPQVersion(req.body.pastq, 'mcq');
+                                    getPQTitle(function(b){
+                                        res.render('objpq', {data: b, msg:`${req.body.pastq} Updated with Question ${e}`});
+                                    })
                                 }
                             })
                         });
@@ -828,10 +855,14 @@ module.exports.addPQ = function(req, res){
                                 });
                                 existingDoc.save((err, existingDoc) => { // save Subdocument to existing Document
                                     if(err){
-                                      console.log(`error saving ${req.body.pastq}`);
+                                        getPQTitle(function(b){
+                                            res.render('objpq', {data: b, msg:`Error Updating ${req.body.pastq} with Question ${e}`});
+                                        })
                                     } else{
-                                      console.log(`${req.body.pastq} Updated`);
-                                      helper.nextPQVersion(req.body.pastq, 'mcq');
+                                        helper.nextPQVersion(req.body.pastq, 'mcq');
+                                        getPQTitle(function(b){
+                                            res.render('objpq', {data: b, msg:`${req.body.pastq} Updated with Question ${e}`});
+                                        })
                                     }
                                 })
                             });
@@ -841,14 +872,11 @@ module.exports.addPQ = function(req, res){
                 });
             }
         }catch(e){
-            console.log(e);
-            res.end();
+            getSCQPQTitle(function(b){
+                res.render('objpq', {data: b, msg: `Caught Error Updating ${req.body.pastq}`});
+            })
         }
     }
-    //console.log(req.body);
-    getPQTitle(function(b){
-        res.render('objpq', {data: b});
-    })
 }
 
 function getPQTitle(fn){
@@ -898,47 +926,7 @@ module.exports.saveQuestion = async function(req, res){
                 if(!req.file) { //if file parameter is not in request
                     var cx;
                     helper.nextID(req.body.course, function(e){
-                        cx = e;
-                        collection.insertOne({
-                            _id: cx,
-                            course: req.body.course,
-                            subCourse: req.body.subCourse,
-                            topic: req.body.topic,
-                            questionType: req.body.qType,
-                            question: req.body.Question,
-                            option1: req.body.opt1,
-                            option2: req.body.opt2,
-                            option3: req.body.opt3,
-                            option4: req.body.opt4,
-                            option5: req.body.opt5,
-                            answer1: req.body.ans1,
-                            answer2: req.body.ans2,
-                            answer3: req.body.ans3,
-                            answer4: req.body.ans4,
-                            answer5: req.body.ans5,
-                            picture: "No Picture",
-                            category: 'General',
-                            difficulty: 0,
-                            contributor: req.session.name,
-                            approved: 'false',
-                            version: 1,
-                            isDuplicate: 'No'
-                        },function(err, result){
-                            if (err) throw err;
-                            if(result.result.n = 1){
-                                console.log("User added Successfully");
-                            }
-        
-                        })
-                        db.close();
-                        res.render('index');
-                    });
-                } else {
-                    helper.getBase64Data(file.originalname, function(data){
-                        //data is base64 string of image uploaded
-                        //var dt = data;
-                        var cx;
-                        helper.nextID(req.body.course, function(e){
+                        if(req.session.role === 'Admin' || req.session.role === 'SuperAdmin'){
                             cx = e;
                             collection.insertOne({
                                 _id: cx,
@@ -957,76 +945,176 @@ module.exports.saveQuestion = async function(req, res){
                                 answer3: req.body.ans3,
                                 answer4: req.body.ans4,
                                 answer5: req.body.ans5,
-                                picture: data,
+                                picture: "No Picture",
+                                category: 'General',
+                                difficulty: 0,
+                                contributor: req.session.name,
+                                approved: 'true',
+                                approvedBy: req.session.name,
+                                version: 1,
+                                isDuplicate: 'No'
+                            },function(err, result){
+                                if (err){
+                                    db.close();
+                                    res.render('Questions', {data:'Error saving Question'});
+                                }
+                                if(result.result.n = 1){
+                                    dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                        helper.level(req.session.name);
+                                        db.close(); //close database connection
+                                        res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                    })
+                                }
+            
+                            })
+                        }else{ // if not admin
+                            cx = e;
+                            collection.insertOne({
+                                _id: cx,
+                                course: req.body.course,
+                                subCourse: req.body.subCourse,
+                                topic: req.body.topic,
+                                questionType: req.body.qType,
+                                question: req.body.Question,
+                                option1: req.body.opt1,
+                                option2: req.body.opt2,
+                                option3: req.body.opt3,
+                                option4: req.body.opt4,
+                                option5: req.body.opt5,
+                                answer1: req.body.ans1,
+                                answer2: req.body.ans2,
+                                answer3: req.body.ans3,
+                                answer4: req.body.ans4,
+                                answer5: req.body.ans5,
+                                picture: "No Picture",
                                 category: 'General',
                                 difficulty: 0,
                                 contributor: req.session.name,
                                 approved: 'false',
+                                approvedBy: 'None',
                                 version: 1,
                                 isDuplicate: 'No'
                             },function(err, result){
-                                if (err) throw err;
+                                if (err){
+                                    db.close();
+                                    res.render('Questions', {data:'Error saving Question'});
+                                }
                                 if(result.result.n = 1){
-                                    console.log("question added Successfully");
+                                    dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                    
+                                        db.close(); //close database connection
+                                        res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                    })
                                 }
             
                             })
-                            db.close();
-                            helper.deleteFile(file.originalname);
-                            res.render('Questions');
+                        }
+                        
+                    });
+                } else {
+                    helper.getBase64Data(file.originalname, function(data){
+                        //data is base64 string of image uploaded
+                        //var dt = data;
+                        var cx;
+                        helper.nextID(req.body.course, function(e){
+                            cx = e;
+                            if(req.session.role === 'Admin' || req.session.role === 'SuperAdmin'){
+                                collection.insertOne({
+                                    _id: cx,
+                                    course: req.body.course,
+                                    subCourse: req.body.subCourse,
+                                    topic: req.body.topic,
+                                    questionType: req.body.qType,
+                                    question: req.body.Question,
+                                    option1: req.body.opt1,
+                                    option2: req.body.opt2,
+                                    option3: req.body.opt3,
+                                    option4: req.body.opt4,
+                                    option5: req.body.opt5,
+                                    answer1: req.body.ans1,
+                                    answer2: req.body.ans2,
+                                    answer3: req.body.ans3,
+                                    answer4: req.body.ans4,
+                                    answer5: req.body.ans5,
+                                    picture: data,
+                                    category: 'General',
+                                    difficulty: 0,
+                                    contributor: req.session.name,
+                                    approved: 'true',
+                                    approvedBy: req.session.name,
+                                    version: 1,
+                                    isDuplicate: 'No'
+                                },function(err, result){
+                                    if (err){
+                                        db.close();
+                                        helper.deleteFile(file.originalname);
+                                        res.render('Questions', {data:'Error saving Question'});
+                                    }
+                                    if(result.result.n = 1){
+                                        dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                            helper.level(req.session.name);
+                                            helper.deleteFile(file.originalname);
+                                            db.close(); //close database connection
+                                            res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                        })
+                                    }
+                                })
+                            }else{ //if not admin
+                                collection.insertOne({
+                                    _id: cx,
+                                    course: req.body.course,
+                                    subCourse: req.body.subCourse,
+                                    topic: req.body.topic,
+                                    questionType: req.body.qType,
+                                    question: req.body.Question,
+                                    option1: req.body.opt1,
+                                    option2: req.body.opt2,
+                                    option3: req.body.opt3,
+                                    option4: req.body.opt4,
+                                    option5: req.body.opt5,
+                                    answer1: req.body.ans1,
+                                    answer2: req.body.ans2,
+                                    answer3: req.body.ans3,
+                                    answer4: req.body.ans4,
+                                    answer5: req.body.ans5,
+                                    picture: data,
+                                    category: 'General',
+                                    difficulty: 0,
+                                    contributor: req.session.name,
+                                    approved: 'false',
+                                    approvedBy: 'None',
+                                    version: 1,
+                                    isDuplicate: 'No'
+                                },function(err, result){
+                                    if (err){
+                                        db.close();
+                                        helper.deleteFile(file.originalname);
+                                        res.render('Questions', {data:'Error saving Question'});
+                                    }
+                                    if(result.result.n = 1){
+                                        dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                            helper.deleteFile(file.originalname);
+                                            db.close(); //close database connection
+                                            res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                        })
+                                    }
+                                })
+                            }
+                            
                         });
                     })
                 }
             });
         }else{ // no authentication
             let file = req.file;
+            //console.log(file.originalname);
             MongoClient.connect(dbURI, function(err, db) {
                 var dbo = db.db(dbname); // use dbname from Zconfig file
                 const collection = dbo.collection(req.body.course);
                 if(!req.file) { //if file parameter is not in request
                     var cx;
                     helper.nextID(req.body.course, function(e){
-                        cx = e;
-                        collection.insertOne({
-                            _id: cx,
-                            course: req.body.course,
-                            subCourse: req.body.subCourse,
-                            topic: req.body.topic,
-                            questionType: req.body.qType,
-                            question: req.body.Question,
-                            option1: req.body.opt1,
-                            option2: req.body.opt2,
-                            option3: req.body.opt3,
-                            option4: req.body.opt4,
-                            option5: req.body.opt5,
-                            answer1: req.body.ans1,
-                            answer2: req.body.ans2,
-                            answer3: req.body.ans3,
-                            answer4: req.body.ans4,
-                            answer5: req.body.ans5,
-                            picture: "No Picture",
-                            category: 'General',
-                            difficulty: 0,
-                            contributor: req.session.name,
-                            approved: 'false',
-                            version: 1,
-                            isDuplicate: 'No'
-                        },function(err, result){
-                            if (err) throw err;
-                            if(result.result.n = 1){
-                                console.log("question added Successfully");
-                            }
-        
-                        })
-                        db.close();
-                        res.render('Questions');
-                    });
-                } else {
-                    helper.getBase64Data(file.originalname, function(data){
-                        //data is base64 string of image uploaded
-                        //var dt = data;
-                        var cx;
-                        helper.nextID(req.body.course, function(e){
+                        if(req.session.role === 'Admin' || req.session.role === 'SuperAdmin'){
                             cx = e;
                             collection.insertOne({
                                 _id: cx,
@@ -1045,26 +1133,165 @@ module.exports.saveQuestion = async function(req, res){
                                 answer3: req.body.ans3,
                                 answer4: req.body.ans4,
                                 answer5: req.body.ans5,
-                                picture: data,
+                                picture: "No Picture",
+                                category: 'General',
+                                difficulty: 0,
+                                contributor: req.session.name,
+                                approved: 'true',
+                                approvedBy: req.session.name,
+                                version: 1,
+                                isDuplicate: 'No'
+                            },function(err, result){
+                                if (err){
+                                    db.close();
+                                    res.render('Questions', {data:'Error saving Question'});
+                                }
+                                if(result.result.n = 1){
+                                    dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                        helper.level(req.session.name);
+                                        db.close(); //close database connection
+                                        res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                    })
+                                }
+            
+                            })
+                        }else{ // if not admin
+                            cx = e;
+                            collection.insertOne({
+                                _id: cx,
+                                course: req.body.course,
+                                subCourse: req.body.subCourse,
+                                topic: req.body.topic,
+                                questionType: req.body.qType,
+                                question: req.body.Question,
+                                option1: req.body.opt1,
+                                option2: req.body.opt2,
+                                option3: req.body.opt3,
+                                option4: req.body.opt4,
+                                option5: req.body.opt5,
+                                answer1: req.body.ans1,
+                                answer2: req.body.ans2,
+                                answer3: req.body.ans3,
+                                answer4: req.body.ans4,
+                                answer5: req.body.ans5,
+                                picture: "No Picture",
                                 category: 'General',
                                 difficulty: 0,
                                 contributor: req.session.name,
                                 approved: 'false',
+                                approvedBy: 'None',
                                 version: 1,
                                 isDuplicate: 'No'
                             },function(err, result){
-                                if (err) throw err;
+                                if (err){
+                                    db.close();
+                                    res.render('Questions', {data:'Error saving Question'});
+                                }
                                 if(result.result.n = 1){
-                                    console.log("question added Successfully");
+                                    dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                        
+                                        db.close(); //close database connection
+                                        res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                    })
                                 }
             
                             })
-                            db.close();
-                            helper.deleteFile(file.originalname);
-                            res.render('Questions');
+                        }
+                        
+                    });
+                } else {
+                    helper.getBase64Data(file.originalname, function(data){
+                        //data is base64 string of image uploaded
+                        //var dt = data;
+                        var cx;
+                        helper.nextID(req.body.course, function(e){
+                            cx = e;
+                            if(req.session.role === 'Admin' || req.session.role === 'SuperAdmin'){
+                                collection.insertOne({
+                                    _id: cx,
+                                    course: req.body.course,
+                                    subCourse: req.body.subCourse,
+                                    topic: req.body.topic,
+                                    questionType: req.body.qType,
+                                    question: req.body.Question,
+                                    option1: req.body.opt1,
+                                    option2: req.body.opt2,
+                                    option3: req.body.opt3,
+                                    option4: req.body.opt4,
+                                    option5: req.body.opt5,
+                                    answer1: req.body.ans1,
+                                    answer2: req.body.ans2,
+                                    answer3: req.body.ans3,
+                                    answer4: req.body.ans4,
+                                    answer5: req.body.ans5,
+                                    picture: data,
+                                    category: 'General',
+                                    difficulty: 0,
+                                    contributor: req.session.name,
+                                    approved: 'true',
+                                    approvedBy: req.session.name,
+                                    version: 1,
+                                    isDuplicate: 'No'
+                                },function(err, result){
+                                    if (err){
+                                        db.close();
+                                        helper.deleteFile(file.originalname);
+                                        res.render('Questions', {data:'Error saving Question'});
+                                    }
+                                    if(result.result.n = 1){
+                                        dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                            helper.level(req.session.name);
+                                            helper.deleteFile(file.originalname);
+                                            db.close(); //close database connection
+                                            res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                        })
+                                    }
+                                })
+                            }else{ //if not admin
+                                collection.insertOne({
+                                    _id: cx,
+                                    course: req.body.course,
+                                    subCourse: req.body.subCourse,
+                                    topic: req.body.topic,
+                                    questionType: req.body.qType,
+                                    question: req.body.Question,
+                                    option1: req.body.opt1,
+                                    option2: req.body.opt2,
+                                    option3: req.body.opt3,
+                                    option4: req.body.opt4,
+                                    option5: req.body.opt5,
+                                    answer1: req.body.ans1,
+                                    answer2: req.body.ans2,
+                                    answer3: req.body.ans3,
+                                    answer4: req.body.ans4,
+                                    answer5: req.body.ans5,
+                                    picture: data,
+                                    category: 'General',
+                                    difficulty: 0,
+                                    contributor: req.session.name,
+                                    approved: 'false',
+                                    approvedBy: 'None',
+                                    version: 1,
+                                    isDuplicate: 'No'
+                                },function(err, result){
+                                    if (err){
+                                        db.close();
+                                        helper.deleteFile(file.originalname);
+                                        res.render('Questions', {data:'Error saving Question'});
+                                    }
+                                    if(result.result.n = 1){
+                                        dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                            helper.deleteFile(file.originalname);
+                                            db.close(); //close database connection
+                                            res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                        })
+                                    }
+                                })
+                            }
+                            
                         });
                     })
-                }       
+                }
             });
         }
     }catch(e){
@@ -1077,13 +1304,19 @@ module.exports.Delete = function(req, res){
     if (dbauth === 'true'){ // if user has specified database authentication
         MongoClient.connect(dbURIAuth, function(err, db) {
             var dbo = db.db(dbname); // use dbname from Zconfig file
-            dbo.collection(req.body.course).deleteOne({_id:parseInt(req.body.id)}, function(err, result){ //make an array of all data in cpcactivities 
-                if (err) throw err; //if there is an error, throw it
-                if(result.result.n === 1){
-                    console.log(`${req.body.id} Deleted`);
+            dbo.collection(req.body.course).find({_id:parseInt(req.body.id)}).toArray(function(err, result){
+                if(result.length == 0){
+                    db.close();
+                    res.send(`Question ${req.body.id} Deleted already`);
+                }else{
+                    dbo.collection(req.body.course).deleteOne({_id:parseInt(req.body.id)}, function(err, result){ //make an array of all data in cpcactivities 
+                        if (err) throw err; //if there is an error, throw it
+                        if(result.result.n === 1){
+                            db.close();
+                            res.send(`Question ${req.body.id} Deleted`);
+                        }
+                    })
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }else{
@@ -1091,18 +1324,34 @@ module.exports.Delete = function(req, res){
 }
 
 module.exports.Modify = function(req, res){
-    console.log(req.body);
+    //console.log(req.body);
+    var c;
     if (dbauth === 'true'){ // if user has specified database authentication
         MongoClient.connect(dbURIAuth, function(err, db) {
             var dbo = db.db(dbname); // use dbname from Zconfig file
-            dbo.collection(req.body.course).updateMany({_id:parseInt(req.body.id)} ,{$set: {approved: "true", question: req.body.que, option1: req.body.opt1, option2: req.body.opt2, option3: req.body.opt3, option4: req.body.opt4, option5: req.body.opt5, answer1: req.body.ans1, answer2: req.body.ans2, answer3: req.body.ans3, answer4: req.body.ans4, answer5: req.body.ans5},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
-                if (err) throw err; //if there is an error, throw it
-                if(result.result.n === 1){
-                    console.log(`${req.body.id} Modified and Approved`);
+            dbo.collection(req.body.course).find({_id:parseInt(req.body.id)}).toArray(function(err, result){
+                c = result[0]['contributor'];
+                if(result[0]['approved'] === 'true'){
+                    dbo.collection(req.body.course).updateMany({_id:parseInt(req.body.id)} ,{$set: {question: req.body.que, option1: req.body.opt1, option2: req.body.opt2, option3: req.body.opt3, option4: req.body.opt4, option5: req.body.opt5, answer1: req.body.ans1, answer2: req.body.ans2, answer3: req.body.ans3, answer4: req.body.ans4, answer5: req.body.ans5},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                        if (err) throw err; //if there is an error, throw it
+                        if(result.result.n === 1){
+                            db.close();
+                            res.send(`Question ${req.body.id} Modified`);
+                        }
+                    })
+                }else{
+                    dbo.collection(req.body.course).updateMany({_id:parseInt(req.body.id)} ,{$set: {approved: "true", approvedBy: req.session.name, question: req.body.que, option1: req.body.opt1, option2: req.body.opt2, option3: req.body.opt3, option4: req.body.opt4, option5: req.body.opt5, answer1: req.body.ans1, answer2: req.body.ans2, answer3: req.body.ans3, answer4: req.body.ans4, answer5: req.body.ans5},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                        if (err) throw err; //if there is an error, throw it
+                        if(result.result.n === 1){
+                            dbo.collection('users').updateOne({username: c.toUpperCase()} ,{$inc: {qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                db.close(); //close database connection
+                                helper.level(c);
+                                res.send(`Question ${req.body.id} Modified and Approved`);
+                            })
+                        }
+                    })
                 }
-                res.send('')
-                db.close(); //close database connection
-            })
+            });
         });
     }else{
     }
@@ -1110,17 +1359,31 @@ module.exports.Modify = function(req, res){
 
 module.exports.Approve = function(req, res){
     //console.log(req.body);
+    var c;
     if (dbauth === 'true'){ // if user has specified database authentication
         MongoClient.connect(dbURIAuth, function(err, db) {
             var dbo = db.db(dbname); // use dbname from Zconfig file
-            dbo.collection(req.body.course).updateMany({_id:parseInt(req.body.id)} ,{$set: {approved: "true"},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
-                if (err) throw err; //if there is an error, throw it
-                if(result.result.n === 1){
-                    console.log(`${req.body.id} Approved`);
+            dbo.collection(req.body.course).find({_id:parseInt(req.body.id)}).toArray(function(err, result){
+                //console.log(result);
+                c = result[0]['contributor'];
+                if(result[0]['approved'] === 'true'){
+                    db.close();
+                    console.log(`Question ${req.body.id} has been Approved already`);
+                    res.send(`Question ${req.body.id} has been Approved already`);
+                }else{
+                    dbo.collection(req.body.course).updateMany({_id:parseInt(req.body.id)} ,{$set: {approved: "true", approvedBy: req.session.name},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                        if (err) throw err; //if there is an error, throw it
+                        if(result.result.n === 1){
+                            dbo.collection('users').updateOne({username: c.toUpperCase()} ,{$inc: {qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                db.close(); //close database connection
+                                helper.level(c);
+                                res.send(`Question ${req.body.id} Approved Successfully`);
+                            })
+                            
+                        }
+                    })
                 }
-                res.send('')
-                db.close(); //close database connection
-            })
+            });
         });
     }else{
         //db auth not in use

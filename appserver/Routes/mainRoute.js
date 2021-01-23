@@ -30,10 +30,10 @@ var sessionChecker = (req, res, next) => {
 
 //Rnder Admin
 router.get('/admin', sessionChecker, function(req, res, next) {
-  if(req.session.role === 'Admin'){
+  if(req.session.role === 'Admin' || req.session.role==='SuperAdmin'){
     res.render('Admin');
   }else{
-    res.render('noaccess');
+    res.render('noaccess', {msg: 'Admins'});
   }
 });
 
@@ -42,7 +42,7 @@ router.get('/admin', sessionChecker, function(req, res, next) {
 }); */
 
 /*router.get("/tesss", function(req, res){
-  res.render("appmcqpq", {data: [{'_id':"2", 'question':"What is this", 'picture':'No Picture', 'course':'aaa', 'option1':"Option1", 'option2':"Option2", 'option3':"Option3", 'option4':"Option4", 'option5':"Option5", 'answer1':'answer1', 'answer2':'answer2', 'answer3':'answer3', 'answer4':'answer4', 'answer5':'answer5'}], pqid:1});
+  res.render("appscqpq", {data: [{'_id':"2", 'question':"What is this", 'picture':'No Picture', 'course':'aaa', 'option1':"Option1", 'option2':"Option2", 'option3':"Option3", 'option4':"Option4", 'option5':"Option5", 'answer1':'answer1', 'answer2':'answer2', 'answer3':'answer3', 'answer4':'answer4', 'answer5':'answer5'}], pqid:1});
 })*/
 
 router.post("/login", jwt.login) 
@@ -53,10 +53,17 @@ router.post("/token", jwt.token)
 
 router.post('/upgUser', login.upgUser);
 
+router.post('/deluser', login.deluser);
+
 router.post("/getUserAccount", login.GetUserAccount);
 
 router.get('/adminupg', function(req, res, next) {
-  res.render('accountupg');
+  if(req.session.role === 'SuperAdmin'){
+    res.render('accountupg');
+  }else{
+    res.render('noaccess1', {msg: 'Super Admins'});
+  }
+  
 });
 
 //Essay Approve Questions
@@ -86,9 +93,9 @@ router.post('/managepq', ctrlStatic.managePQ);
 
 router.post("/apprscqpq", ctrlStatic.ApproveSCQPQ); ///approve through ajav in slider.js
 
-router.get('/add_scqpq', sessionChecker, ctrlStatic.getSCQPQ);
+router.get('/add_scqpq', /*sessionChecker,*/ ctrlStatic.getSCQPQ);
 
-router.post("/addscqpq", upload.single('question_pic'), ctrlStatic.addSCQPQ);
+router.post("/add_scqpq", upload.single('question_pic'), ctrlStatic.addSCQPQ);
 
 //For Adding Subcourse
 router.post('/addsc', function(req, res){
@@ -124,11 +131,7 @@ router.post('/gettopicst',async function(req, res){
 
 router.get('/add_esspq', sessionChecker, ctrlStatic.rEssay);
 
-router.post('/registeress', ctrlStatic.addEssay);
-
-router.post("/registerpq", ctrlStatic.registerpq);
-
-router.post("/addpq", upload.single('question_pic'), ctrlStatic.addPQ);
+router.post('/add_esspq', ctrlStatic.addEssay);
 
 router.post("/approve", ctrlStatic.qforApproval);
 
@@ -139,8 +142,6 @@ router.post("/modify", ctrlStatic.Modify); ///modify and approve through ajav in
 router.post("/deletead", ctrlStatic.Delete); ///modify and approve through ajav in slider.js
 
 router.get('/dashboard', sessionChecker, login.getDash)
-
-router.post('/saveque', upload.single('question_pic'),  ctrlStatic.saveQuestion)
 
 router.post('/register', upload.single('pic'),  regController.register);
 
@@ -180,14 +181,19 @@ router.get('/register', function(req, res, next) {
 });
 
 router.get('/add_question', sessionChecker, function(req, res, next) {
-    res.render('Questions', {msg:"li", name:req.session.name});
+    res.render('Questions', {data:'Notifications appear here'});
 });
+router.post('/add_question', upload.single('question_pic'),  ctrlStatic.saveQuestion)
 
 router.get('/add_objpq', sessionChecker, ctrlStatic.getPQ);
+
+router.post("/add_objpq", upload.single('question_pic'), ctrlStatic.addPQ);
 
 router.get('/reg_pq', sessionChecker, function(req, res, next) {
   res.render('registerpq');
 });
+
+router.post("/reg_pq", ctrlStatic.registerpq);
 
 router.get('/adminque', function(req, res, next) {
   res.render('admin_que');
@@ -204,20 +210,30 @@ router.get('/ajax', function(req, res){
 
 
 router.post('/delsc', function(req, res){
-  mongo.delSC(req.body.course, req.body.SubCourse, function(e){
-    //console.log(e);
-    res.send(e);
-    //res.send(e);
-  })
+  if(req.session.role === 'SuperAdmin'){
+    mongo.delSC(req.body.course, req.body.SubCourse, function(e){
+      //console.log(e);
+      res.send(e);
+      //res.send(e);
+    })
+  }else{
+    res.send('Only Super Admins can Delete Subtopics')
+  }
+  
   //res.render('admin_que');
 });
 
 router.post('/deltopic', function(req, res){
-  mongo.delTopic(req.body.course, req.body.topic, function(e){
-    //console.log(e);
-    res.send(e);
-    //res.send(e);
-  })
+  if(req.session.role === 'SuperAdmin'){
+    mongo.delTopic(req.body.course, req.body.topic, function(e){
+      //console.log(e);
+      res.send(e);
+      //res.send(e);
+    })
+  }else{
+    res.send('Only Super Admins can Delete Topics')
+  }
+  
   //res.render('admin_que');
 });
 

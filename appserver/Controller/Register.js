@@ -34,8 +34,35 @@ module.exports.register = function(req, res){
                     //console.log(result);
                     if(result.length === 0){ //user not available, register it
                         if(!req.file) { //if file parameter is not in request
-                            res.render('Register');
-                            console.log("no file")
+                            const Salt = bcrypt.genSaltSync()
+                            const hashedpassword = bcrypt.hashSync(req.body.pwd, Salt)
+                            var objDoc = new userdoc({ 
+                                firstName: req.body.fname,
+                                lastName: req.body.lname,
+                                school: req.body.school,
+                                dept: req.body.dept,
+                                email: req.body.email,
+                                level: req.body.lvl,
+                                username: (req.body.user).toUpperCase(),
+                                role: 'Contributor',
+                                pic: 'No Picture',
+                                password: hashedpassword,
+                                clevel: 1,
+                                noOfQ: 0,
+                                qApproved: 0
+                            });
+                            objDoc.save((err, objDoc) => {  
+                                if(err){
+                                    console.log(`error saving user Account ${err}`);
+                                } else{
+                                    console.log("User added Successfully");
+                                }
+                            });
+                            db.close();
+                            req.session.name = (req.body.user).toUpperCase();
+                            req.session.password = hashedpassword;
+                            req.session.role = 'Contributor';
+                            res.redirect('/');
                         } else {
                             helper.getBase64Data(file.originalname, function(data){
                                 //data is base64 string of image uploaded
@@ -73,7 +100,7 @@ module.exports.register = function(req, res){
                             })
                         }
                     }else{// user available, ignore
-                        res.render('Register');
+                        res.render('Register', {msg:'Username Taken Already.'});
                         //console.log("user available")
                     }
                 });
@@ -88,8 +115,35 @@ module.exports.register = function(req, res){
                     //console.log(result);
                     if(result.length === 0){ //user not available, register it
                         if(!req.file) { //if file parameter is not in request
-                            res.render('Register');
-                            console.log("no file")
+                            const Salt = bcrypt.genSaltSync()
+                            const hashedpassword = bcrypt.hashSync(req.body.pwd, Salt)
+                            var objDoc = new userdoc({ 
+                                firstName: req.body.fname,
+                                lastName: req.body.lname,
+                                school: req.body.school,
+                                dept: req.body.dept,
+                                email: req.body.email,
+                                level: req.body.lvl,
+                                username: (req.body.user).toUpperCase(),
+                                role: 'Contributor',
+                                pic: 'No Picture',
+                                password: hashedpassword,
+                                clevel: 1,
+                                noOfQ: 0,
+                                qApproved: 0
+                            });
+                            objDoc.save((err, objDoc) => {  
+                                if(err){
+                                    console.log(`error saving user Account ${err}`);
+                                } else{
+                                    console.log("User added Successfully");
+                                }
+                            });
+                            db.close();
+                            req.session.name = (req.body.user).toUpperCase();
+                            req.session.password = hashedpassword;
+                            req.session.role = 'Contributor';
+                            res.redirect('/');
                         } else {
                             helper.getBase64Data(file.originalname, function(data){
                                 //data is base64 string of image uploaded
@@ -128,14 +182,14 @@ module.exports.register = function(req, res){
                             })
                         }
                     }else{// user available, ignore
-                        res.render('Register');
+                        res.render('Register', {msg:'Username Taken Already.'});
                     }
                 });
             });
         }
     }else{
         //password did not match
-        res.render('Register');
+        res.render('Register', {msg:'Password do not match'});
     }
 }
 
@@ -150,7 +204,7 @@ module.exports.createAdmin = function(){
         email: 'bukmeds@gmail.com',
         level: "4",
         username: 'ADMIN',
-        role: 'Admin', 
+        role: 'SuperAdmin', 
         pic: "No Picture",
         password: hashedpassword,
         clevel: 1,
@@ -190,12 +244,12 @@ module.exports.Appregister = function(req, res){
                             level: req.body.lvl,
                             username: (req.body.username).toUpperCase(),
                             role: 'Contributor',
-                            pic: req.body.pic,
+                            pic: 'No Picture',
                             password: hashedpassword,
                             clevel: 1,
                             noOfQ: 0,
                             qApproved: 0
-                        });
+                        }); 
                         objDoc.save((err, objDoc) => {  
                             if(err){
                                 res.send('Registration Failed - Saving user failed!!!');
@@ -231,7 +285,7 @@ module.exports.Appregister = function(req, res){
                             level: req.body.lvl,
                             username: (req.body.username).toUpperCase(),
                             role: 'Contributor',
-                            pic: req.body.pic,
+                            pic: 'No Picture',
                             password: hashedpassword,
                             clevel: 1,
                             noOfQ: 0,
@@ -253,7 +307,7 @@ module.exports.Appregister = function(req, res){
             });
         }
     }else{
-        //password did not match
+        //password did not match 
         res.send('Registration Failed- Password do not match!!!');
     }
 }

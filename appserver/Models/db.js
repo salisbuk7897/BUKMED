@@ -23,22 +23,9 @@ var dbURIAuth = `mongodb://${mongourl}:${mongoport}/${dbname}?authSource=${authS
 
 var ls =["scqpq", "mcqpq", "essaypq"];
 var allCourses = [
-    ["ana", "Anatomy", "Not Selected"],
-    ["bio", "Biochemistry", "Not Selected"],
-    ["phy", "Physiology", "Not Selected"],
-    ["fmt", "Forensic Medicine & Toxicology", "Not Selected"],
-    ["mcb", "Microbiology", "Not Selected"],
     ["pth", "Pathology", "Not Selected"],
     ["phm", "Pharmacology", "Not Selected"],
-    ["ans", "Anesthesiology", "Not Selected"],
-    ["cmd", "Community Medicine", "Not Selected"],
-    ["dav", "Dermatology & Venereology", "Not Selected"],
-    ["obg", "Obstetrics & Gynecology", "Not Selected"],
-    ["opt", "Ophthalmology", "Not Selected"],
-    ["ort", "Orthopaedics", "Not Selected"],
-    ["oto", "Otorhinolaryngology", "Not Selected"],
-    ["pea", "Paediatrics", "Not Selected"],
-    ["psy", "Psychiatry", "Not Selected"],
+    ["mdc", "Medicine", "Not Selected"],
     ["sgy", "Surgery", "Not Selected"]]
 
 if (dbauth === 'true'){
@@ -58,10 +45,17 @@ if (dbauth === 'true'){
                 if(err){
                     console.log("error Connecting to database")
                 } 
-                if (collinfo) {
+                if (collinfo) { 
                     console.log("Collections exist");
                 }else{
+                    
                     await conn.db.createCollection('users',{storageEngine: {wiredTiger: {configString: 'block_compressor=zlib'}}});
+                    await conn.db.createCollection('pqscqactivities',{storageEngine: {wiredTiger: {configString: 'block_compressor=zlib'}}});
+                    try{
+                        conn.db.createCollection('counters',{storageEngine: {wiredTiger: {configString: 'block_compressor=zlib'}}});
+                    }catch(e){
+
+                    }
                     await addCounter('user');
                     for(i in allCourses){
                         var courseDoc = new coursesdoc({ 
@@ -104,6 +98,11 @@ if (dbauth === 'true'){
                     console.log("Collections exist");
                 }else{
                    await conn.db.createCollection('users',{storageEngine: {wiredTiger: {configString: 'block_compressor=zlib'}}});
+                   try{
+                        conn.db.createCollection('counters',{storageEngine: {wiredTiger: {configString: 'block_compressor=zlib'}}});
+                    }catch(e){
+
+                    }
                    await addCounter('user');
                     for(i in allCourses){
                         var courseDoc = new coursesdoc({ 

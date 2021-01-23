@@ -1,0 +1,179 @@
+extend layout
+block header
+    link(rel='stylesheet', href='/stylesheets/slider.css')
+    style.
+        form {
+            --background: white;
+            --border: rgba(0, 0, 0, 0.125);
+            --borderDark: rgba(0, 0, 0, 0.25);
+            --borderDarker: rgba(0, 0, 0, 0.5);
+            --bgColorH: 0;
+            --bgColorS: 0%;
+            --bgColorL: 98%;
+            --fgColorH: 210;
+            --fgColorS: 50%;
+            --fgColorL: 38%;
+            --shadeDark: 0.3;
+            --shadeLight: 0.7;
+            --shadeNormal: 0.5;
+            --borderRadius: 0.125rem;
+            --highlight: #306090;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--borderRadius);
+            box-shadow: 0 1rem 1rem -0.75rem var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topa{
+            width:60%;
+            margin: auto;
+            border: 1%;
+            padding: 10px;
+        }
+        .hdd{
+            font-family: 'Calisto MT';
+            font-size: 25px;
+        }
+
+        .clegend{
+            font-family: 'Calisto MT';
+        }
+        .qnu{
+            margin-top:20px; 
+            margin-right: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .qnu1{
+            width:22%;
+            margin: auto;
+            border: 1%;
+            padding: 10px;
+        }
+
+        .pp{
+            margin-top:10px;
+            margin-right: 10px;
+        }
+
+        @media screen and (max-width: 720px) {
+            body{
+                margin:0px;
+                font-family: "Times New Roman", Times, serif
+            }
+            .hdd{
+                font-family: "Times New Roman", Times, serif;
+                font-size: 16px;
+            }
+            .topa{
+                width:  100%;
+                margin: auto;
+                border: 5px;
+                padding: 1%;
+            }
+            .clegend{
+                font-size:25px;
+                font-family: "Times New Roman", Times, serif;
+            }
+            .qnu{
+                margin-top:20px; 
+                text-align: center;
+                font-weight: bold;
+                float:'left';
+            }
+
+            .pp{
+                margin-top:0px;
+                margin-right: 0px;
+            }
+            
+        }
+block content
+    .salis(style={"margin-left":"15%","margin-right":"15%", "border":"Solid", "border-color":"blue","background-color":"lightblue", "height":"85vh","overflow":"auto", "margin-top":"1%"})
+        h2(style={"text-align":"center", "margin-top":"2%"}) Add Past Question
+        hr
+        form(action="/addpq" method="post" enctype="multipart/form-data")
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-3
+                    p(style={"margin-top":"10px",}) Past Question
+                .col-md-9
+                    select.custom-select(style={"margin-right": "10px"}, name="pastq", id="pastq")
+                        option(selected='') Select Past Question
+                        - if(data.length > 0)
+                            - for(i of data)
+                                option(value=`${i}`) !{i}
+            hr
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-9
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Question
+                    input(type="text" class="form-control" name="Question" style={"margin-right": "10px"} id="que")
+                .col-md-3
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Picture (If any)
+                    input(type="file" class="form-control" name="question_pic" style={"margin-right": "10px"} id="pic")
+            
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-2
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 1
+                .col-md-7
+                    input(type="text" class="form-control" name="opt1" style={"margin-top":"10px","margin-right": "10px"} id="opt1")
+                .col-md-3
+                    select.custom-select(style={"margin-top":"10px","margin-right": "10px"}, id="ans1" name="ans1")
+                        option(selected='') Select Answer
+                        option(value='T') True
+                        option(value='F') False
+
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-2
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 2
+                .col-md-7
+                    input(type="text" class="form-control" name="opt2" style={"margin-top":"10px","margin-right": "10px"} id="opt2")
+                .col-md-3
+                    select.custom-select(style={"margin-top":"10px","margin-right": "10px"}, id="ans2" name="ans2")
+                        option(selected='') Select Answer
+                        option(value='T') True
+                        option(value='F') False
+
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-2
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 3
+                .col-md-7
+                    input(type="text" class="form-control" name="opt3" style={"margin-top":"10px","margin-right": "10px"} id="opt3")
+                .col-md-3
+                    select.custom-select(style={"margin-top":"10px","margin-right": "10px"}, id="ans3" name="ans3")
+                        option(selected='') Select Answer
+                        option(value='T') True
+                        option(value='F') False
+
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-2
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 4
+                .col-md-7
+                    input(type="text" class="form-control" name="opt4" style={"margin-top":"10px","margin-right": "10px"} id="opt4")
+                .col-md-3
+                    select.custom-select(style={"margin-top":"10px","margin-right": "10px"}, id="ans4" name="ans4")
+                        option(selected='') Select Answer
+                        option(value='T') True
+                        option(value='F') False
+
+            .row(style={"width":"98%", "margin-left":"15px"})
+                .col-md-2
+                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 5
+                .col-md-7
+                    input(type="text" class="form-control" name="opt5" style={"margin-top":"10px","margin-right": "10px"} id="opt5")
+                .col-md-3
+                    select.custom-select(style={"margin-top":"10px","margin-right": "10px"}, id="ans5" name="ans5")
+                        option(selected='') Select Answer
+                        option(value='T') True
+                        option(value='F') False
+
+            button(type='submit' style={"color":"white", "width":"90%", "margin-top":"10px", "margin-right":"5%", "margin-left":"5%"} class='btn btn-primary' ) Save Question
+                                                              
+
+block scripts
+    script.

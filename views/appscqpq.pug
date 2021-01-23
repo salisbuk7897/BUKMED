@@ -2,79 +2,167 @@ extend layout
 
 block header
     link(rel='stylesheet', href='/stylesheets/slider.css')
+    style.
+        form {
+            --background: white;
+            --border: rgba(0, 0, 0, 0.125);
+            --borderDark: rgba(0, 0, 0, 0.25);
+            --borderDarker: rgba(0, 0, 0, 0.5);
+            --bgColorH: 0;
+            --bgColorS: 0%;
+            --bgColorL: 98%;
+            --fgColorH: 210;
+            --fgColorS: 50%;
+            --fgColorL: 38%;
+            --shadeDark: 0.3;
+            --shadeLight: 0.7;
+            --shadeNormal: 0.5;
+            --borderRadius: 0.125rem;
+            --highlight: #306090;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--borderRadius);
+            box-shadow: 0 1rem 1rem -0.75rem var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topa{
+            width:60%;
+            margin: auto;
+            border: 1%;
+            padding: 10px;
+        }
+        .hdd{
+            font-family: 'Calisto MT';
+            font-size: 25px;
+        }
+
+        .clegend{
+            font-family: 'Calisto MT';
+        }
+        .qnu{
+            margin-top:20px; 
+            margin-right: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .qnu1{
+            width:22%;
+            margin: auto;
+            border: 1%;
+            padding: 10px;
+        }
+
+        .pp{
+            margin-top:10px;
+            margin-right: 10px;
+        }
+
+        @media screen and (max-width: 720px) {
+            body{
+                margin:0px;
+                font-family: "Times New Roman", Times, serif
+            }
+            .hdd{
+                font-family: "Times New Roman", Times, serif;
+                font-size: 16px;
+            }
+            .topa{
+                width:  100%;
+                margin: auto;
+                border: 5px;
+                padding: 1%;
+            }
+            .clegend{
+                font-size:25px;
+                font-family: "Times New Roman", Times, serif;
+            }
+            .qnu{
+                margin-top:20px; 
+                text-align: center;
+                font-weight: bold;
+                float:'left';
+            }
+
+            .pp{
+                margin-top:0px;
+                margin-right: 0px;
+            }
+            
+        }
 
 block content
-    div(style={"overflow":"auto", "height":"85vh"}, id='main')
+    div(class='topa')
         if(data)                
-            .salis(style={"margin-left":"15%","margin-right":"15%", "border":"Solid", "border-color":"blue","overflow":"auto", "height":"80vh", "margin-top":"1%", "background-color":"lightblue"})
+            form
                 .slideshow-container
                     - for(dat of data)
                         .mySlides.faded
                             .row
-                                .col-md-6.float-right
-                                    p(style={"margin-top":"20px", "margin-right": "10px","float":"right"}) Question Number
                                 .col-md-6
-                                    input(readonly type="text" class="form-control" name="qnum" value=`${dat._id}` style={"width":"10%","margin-top":"10px","margin-right": "10px"} id="qnum")
+                                    p(class='qnu') Question Number
+                                .col-md-6
+                                    div(class='qnu1')
+                                        input(readonly type="text" class="form-control" name="qnum" value=`${dat._id}` style={'text-align':'center'} id="qnum")
                             hr
-                            .row(style={"width":"98%", "margin-left":"15px"})
-                                .col-md-9
-                                    p(style={"margin-top":"10px", "margin-right": "10px"}) Question
-                                    textarea.autofocus(autofocus name="Question" id=`que${dat._id}` class="md-textarea form-control" rows="3") !{dat.question}
-                                .col-md-3
-                                    if(dat.picture === 'No Picture' )
-                                        img(src="/images/noimage.png", style={"height": "150px", "width":"180px"})
-                                    else
+                            if(dat.picture === 'No Picture' )
+                                div(class="form-group")
+                                    label(for='Question') Question
+                                    textarea.autofocus(autofocus name="Question" id="que" class="md-textarea form-control" rows="3") !{dat.question}
+                            else
+                                .row(style={"width":"98%", "margin-left":"15px"})
+                                    .col-md-9
+                                        div(class="form-group")
+                                            label(for='Question') Question
+                                            textarea.autofocus(autofocus name="Question" id="que" class="md-textarea form-control" rows="3") !{dat.question}
+                                    .col-md-3
                                         img(src=`data:image/gif;base64,${dat.picture}`, style={"height": "150px", "width":"180px"})
                             
-                            .row(style={"width":"98%", "margin-left":"15px"})
-                                .col-md-2
-                                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option A
-                                .col-md-7
-                                    input(type="text" class="form-control" name="opt1" value=`${dat.option1}` style={"margin-top":"10px","margin-right": "10px"} id=`opti${dat._id}`)
-                                
+                            
+                            div(class="form-group")
+                                label(for='opt1') Option 1
+                                input(type="text" class="form-control" name="opt1" value=`${dat.option1}` style={"margin-right": "1%"} id="opt1")
 
-                            .row(style={"width":"98%", "margin-left":"15px"})
-                                .col-md-2
-                                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option B
-                                .col-md-7
-                                    input(type="text" class="form-control" name="opt2" value=`${dat.option2}` style={"margin-top":"10px","margin-right": "10px"} id=`optii${dat._id}`)
-                                
+                            div(class="form-group")
+                                label(for='opt2') Option 2
+                                input(type="text" class="form-control" name="opt2" value=`${dat.option1}` style={"margin-right": "1%"} id="opt2")
 
-                            .row(style={"width":"98%", "margin-left":"15px"})
-                                .col-md-2
-                                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option C
-                                .col-md-7
-                                    input(type="text" class="form-control" name="opt3" value=`${dat.option3}` style={"margin-top":"10px","margin-right": "10px"} id=`optiii${dat._id}`)
-                                
-                            .row(style={"width":"98%", "margin-left":"15px"})
-                                .col-md-2
-                                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option D
-                                .col-md-7
-                                    input(type="text" class="form-control" name="opt4" value=`${dat.option4}` style={"margin-top":"10px","margin-right": "10px"} id=`optiv${dat._id}`)
-                                
-                            .row(style={"width":"98%", "margin-left":"15px"})
-                                .col-md-2
-                                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option E
-                                .col-md-7
-                                    input(type="text" class="form-control" name="opt5" value=`${dat.option5}` style={"margin-top":"10px","margin-right": "10px"} id=`optv${dat._id}`)
+                            div(class="form-group")
+                                label(for='opt3') Option 3
+                                input(type="text" class="form-control" name="opt3" value=`${dat.option1}` style={"margin-right": "1%"} id="opt3")
+
+                            div(class="form-group")
+                                label(for='opt4') Option 4
+                                input(type="text" class="form-control" name="opt4" value=`${dat.option1}` style={"margin-right": "1%"} id="opt4")
+
+                            .row
+                                .col-md-9
+                                    div(class="form-group")
+                                        label(for='opt5') Option 5
+                                        input(type="text" class="form-control" name="opt5" value=`${dat.option1}` style={"margin-right": "1%"} id="opt5")
                                 .col-md-3
-                                    .row
-                                        .col-md-8
-                                            p(style={"margin-top":"10px", "margin-right": "1%", "text-align":"center"}) Answer
-                                        .col-md-4
-                                            input(class="form-control" value=`${dat.answer}` style={"margin-right": "10px"}, id=`ans${dat._id}` name="ans")
+                                    div(class="form-group")
+                                        label(for='ans') Answer
+                                        input(class="form-control" value=`${dat.answer}` style={"margin-right": "10px"}, id=`ans${dat._id}` name="ans")
+                                            
                             .row
                                 .col-md-2
-                                    a(href="javascript:plusSlides(-1)" style={"color":"white", "width":"90%", "margin-top":"20px", } class="btn btn-primary float-right") Previous
+                                    a(href="javascript:plusSlides(-1)" style={"width":"100%", "margin-top":"20px", } class="btn btn-primary float-right") Previous
                                 .col-md-2
-                                    a(href=`javascript:deleteadpq(${pqid}, ${dat._id})` class='btn btn-danger float-right' id="rmf3b", style={"width":"90%", "margin-top":"20px", "margin-right":"5px"}) Delete
+                                    a(href=`javascript:deleteadpq(${pqid}, ${dat._id})` class='btn btn-danger float-right' id="rmf3b", style={"width":"100%", "margin-top":"20px"}) Delete
                                 .col-md-3
-                                    a(href=`javascript:MaApprpq(${pqid}, ${dat._id})` class='btn btn-primary float-right' id="rmf3b", style={"width":"90%", "margin-top":"20px", "margin-right":"20px"}) Modify and Approve
+                                    a(href=`javascript:MaApprpq(${pqid}, ${dat._id})` class='btn btn-primary float-right' id="rmf3b", style={"width":"100%", "margin-top":"20px"}) Modify and Approve
                                 .col-md-2
-                                    a(href=`javascript:approvepq(${pqid}, ${dat._id})` class='btn btn-primary float-right' id="rmf3b", style={"width":"90%", "margin-top":"20px", "margin-right":"20px"}) Approve
+                                    a(href=`javascript:approvepq(${pqid}, ${dat._id})` class='btn btn-primary float-right' id="rmf3b", style={"width":"100%", "margin-top":"20px"}) Approve
                                 .col.md-2
-                                    a(href="javascript:plusSlides(1)" style={"color":"white", "width":"90%", "margin-top":"20px", "margin-right":"20px"} class="btn btn-primary float-right") Next
-
+                                    a(href="javascript:plusSlides(1)" style={"width":"100%", "margin-top":"20px"} class="btn btn-primary float-right") Next
+        h6(style={"text-align":"center"}, class="alert alert-danger", id ="ownscq1")
+        br
 
 block scripts
     script(src='/javascripts/slider.js')

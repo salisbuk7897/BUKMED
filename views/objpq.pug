@@ -1,85 +1,224 @@
 extend layout
+block header
+    link(rel='stylesheet', href='/stylesheets/slider.css')
+    style.
+        form {
+            --background: white;
+            --border: rgba(0, 0, 0, 0.125);
+            --borderDark: rgba(0, 0, 0, 0.25);
+            --borderDarker: rgba(0, 0, 0, 0.5);
+            --bgColorH: 0;
+            --bgColorS: 0%;
+            --bgColorL: 98%;
+            --fgColorH: 210;
+            --fgColorS: 50%;
+            --fgColorL: 38%;
+            --shadeDark: 0.3;
+            --shadeLight: 0.7;
+            --shadeNormal: 0.5;
+            --borderRadius: 0.125rem;
+            --highlight: #306090;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--borderRadius);
+            box-shadow: 0 1rem 1rem -0.75rem var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
 
-block content
-    .salis(style={"margin-left":"15%","margin-right":"15%", "border":"Solid", "border-color":"blue","background-color":"lightblue", "height":"85vh","overflow":"auto", "margin-top":"1%"})
-        h2(style={"text-align":"center", "margin-top":"2%"}) Add Past Question
-        hr
-        form(action="/addpq" method="post" enctype="multipart/form-data")
-            .row(style={"width":"98%", "margin-left":"15px"})
-                .col-md-3
-                    p(style={"margin-top":"10px",}) Past Question
-                .col-md-9
-                    select.custom-select(style={"margin-right": "10px"}, name="pastq", id="pastq")
-                        option(selected='') Select Past Question
-                        - if(data.length > 0)
-                            - for(i of data)
-                                option(value=`${i}`) !{i}
-            hr
-            .row(style={"width":"98%", "margin-left":"15px"})
-                .col-md-9
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Question
-                    input(type="text" class="form-control" name="Question" style={"margin-right": "10px"} id="que")
-                .col-md-3
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Picture (If any)
-                    input(type="file" class="form-control" name="question_pic" style={"margin-right": "10px"} id="pic")
+        .topa{
+            width:60%;
+            margin: auto;
+            border: 1%;
+            padding: 10px;
+        }
+        .hdd{
+            font-family: 'Calisto MT';
+            font-size: 25px;
+        }
+
+        .clegend{
+            font-family: 'Calisto MT';
+        }
+        .qnu{
+            margin-top:20px; 
+            margin-right: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .qnu1{
+            width:22%;
+            margin: auto;
+            border: 1%;
+            padding: 10px;
+        }
+
+        .pp{
+            margin-top:10px;
+            margin-right: 10px;
+        }
+
+        @media screen and (max-width: 720px) {
+            body{
+                margin:0px;
+                font-family: "Times New Roman", Times, serif
+            }
+            .hdd{
+                font-family: "Times New Roman", Times, serif;
+                font-size: 16px;
+            }
+            .topa{
+                width:  100%;
+                margin: auto;
+                border: 5px;
+                padding: 1%;
+            }
+            .clegend{
+                font-size:25px;
+                font-family: "Times New Roman", Times, serif;
+            }
+            .qnu{
+                margin-top:20px; 
+                text-align: center;
+                font-weight: bold;
+                float:'left';
+            }
+
+            .pp{
+                margin-top:0px;
+                margin-right: 0px;
+            }
             
-            .row(style={"width":"98%", "margin-left":"15px"})
-                .col-md-2
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 1
-                .col-md-7
-                    input(type="text" class="form-control" name="opt1" style={"margin-top":"10px","margin-right": "10px"} id="opt1")
+        }
+block content
+    if(msg)
+        div(class="alert alert-success" role="alert" style={'text-align':'center'}) !{msg}
+    div(class='topa')
+        form(action="/add_objpq" method="post" enctype="multipart/form-data" class="needs-validation" novalidate)
+            legend
+                center
+                    h2
+                        b( class='clegend') Add Question
+            div(class="form-group")
+                label(for='pastq') Past Question
+                select.custom-select(style={"width": "100%"}, name="pastq", id="pastq" required)
+                    option(value='' disabled selected) Select Past Question
+                    - if(data.length > 0)
+                        - for(i of data)
+                            option(value=`${i}`) !{i}
+                div(class="invalid-feedback") Please Select a Question Paper.
+            .row
+                .col-md-9
+                    div(class="form-group")
+                        label(for='Question') Question
+                        input(type="text" class="form-control" name="Question" style={"margin-right": "10px"} id="que" required)
+                        div(class="invalid-feedback") Please Enter a Question.
                 .col-md-3
-                    select.custom-select(style={"margin-top":"10px","margin-right": "10px"}, id="ans1" name="ans1")
-                        option(selected='') Select Answer
-                        option(value='T') True
-                        option(value='F') False
-
-            .row(style={"width":"98%", "margin-left":"15px"})
-                .col-md-2
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 2
-                .col-md-7
-                    input(type="text" class="form-control" name="opt2" style={"margin-top":"10px","margin-right": "10px"} id="opt2")
+                    div(class="form-group")
+                        label(for='question_pic') Picture (If any)
+                        input(type="file" class="form-control" name="question_pic" style={"margin-right": "10px"} id="pic")
+            
+            .row
+                .col-md-9
+                    div(class="form-group")
+                        label(for='opt1') Option 1
+                        input(type="text" class="form-control" name="opt1" id="opt1" required)
+                        div(class="invalid-feedback") Please Enter an Option.
                 .col-md-3
-                    select.custom-select(style={"margin-top":"10px","margin-right": "10px"}, id="ans2" name="ans2")
-                        option(selected='') Select Answer
-                        option(value='T') True
-                        option(value='F') False
+                    div(class="form-group")
+                        label(for='ans1') Answer 1
+                        select.custom-select( id="ans1" name="ans1" required)
+                            option(value='' disabled selected) Select Answer
+                            option(value='T') True
+                            option(value='F') False
+                        div(class="invalid-feedback") Please Select an Answer.
 
-            .row(style={"width":"98%", "margin-left":"15px"})
-                .col-md-2
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 3
-                .col-md-7
-                    input(type="text" class="form-control" name="opt3" style={"margin-top":"10px","margin-right": "10px"} id="opt3")
+            .row
+                .col-md-9
+                    div(class="form-group")
+                        label(for='opt2') Option 2
+                        input(type="text" class="form-control" name="opt2" id="opt2" required)
+                        div(class="invalid-feedback") Please Enter an Option.
                 .col-md-3
-                    select.custom-select(style={"margin-top":"10px","margin-right": "10px"}, id="ans3" name="ans3")
-                        option(selected='') Select Answer
-                        option(value='T') True
-                        option(value='F') False
+                    div(class="form-group")
+                        label(for='ans2') Answer 2
+                        select.custom-select( id="ans2" name="ans2" required)
+                            option(value='' disabled selected) Select Answer
+                            option(value='T') True
+                            option(value='F') False
+                        div(class="invalid-feedback") Please Select an Answer
 
-            .row(style={"width":"98%", "margin-left":"15px"})
-                .col-md-2
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 4
-                .col-md-7
-                    input(type="text" class="form-control" name="opt4" style={"margin-top":"10px","margin-right": "10px"} id="opt4")
+            .row
+                .col-md-9
+                    div(class="form-group")
+                        label(for='opt3') Option 3
+                        input(type="text" class="form-control" name="opt3" id="opt3" required)
+                        div(class="invalid-feedback") Please Enter an Option.
                 .col-md-3
-                    select.custom-select(style={"margin-top":"10px","margin-right": "10px"}, id="ans4" name="ans4")
-                        option(selected='') Select Answer
-                        option(value='T') True
-                        option(value='F') False
+                    div(class="form-group")
+                        label(for='ans3') Answer 3
+                        select.custom-select( id="ans3" name="ans3" required)
+                            option(value='' disabled selected) Select Answer
+                            option(value='T') True
+                            option(value='F') False
+                        div(class="invalid-feedback") Please Select an Answer.
 
-            .row(style={"width":"98%", "margin-left":"15px"})
-                .col-md-2
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 5
-                .col-md-7
-                    input(type="text" class="form-control" name="opt5" style={"margin-top":"10px","margin-right": "10px"} id="opt5")
+            .row
+                .col-md-9
+                    div(class="form-group")
+                        label(for='opt4') Option 4
+                        input(type="text" class="form-control" name="opt4" id="opt4" required)
+                        div(class="invalid-feedback") Please Enter an Option.
                 .col-md-3
-                    select.custom-select(style={"margin-top":"10px","margin-right": "10px"}, id="ans5" name="ans5")
-                        option(selected='') Select Answer
-                        option(value='T') True
-                        option(value='F') False
+                    div(class="form-group")
+                        label(for='ans4') Answer 4
+                        select.custom-select( id="ans4" name="ans4" required)
+                            option(value='' disabled selected) Select Answer
+                            option(value='T') True
+                            option(value='F') False
+                        div(class="invalid-feedback") Please Select an Answer.
 
-            button(type='submit' style={"color":"white", "width":"90%", "margin-top":"10px", "margin-right":"5%", "margin-left":"5%"} class='btn btn-primary' ) Save Question
+            .row
+                .col-md-9
+                    div(class="form-group")
+                        label(for='opt5') Option 5
+                        input(type="text" class="form-control" name="opt5" id="opt5" required)
+                        div(class="invalid-feedback") Please Enter an Option.
+                .col-md-3
+                    div(class="form-group")
+                        label(for='ans5') Answer 5
+                        select.custom-select(id="ans5" name="ans5" required)
+                            option(value='' disabled selected) Select Answer
+                            option(value='T') True
+                            option(value='F') False
+                        div(class="invalid-feedback") Please Select an Answer.
+
+            button(type='submit' style={'width':'100%', "margin-top":"10px"} class='btn btn-primary' ) Save Question
                                                               
 
 block scripts
+    script(src='https://code.jquery.com/jquery-3.5.1.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.bundle.min.js')
     script.
+        (function() {
+            'use strict';
+                window.addEventListener('load', function() {
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    var forms = document.getElementsByClassName('needs-validation');
+                    // Loop over them and prevent submission
+                    var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                    });
+                }, false);
+            })();

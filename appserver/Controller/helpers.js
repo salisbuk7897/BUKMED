@@ -19,6 +19,25 @@ const { collection } = require("../Models/coursesSchema");
 var dbURI = `mongodb://${mongourl}:${mongoport}/${dbname}?compressors=zlib`; //no authentication
 var dbURIAuth = `mongodb://${dbuser}:${dbpwd}@${mongourl}:${mongoport}/${dbname}?authMechanism=DEFAULT&authSource=${authSource}`; 
 
+module.exports.level = function(name){
+    var lvls = [10, 30, 80, 150, 300, 500, 800, 1200, 1500, 2000, 2800, 3700, 5000, 7000]
+    MongoClient.connect(dbURIAuth, function(err, db) {
+        var dbo = db.db(dbname); 
+        dbo.collection('users').find({username: name.toUpperCase()}).toArray(function(err, result){
+            for(i in lvls){
+                if(result[0]['qApproved'] === lvls[i]){
+                    dbo.collection('users').updateOne({username: name.toUpperCase()} ,{$inc: {clevel:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                        db.close(); //close database connection
+                    })
+                    break;
+                }else if(result[0]['qApproved'] < lvls[i]){
+                    break;
+                }
+            }
+        });
+    });
+}
+
 module.exports.nextID = async function(sq, fn){
     if (dbauth === 'true'){
         MongoClient.connect(dbURIAuth, function(err, db) {

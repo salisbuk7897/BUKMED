@@ -71,29 +71,91 @@ module.exports.userLogin = function(req, res){
 }
 
 module.exports.upgUser = function(req, res){
+    console.log(req.body);
     if (dbauth === 'true'){ // if user has specified database authentication
         MongoClient.connect(dbURIAuth, function(err, db) {
             var dbo = db.db(dbname); // use dbname from Zconfig file
-            dbo.collection('users').updateOne({username:(req.body.user).toUpperCase()} ,{$set: {role: "Admin"}}, function(err, result){ //make an array of all data in cpcactivities 
+            if(req.body.st === 'adm'){
+                dbo.collection('users').updateOne({username:(req.body.user).toUpperCase()} ,{$set: {role: "Admin"}}, function(err, result){ //make an array of all data in cpcactivities 
+                    if (err) throw err; //if there is an error, throw it
+                    if(result.result.n === 1){
+                        db.close(); //close database connection
+                        res.send(`${req.body.user} Upgraded to Admin`);
+                    }
+                })
+            }else if(req.body.st === 'sadm'){
+                dbo.collection('users').updateOne({username:(req.body.user).toUpperCase()} ,{$set: {role: "SuperAdmin"}}, function(err, result){ //make an array of all data in cpcactivities 
+                    if (err) throw err; //if there is an error, throw it
+                    if(result.result.n === 1){
+                        db.close(); //close database connection
+                        res.send(`${req.body.user} Upgraded to Super Admin`);
+                    }
+                })
+            }else if(req.body.st === 'cnt'){
+                dbo.collection('users').updateOne({username:(req.body.user).toUpperCase()} ,{$set: {role: "Contributor"}}, function(err, result){ //make an array of all data in cpcactivities 
+                    if (err) throw err; //if there is an error, throw it
+                    if(result.result.n === 1){
+                        db.close(); //close database connection
+                        res.send(`${req.body.user} Updated to Contributor`);
+                    }
+                })
+            }  
+        });
+    }else{
+        //db auth not in use
+        MongoClient.connect(dbURI, function(err, db) {
+            var dbo = db.db(dbname); // use dbname from Zconfig file
+            if(req.body.st === 'adm'){
+                dbo.collection('users').updateOne({username:(req.body.user).toUpperCase()} ,{$set: {role: "Admin"}}, function(err, result){ //make an array of all data in cpcactivities 
+                    if (err) throw err; //if there is an error, throw it
+                    if(result.result.n === 1){
+                        db.close(); //close database connection
+                        res.send(`${req.body.user} Upgraded to Admin`);
+                    }
+                })
+            }else if(req.body.st === 'sadm'){
+                dbo.collection('users').updateOne({username:(req.body.user).toUpperCase()} ,{$set: {role: "SuperAdmin"}}, function(err, result){ //make an array of all data in cpcactivities 
+                    if (err) throw err; //if there is an error, throw it
+                    if(result.result.n === 1){
+                        db.close(); //close database connection
+                        res.send(`${req.body.user} Upgraded to Super Admin`);
+                    }
+                })
+            }else if(req.body.st === 'cnt'){
+                dbo.collection('users').updateOne({username:(req.body.user).toUpperCase()} ,{$set: {role: "Contributor"}}, function(err, result){ //make an array of all data in cpcactivities 
+                    if (err) throw err; //if there is an error, throw it
+                    if(result.result.n === 1){
+                        db.close(); //close database connection
+                        res.send(`${req.body.user} Updated to Contributor`);
+                    }
+                })
+            } 
+        });
+    }
+}
+
+module.exports.deluser = function(req, res){
+    if (dbauth === 'true'){ // if user has specified database authentication
+        MongoClient.connect(dbURIAuth, function(err, db) {
+            var dbo = db.db(dbname); // use dbname from Zconfig file
+            dbo.collection('users').deleteOne({username:(req.body.user).toUpperCase()} , function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.user} Upgraded to Admin`);
+                    db.close();
+                    res.send(`${req.body.user} Deleted Successfully`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }else{
         //db auth not in use
         MongoClient.connect(dbURI, function(err, db) {
             var dbo = db.db(dbname); // use dbname from Zconfig file
-            dbo.collection('users').updateOne({username:(req.body.user).toUpperCase()} ,{$set: {role: "Admin"}}, function(err, result){ //make an array of all data in cpcactivities 
+            dbo.collection('users').deleteOne({username:(req.body.user).toUpperCase()} , function(err, result){ //make an array of all data in cpcactivities 
                 if (err) throw err; //if there is an error, throw it
                 if(result.result.n === 1){
-                    console.log(`${req.body.user} Upgraded to Admin`);
+                    db.close();
+                    res.send(`${req.body.user} Deleted Successfully`);
                 }
-                res.send('')
-                db.close(); //close database connection
             })
         });
     }

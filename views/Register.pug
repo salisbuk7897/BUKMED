@@ -53,8 +53,10 @@ block header
         }
 
 block content
+    if(msg)
+            div(class="alert alert-danger" role="alert" style={'text-align':'center'}) !{msg}
     div(class='topa')
-        form(action="/register" method="post" enctype="multipart/form-data")
+        form(action="/register" method="post" enctype="multipart/form-data" class="needs-validation" novalidate)
             legend
                 center
                     h2
@@ -67,35 +69,40 @@ block content
                             div(class="input-group-prepend")
                                 div(class="input-group-text") 
                                     i(class="fas fa-user")
-                            input(type="text" class="form-control" name='fname' id="fname" placeholder="First Name")
+                            input(type="text" class="form-control" name='fname' id="fname" placeholder="First Name" required)
+                            div(class="invalid-feedback") Please Enter First Name.
                     div(class="form-group")
                         label(for="lname") Last Name
                         div(class="input-group mb-2")
                             div(class="input-group-prepend")
                                 div(class="input-group-text") 
                                     i(class="fas fa-user")
-                            input(type="text" class="form-control" name='lname' id="lname" placeholder="Last Name")
+                            input(type="text" class="form-control" name='lname' id="lname" placeholder="Last Name" required)
+                            div(class="invalid-feedback") Please Enter Last Name.
                     div(class="form-group")
                         label(for="school") School
                         div(class="input-group mb-2")
                             div(class="input-group-prepend")
                                 div(class="input-group-text") 
                                     i(class="fas fa-school")
-                            input(type="text" class="form-control" name='school' id="school" placeholder="School")
+                            input(type="text" class="form-control" name='school' id="school" placeholder="School" required)
+                            div(class="invalid-feedback") Please Enter School.
                     div(class="form-group")
                         label(for="dept") Department
                         div(class="input-group mb-2")
                             div(class="input-group-prepend")
                                 div(class="input-group-text") 
                                     i(class="fas fa-school")
-                            input(type="text" class="form-control" id="dept" name='dept' placeholder="Department")
+                            input(type="text" class="form-control" id="dept" name='dept' placeholder="Department" required)
+                            div(class="invalid-feedback") Please Enter Department.
                     div(class="form-group")
                         label(for="lvl") Level
                         div(class="input-group mb-2")
                             div(class="input-group-prepend")
                                 div(class="input-group-text") 
                                     i(class="fas fa-school")
-                            input(type="text" class="form-control" id="lvl" name='lvl' placeholder="Level")
+                            input(type="text" class="form-control" id="lvl" name='lvl' placeholder="Level" required)
+                            div(class="invalid-feedback") Please Enter Level.
                 .col-md-6
                     div(class="form-group")
                         label(for="email") Email
@@ -103,36 +110,60 @@ block content
                             div(class="input-group-prepend")
                                 div(class="input-group-text") 
                                     i(class="fas fa-envelope-square")
-                            input(type="text" class="form-control" id="email" name='email' placeholder="Email")
+                            input(type="text" class="form-control" id="email" name='email' placeholder="Email" required)
+                            div(class="invalid-feedback") Please Enter Email.
                     div(class="form-group")
                         label(for="user") Username
                         div(class="input-group mb-2")
                             div(class="input-group-prepend")
                                 div(class="input-group-text") 
                                     i(class="fas fa-user")
-                            input(type="text" class="form-control" id="user" name='user' placeholder="Username")
+                            input(type="text" class="form-control" id="user" name='user' placeholder="Username" required)
+                            div(class="invalid-feedback") Please Enter Username.
                     div(class="form-group")
                         label(for="pwd") Password
                         div(class="input-group mb-2")
                             div(class="input-group-prepend")
                                 div(class="input-group-text") 
                                     i(class="fas fa-key")
-                            input(type="password" class="form-control" id="pwd" name='pwd' placeholder="Password")
+                            input(type="password" class="form-control" id="pwd" name='pwd' placeholder="Password" required)
+                            div(class="invalid-feedback") Please Enter Password.
                     div(class="form-group")
-                        label(for="cpwd") Comfirm Password
+                        label(for="cpwd") Confirm Password
                         div(class="input-group mb-2")
                             div(class="input-group-prepend")
                                 div(class="input-group-text") 
                                     i(class="fas fa-key")
-                            input(type="password" class="form-control" id="cpwd" name='cpwd' placeholder="Comfirm Password")
+                            input(type="password" class="form-control" id="cpwd" name='cpwd' placeholder="Comfirm Password" required)
+                            div(class="invalid-feedback") Please Confirm Password.
                     div(class="form-group")
                         label(for="pic") Profile Pic(Optional)
                         div(class="input-group mb-2")
                             div(class="input-group-prepend")
                                 div(class="input-group-text") 
                                     i(class="fas fa-portrait")
-                            input(type="file" class="form-control" id="pic" name='pic' placeholder="Password")
+                            input(type="file" class="form-control" id="pic" name='pic')
             button(type='submit' class='btn btn-primary' id="rmf3b") Register
         
-
-                
+block scripts
+    script(src='https://code.jquery.com/jquery-3.5.1.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.bundle.min.js')
+    script.
+        (function() {
+            'use strict';
+                window.addEventListener('load', function() {
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    var forms = document.getElementsByClassName('needs-validation');
+                    // Loop over them and prevent submission
+                    var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                    });
+                }, false);
+            })();

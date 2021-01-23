@@ -4,10 +4,13 @@ block content
     div(style={"margin-left":"2%", "width":"98%", 'height':"90vh", "overflow":"auto"})
         .row(style={"width":"98%","margin-top":"2%"})
             .col-md-6.float-right
-                img(src=`data:image/gif;base64,${pic}`, class="float-right" style={"border-radius":"50%", "height":"130px", "width":"110px"})
+                if(pic === 'No Picture')
+                    img(src=`/images/logo.png`, class="float-right" style={"border-radius":"50%", "height":"130px", "width":"110px"})
+                else
+                    img(src=`data:image/gif;base64,${pic}`, class="float-right" style={"border-radius":"50%", "height":"130px", "width":"110px"})
             .col.md-6(style={"margin":"auto"})
                 h3(style={"color":"blue"}) !{fname} !{lname}
-                h5(style={"color":"blue"}) Level: !{clevel}
+                h5(style={"color":"blue"}) Contribution Level: !{clevel}
         hr
         h3 Information
         hr(style={"margin":"0"})
@@ -20,7 +23,7 @@ block content
             .col-md-6
                 h5(style={"margin-top":"10px"}) Email:
                 p(style={"color":"blue","font-size":"18px"}) !{email}
-                h5(style={"margin-top":"10px"}) Level:
+                h5(style={"margin-top":"10px"}) School Level:
                 p(style={"color":"blue","font-size":"18px"}) !{lvl}
         br
         h3 Contributions

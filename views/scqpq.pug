@@ -1,84 +1,191 @@
 extend layout
+block header
+    style.
+        form {
+            --background: white;
+            --border: rgba(0, 0, 0, 0.125);
+            --borderDark: rgba(0, 0, 0, 0.25);
+            --borderDarker: rgba(0, 0, 0, 0.5);
+            --bgColorH: 0;
+            --bgColorS: 0%;
+            --bgColorL: 98%;
+            --fgColorH: 210;
+            --fgColorS: 50%;
+            --fgColorL: 38%;
+            --shadeDark: 0.3;
+            --shadeLight: 0.7;
+            --shadeNormal: 0.5;
+            --borderRadius: 0.125rem;
+            --highlight: #306090;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--borderRadius);
+            box-shadow: 0 1rem 1rem -0.75rem var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topa{
+            width:60%;
+            margin: auto;
+            border: 1%;
+            padding: 10px;
+        }
+        .hdd{
+            font-family: 'Calisto MT';
+            font-size: 25px;
+        }
+
+        .clegend{
+            font-family: 'Calisto MT';
+        }
+        .qnu{
+            margin-top:20px; 
+            margin-right: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .qnu1{
+            width:22%;
+            margin: auto;
+            border: 1%;
+            padding: 10px;
+        }
+
+        .pp{
+            margin-top:50px;
+        }
+
+        @media screen and (max-width: 720px) {
+            body{
+                margin:0px;
+                font-family: "Times New Roman", Times, serif
+            }
+            .hdd{
+                font-family: "Times New Roman", Times, serif;
+                font-size: 16px;
+            }
+            .topa{
+                width:  100%;
+                margin: auto;
+                border: 5px;
+                padding: 1%;
+            }
+            .clegend{
+                font-size:25px;
+                font-family: "Times New Roman", Times, serif;
+            }
+            .qnu{
+                margin-top:20px; 
+                text-align: center;
+                font-weight: bold;
+                float:'left';
+            }
+
+            .pp{
+                margin-top:0px;
+            }
+
+            label{
+                font-weight: bold;
+            }
+            
+        }
 
 block content
-    .salis(style={"margin-left":"15%","margin-right":"15%", "border":"Solid", "border-color":"blue","background-color":"lightblue", "height":"85vh","overflow":"auto", "margin-top":"1%"})
-        h2(style={"text-align":"center", "margin-top":"2%"}, onload=`notify("${notice}")`) Add Past Question
-        hr
-        form(action="/addscqpq" method="post" enctype="multipart/form-data")
-            .row(style={"width":"98%", "margin-left":"15px"})
-                .col-md-3
-                    p(style={"margin-top":"10px",}) Past Question
-                .col-md-9
-                    select.custom-select(style={"margin-right": "10px"}, name="pastq", id="pastq")
-                        option(selected='') Select Past Question
+    if(msg)
+        div(class="alert alert-success" role="alert" style={'text-align':'center'}) !{msg}
+    div(class='topa')
+        form(action="/add_scqpq" method="post" enctype="multipart/form-data" class="needs-validation" novalidate)
+            legend
+                center
+                    h2
+                        b( class='clegend') Add Question
+            div(class="form-group")
+                    label(for='pastq') Past Question
+                    select.custom-select(style={"margin-right": "10px"}, name="pastq", id="pastq" required)
+                        option(value='' disabled selected) Select Past Question
                         - if(data.length > 0)
                             - for(i of data)
                                 option(value=`${i}`) !{i}
-            hr
-            .row(style={"width":"98%", "margin-left":"15px"})
+                    div(class="invalid-feedback") Please Select a Question Paper.
+            .row
                 .col-md-9
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Question
-                    input(type="text" class="form-control" name="Question" style={"margin-right": "10px"} id="que")
+                    div(class="form-group")
+                        label(for='Question') Question
+                        input(type="text" class="form-control" name="Question" style={"margin-right": "10px"} id="que" required)
+                        div(class="invalid-feedback") Please Enter a Question.
                 .col-md-3
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Picture (If any)
-                    input(type="file" class="form-control" name="question_pic" style={"margin-right": "10px"} id="pic")
+                    div(class="form-group")
+                        label(for='question_pic') Picture (If any)
+                        input(type="file" class="form-control" name="question_pic" style={"margin-right": "10px"} id="pic")
             
-            .row(style={"width":"98%", "margin-left":"15px"})
-                .col-md-2
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 1
-                .col-md-7
-                    input(type="text" class="form-control" name="opt1" style={"margin-top":"10px","margin-right": "10px"} id="opt1")
-                .col-md-3
-                    br
-                    input(type="radio" id="ans1" name="ans" value="A")
-                    label(for="ans1" style={"margin-left":"2%"}) Option 1 is the answer
+            .row
+                .col-md-9
+                    div(class="form-group")
+                        label(for='opt1') Option 1
+                        input(type="text" class="form-control" name="opt1" style={"margin-top":"10px","margin-right": "10px"} id="opt1" required)
+                        div(class="invalid-feedback") Please Enter an Option.
+                .col-md-3(class='pp')
+                    div(class="form-group")
+                        input(type="radio" id="ans1" name="ans" value="A")
+                        label(for="ans1" style={"margin-left":"2%"}) Option 1 is the answer
                     
 
-            .row(style={"width":"98%", "margin-left":"15px"})
-                .col-md-2
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 2
-                .col-md-7
-                    input(type="text" class="form-control" name="opt2" style={"margin-top":"10px","margin-right": "10px"} id="opt2")
-                .col-md-3
-                    br
-                    input(type="radio" id="ans2" name="ans" value="B")
-                    label(for="ans2" style={"margin-left":"2%"}) Option 2 is the answer
+            .row
+                .col-md-9
+                    div(class="form-group")
+                        label(for='opt2') Option 2
+                        input(type="text" class="form-control" name="opt2" style={"margin-top":"10px","margin-right": "10px"} id="opt2" required)
+                        div(class="invalid-feedback") Please Enter an Option.
+                .col-md-3(class='pp')
+                    div(class="form-group")
+                        input(type="radio" id="ans2" name="ans" value="B")
+                        label(for="ans2" style={"margin-left":"2%"}) Option 2 is the answer
                     
 
-            .row(style={"width":"98%", "margin-left":"15px"})
-                .col-md-2
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 3
-                .col-md-7
-                    input(type="text" class="form-control" name="opt3" style={"margin-top":"10px","margin-right": "10px"} id="opt3")
-                .col-md-3
-                    br
-                    input(type="radio" id="ans3" name="ans" value="C")
-                    label(for="ans3" style={"margin-left":"2%"}) Option 3 is the answer
+            .row
+                .col-md-9
+                    div(class="form-group")
+                        label(for='opt3') Option 3
+                        input(type="text" class="form-control" name="opt3" style={"margin-top":"10px","margin-right": "10px"} id="opt3" required)
+                        div(class="invalid-feedback") Please Enter an Option.
+                .col-md-3(class='pp')
+                    div(class="form-group")
+                        input(type="radio" id="ans3" name="ans" value="C")
+                        label(for="ans3" style={"margin-left":"2%"}) Option 3 is the answer
+                        div(class="invalid-feedback") Please Enter an Answer.
+                        
+                    
+            .row
+                .col-md-9
+                    div(class="form-group")
+                        label(for='opt4') Option 4
+                        input(type="text" class="form-control" name="opt4" style={"margin-top":"10px","margin-right": "10px"} id="opt4" required)
+                        div(class="invalid-feedback") Please Enter an Option.
+                .col-md-3(class='pp')
+                    div(class="form-group")
+                        input(type="radio" id="ans4" name="ans" value="D")
+                        label(for="ans4" style={"margin-left":"2%"})  Option 4 is the answer
                     
 
-            .row(style={"width":"98%", "margin-left":"15px"})
-                .col-md-2
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 4
-                .col-md-7
-                    input(type="text" class="form-control" name="opt4" style={"margin-top":"10px","margin-right": "10px"} id="opt4")
-                .col-md-3
-                    br
-                    input(type="radio" id="ans4" name="ans" value="D")
-                    label(for="ans4" style={"margin-left":"2%"})  Option 4 is the answer
+            .row
+                .col-md-9
+                    div(class="form-group")
+                        label(for='opt5') Option 5
+                        input(type="text" class="form-control" name="opt5" style={"margin-top":"10px","margin-right": "10px"} id="opt5" required)
+                        div(class="invalid-feedback") Please Enter an Option.
+                .col-md-3(class='pp')
+                    div(class="form-group")
+                        input(type="radio" id="ans5" name="ans" value="E")
+                        label(for="ans5" style={"margin-left":"2%"}) Option 5 is the answer
                     
 
-            .row(style={"width":"98%", "margin-left":"15px"})
-                .col-md-2
-                    p(style={"margin-top":"10px", "margin-right": "10px"}) Option 5
-                .col-md-7
-                    input(type="text" class="form-control" name="opt5" style={"margin-top":"10px","margin-right": "10px"} id="opt5")
-                .col-md-3
-                    br
-                    input(type="radio" id="ans5" name="ans" value="E")
-                    label(for="ans5" style={"margin-left":"2%"}) Option 5 is the answer
-                    
-
-            button(type='submit' style={"color":"white", "width":"90%", "margin-top":"10px", "margin-right":"5%", "margin-left":"5%"} class='btn btn-primary' ) Save Question
+            button(type='submit' style={ "width":"100%", "margin-top":"10px"} class='btn btn-primary' ) Save Question
                                                               
 
 block scripts
@@ -86,12 +193,20 @@ block scripts
     script(src='/stylesheets/bootstrap/js/bootstrap.min.js')
     script(src='/stylesheets/bootstrap/js/bootstrap.bundle.min.js')
     script.
-        function notify(a){
-            if(a == "get"){
-                alert("Question Added Successfully");
-            }else if(a == 'post'){
-                alert("Question Added Successfully");
-            }else{
-                alert("Question Added Successfully");
-            }
-        }
+        (function() {
+            'use strict';
+                window.addEventListener('load', function() {
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    var forms = document.getElementsByClassName('needs-validation');
+                    // Loop over them and prevent submission
+                    var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                    });
+                }, false);
+            })();

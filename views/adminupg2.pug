@@ -1,10 +1,13 @@
 extend layout
 
 block content    
-    div(style={"margin":"5%", 'max-height':"90vh", "overflow":"auto"})
+    div(style={"padding":"1%", "overflow":"auto", "width":"100%",})
         .row(style={"width":"98%","margin-top":"2%"})
             .col-md-6.float-right
-                img(src=`data:image/gif;base64,${pic}`, class="float-right" style={"border-radius":"50%", "height":"130px", "width":"110px"})
+                if(pic === 'No Picture')
+                    img(src=`/images/logo.png`, class="float-right" style={"border-radius":"50%", "height":"130px", "width":"110px"})
+                else
+                    img(src=`data:image/gif;base64,${pic}`, class="float-right" style={"border-radius":"50%", "height":"130px", "width":"110px"})
             .col.md-6(style={"margin":"auto"})
                 h3(style={"color":"blue"}) !{fname} !{lname}
                 h5(style={"color":"blue"}) Level: !{clevel}
@@ -23,22 +26,45 @@ block content
                 h5(style={"margin-top":"10px"}) Level:
                 p(style={"color":"blue","font-size":"18px"}) !{lvl}
         br
-        a(href=`javascript:upg('${username}')`, class='btn btn-primary' style={'float':'right'}) Ugrade to Admin
+        .row(style={"width":"100%","margin-top":"2%"})
+            .col-md-3
+                a(href=`javascript:upg('${username}', 'adm')`, class='btn btn-primary' style={'width':'100%', 'float':'right', 'margin-top':'10px'}) Ugrade to Admin
+            .col-md-3
+                a(href=`javascript:upg('${username}', 'sadm')`, class='btn btn-primary' style={'width':'100%','float':'right', 'margin-top':'10px'}) Ugrade to SuperAdmin
+            .col-md-3
+                a(href=`javascript:upg('${username}', 'cnt')`, class='btn btn-primary' style={'width':'100%','float':'right', 'margin-top':'10px'}) Make Contributor
+            .col-md-3
+                a(href=`javascript:deluser('${username}')`, class='btn btn-danger' style={'width':'100%', 'float':'right', 'margin-top':'10px'}) Delete User
+        br
+        h6(style={"text-align":"center"}, class="alert alert-danger", id ="ress")
+        br
+        
 
 block scripts
     script(src='https://code.jquery.com/jquery-3.5.1.min.js')
     script(src='/stylesheets/bootstrap/js/bootstrap.min.js')
     script(src='/stylesheets/bootstrap/js/bootstrap.bundle.min.js')
     script.
-        function upg(a){
-            var data = {user: a};
+        function upg(a, b){
+            var data = {user: a, st: b};
             $.ajax({
-                dataType: "json",
                 type: 'post',
                 url: '/upgUser',
                 data: data,
             })
             .done(function(e){
-                $('.ress').html(e);
+                $('#ress').html(e);
+            });
+        }
+
+        function deluser(a){
+            var data = {user: a};
+            $.ajax({
+                type: 'post',
+                url: '/deluser',
+                data: data,
+            })
+            .done(function(e){
+                $('#ress').html(e);
             });
         }
