@@ -42,9 +42,10 @@ block content
             -for(dat of pastq)
                 .col-md-4(style={})
                     form(action=`/managepq?user=${username}&pqname=${dat.name}&type=${dat.type}`, method='post')
-                        div(style={"border":"solid", "border-color":"blue", "width":'96%', "margin":"1%", "padding":"10%", "padding-top":"1%", 'border-style': 'outset'})
+                        div(style={"border":"solid", "border-color":"blue", "width":'96%', "padding":"10%", "padding-top":"1%", 'border-style': 'outset'})
                             h5(style={"margin-top":"10px", "text-align":"center"}) Name: !{dat.name} 
                             p(style={}) Year: !{dat.year}
                             p(style={}) Type: !{(dat.type).toUpperCase()}
                             button(type="submit" style={ "margin-bottom":"1%"} class="btn btn-primary float-right") Manage
+                            br
                 

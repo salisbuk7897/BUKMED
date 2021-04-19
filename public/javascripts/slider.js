@@ -100,6 +100,43 @@ function MaAppr(a, b) {
   });
 }
 
+// Approve SCQ Questions
+function approvescq(a, b) {
+  var data = {id: a, course: b}
+  $.ajax({
+      type: 'post',
+      url: '/apprscq',
+      data: data,
+  })
+  .done(function(e){
+    $('#ownscq1').html(e);
+  });
+}
+
+function deleteadscq(a, b) {
+  var data = {id: a, course: b,};
+  $.ajax({
+      type: 'post',
+      url: '/deletescq',
+      data: data,
+  })
+  .done(function(e){
+    $('#ownscq1').html(e);
+  });
+}
+
+function MaApprscq(b, c) {
+  var data = {id: b, course: c, que:$(`#que${b}`).val(), opt1:$(`#opti${b}`).val(), opt2:$(`#optii${b}`).val(), opt3:$(`#optiii${b}`).val(), opt4:$(`#optiv${b}`).val(), opt5:$(`#optv${b}`).val(), ans:$(`#ans${b}`).val()};
+  $.ajax({
+      type: 'post',
+      url: '/modifyscq',
+      data: data,
+  })
+  .done(function(e){
+    $('#ownscq1').html(e);
+  });
+}
+
 // Approve SCQ PQ
 function approvepq(a, b) {
   var data = {pqid: a, id: b}

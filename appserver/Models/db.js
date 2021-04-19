@@ -23,10 +23,10 @@ var dbURIAuth = `mongodb://${mongourl}:${mongoport}/${dbname}?authSource=${authS
 
 var ls =["scqpq", "mcqpq", "essaypq"];
 var allCourses = [
-    ["pth", "Pathology", "Not Selected"],
-    ["phm", "Pharmacology", "Not Selected"],
-    ["mdc", "Medicine", "Not Selected"],
-    ["sgy", "Surgery", "Not Selected"]]
+    ["pth", "Pathology", "Not Selected", "MCQ"],
+    ["phm", "Pharmacology", "Not Selected", "SCQ"],
+    ["mdc", "Medicine", "Not Selected", "SCQ"],
+    ["sgy", "Surgery", "Not Selected", "MCQ"]]
 
 if (dbauth === 'true'){
     //mongoose.connect(`mongodb://${dbuser}:${dbpwd}@${mongourl}:${mongoport}/${dbname}`,{auth:{authdb:"admin"}, useNewUrlParser: true, useUnifiedTopology: true });
@@ -61,17 +61,17 @@ if (dbauth === 'true'){
                         var courseDoc = new coursesdoc({ 
                             title : allCourses[i][1],
                             name : allCourses[i][0],
-                            selected: allCourses[i][2] 
-                            });
-                            conn.db.createCollection(allCourses[i][0],{storageEngine: {wiredTiger: {configString: 'block_compressor=zlib'}}});
-                            courseDoc.save((err, courseDoc) => {  
-                              if(err){
-                                console.log(`error Creating ${allCourses[i][0]} DB`);
-                              } else{
-                                console.log(`${allCourses[i][0]} created Successfully`);
-                                }
+                            selected: allCourses[i][2],
+                            type : allCourses[i][3]
+                        });
+                        conn.db.createCollection(allCourses[i][0],{storageEngine: {wiredTiger: {configString: 'block_compressor=zlib'}}});
+                        courseDoc.save((err, courseDoc) => {  
+                            if(err){
+                            console.log(`error Creating ${allCourses[i][0]} DB`);
+                            } else{
+                            console.log(`${allCourses[i][0]} created Successfully`);
                             }
-                        );
+                        });
                         addCounter(allCourses[i][0]);
                     }
                     reg.createAdmin();

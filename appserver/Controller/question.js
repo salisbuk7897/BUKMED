@@ -297,8 +297,110 @@ module.exports.ModifySCQPQ = function(req, res){
     }
 }
 
-module.exports.ApproveSCQPQ = function(req, res){
+module.exports.DeleteSCQQue = function(req, res){
+    //console.log(req.body);
+    if (dbauth === 'true'){ // if user has specified database authentication
+        MongoClient.connect(dbURIAuth, function(err, db) {
+            var dbo = db.db(dbname); // use dbname from Zconfig file
+            dbo.collection(req.body.course).find({_id:parseInt(req.body.id)}).toArray(function(err, result){
+                if(result.length == 0){
+                    db.close();
+                    res.send(`Question ${req.body.id} Deleted already`);
+                }else{
+                    dbo.collection(req.body.course).deleteOne({_id:parseInt(req.body.id)}, function(err, result){ //make an array of all data in cpcactivities 
+                        if (err) throw err; //if there is an error, throw it
+                        if(result.result.n === 1){
+                            db.close();
+                            res.send(`Question ${req.body.id} Deleted`);
+                        }
+                    })
+                }
+            })
+        });
+    }else{
+    }
+}
+
+module.exports.ModifySCQQue = function(req, res){
+    //console.log(req.body);
+    var c;
+    if (dbauth === 'true'){ // if user has specified database authentication
+        MongoClient.connect(dbURIAuth, function(err, db) {
+            var dbo = db.db(dbname); // use dbname from Zconfig file
+            dbo.collection(req.body.course).find({_id:parseInt(req.body.id)}).toArray(function(err, result){
+                c = result[0]['contributor'];
+                if(result[0]['approved'] === 'true'){
+                    dbo.collection(req.body.course).updateMany({_id:parseInt(req.body.id)} ,{$set: {question: req.body.que, option1: req.body.opt1, option2: req.body.opt2, option3: req.body.opt3, option4: req.body.opt4, option5: req.body.opt5, answer: req.body.ans},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                        if (err) throw err; //if there is an error, throw it
+                        if(result.result.n === 1){
+                            db.close();
+                            res.send(`Question ${req.body.id} Modified`);
+                        }
+                    })
+                }else{
+                    dbo.collection(req.body.course).updateMany({_id:parseInt(req.body.id)} ,{$set: {approved: "true", approvedBy: req.session.name, question: req.body.que, option1: req.body.opt1, option2: req.body.opt2, option3: req.body.opt3, option4: req.body.opt4, option5: req.body.opt5, answer: req.body.ans},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                        if (err) throw err; //if there is an error, throw it
+                        if(result.result.n === 1){
+                            dbo.collection('users').updateOne({username: c.toUpperCase()} ,{$inc: {qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                db.close(); //close database connection
+                                helper.level(c);
+                                res.send(`Question ${req.body.id} Modified and Approved`);
+                            })
+                        }
+                    })
+                }
+            });
+        });
+    }else{
+    }
+}
+
+module.exports.ApproveSCQQue = function(req, res){
     console.log(req.body);
+    var c;
+    if (dbauth === 'true'){ // if user has specified database authentication
+        MongoClient.connect(dbURIAuth, function(err, db) {
+            var dbo = db.db(dbname); // use dbname from Zconfig file
+            dbo.collection(req.body.course).find({_id:parseInt(req.body.id)}).toArray(function(err, result){
+                //console.log(result);
+                c = result[0]['contributor'];
+                if(result[0]['approved'] === 'true'){
+                    db.close();
+                    //console.log(`Question ${req.body.id} has been Approved already`);
+                    res.send(`Question ${req.body.id} has been Approved already`);
+                }else{
+                    dbo.collection(req.body.course).updateMany({_id:parseInt(req.body.id)} ,{$set: {approved: "true", approvedBy: req.session.name},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                        if (err) throw err; //if there is an error, throw it
+                        if(result.result.n === 1){
+                            dbo.collection('users').updateOne({username: c.toUpperCase()} ,{$inc: {qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                db.close(); //close database connection
+                                helper.level(c);
+                                res.send(`Question ${req.body.id} Approved Successfully`);
+                            })
+                            
+                        }
+                    })
+                }
+            });
+        });
+    }else{
+        //db auth not in use
+        MongoClient.connect(dbURI, function(err, db) {
+            var dbo = db.db(dbname); // use dbname from Zconfig file
+            dbo.collection(req.body.course).updateMany({_id:parseInt(req.body.id)} ,{$set: {approved: "true"},$inc:{version:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                if (err) throw err; //if there is an error, throw it
+                if(result.result.n === 1){
+                    console.log(`${req.body.id} Approved`);
+                }
+                res.send('')
+                db.close(); //close database connection
+            })
+        });
+    }
+}
+
+module.exports.ApproveSCQPQ = function(req, res){
+    //console.log(req.body);
     if (dbauth === 'true'){ // if user has specified database authentication
         MongoClient.connect(dbURIAuth, function(err, db) {
             var dbo = db.db(dbname); // use dbname from Zconfig file
@@ -329,22 +431,276 @@ module.exports.getPQUpdates = function(req, res){
     var mcq;
     var scq;
     var ess;
+    var esslist = [];
+    var mcqlist = [];
+    var scqlist = [];
+    var name = "";
+    var date = "";
+    var type = "";
+    if(req.query.name){
+        name = req.query.name;
+    }
+    if(req.query.date){
+        date = req.query.date;
+    }
+    if(req.query.type){
+        type = req.query.type;
+    }
+    
     if (dbauth === 'true'){
-        MongoClient.connect(dbURIAuth, function(err, db) {
-            var dbo = db.db(dbname); // use dbname from Zconfig file 
-            dbo.collection('pqessactivities').find().toArray(function(err, result){
-                ess= result;
-                dbo.collection('pqobjactivities').find().toArray(function(err, result){
-                    mcq = result;
-                    dbo.collection('pqscqactivities').find().toArray(function(err, result){
-                        scq = result;
-                        db.close();
-                        var data = {essay: ess, MCQ: mcq, SCQ: scq };
-                        res.json(data)
+        if(name === "" && date === "All" && type === "All"){
+            MongoClient.connect(dbURIAuth, function(err, db) {
+                var dbo = db.db(dbname); // use dbname from Zconfig file 
+                dbo.collection('pqessactivities').find().toArray(function(err, result){
+                    ess= result;
+                    dbo.collection('pqobjactivities').find().toArray(function(err, result){
+                        mcq = result;
+                        dbo.collection('pqscqactivities').find().toArray(function(err, result){
+                            scq = result;
+                            db.close();
+                            var data = {essay: ess, MCQ: mcq, SCQ: scq };
+                            res.json(data)
+                        });
                     });
                 });
             });
-        });
+        }else if(name === "" && date != "All" && type === "All"){
+            MongoClient.connect(dbURIAuth, function(err, db) {
+                var dbo = db.db(dbname); // use dbname from Zconfig file 
+                dbo.collection('pqessactivities').find({year: date}).toArray(function(err, result){
+                    ess= result;
+                    dbo.collection('pqobjactivities').find({year: date}).toArray(function(err, result){
+                        mcq = result;
+                        dbo.collection('pqscqactivities').find({year: date}).toArray(function(err, result){
+                            scq = result;
+                            db.close();
+                            var data = {essay: ess, MCQ: mcq, SCQ: scq };
+                            res.json(data)
+                        });
+                    });
+                });
+            });
+        }else if(name === "" && date != "All" && type != "All"){
+            if(type === "Essay"){
+                MongoClient.connect(dbURIAuth, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection('pqessactivities').find({year: date}).toArray(function(err, result){
+                        ess = result;
+                        db.close();
+                        var data = {essay: ess };
+                        res.json(data)
+                    });
+                });
+            }else if(type === "MCQ"){
+                MongoClient.connect(dbURIAuth, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection('pqobjactivities').find({year: date}).toArray(function(err, result){
+                        mcq = result
+                        db.close();
+                        var data = {MCQ: mcq };
+                        res.json(data)
+                    });
+                });
+            }else if(type === "SCQ"){
+                MongoClient.connect(dbURIAuth, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection('pqscqactivities').find({year: date}).toArray(function(err, result){
+                        scq = result
+                        db.close();
+                        var data = {SCQ: scq };
+                        res.json(data)
+                    });
+                });
+            }
+        }else if(name === "" && date === "All" && type != "All"){
+            if(type === "Essay"){
+                MongoClient.connect(dbURIAuth, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection('pqessactivities').find().toArray(function(err, result){
+                        ess = result;
+                        db.close();
+                        var data = {essay: ess };
+                        res.json(data)
+                    });
+                });
+            }else if(type === "MCQ"){
+                MongoClient.connect(dbURIAuth, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection('pqobjactivities').find().toArray(function(err, result){
+                        mcq = result
+                        db.close();
+                        var data = {MCQ: mcq };
+                        res.json(data)
+                    });
+                });
+            }else if(type === "SCQ"){
+                MongoClient.connect(dbURIAuth, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection('pqscqactivities').find().toArray(function(err, result){
+                        scq = result
+                        db.close();
+                        var data = {SCQ: scq };
+                        res.json(data)
+                    });
+                });
+            }
+        }else if(name != "" && date === "All" && type === "All" ){
+            MongoClient.connect(dbURIAuth, function(err, db) {
+                var dbo = db.db(dbname); // use dbname from Zconfig file 
+                dbo.collection('pqessactivities').find().toArray(function(err, result){
+                    for(i in result){
+                        var c = result[i]["name"].toUpperCase();
+                        if (c.includes(name.toUpperCase())){
+                            esslist.push(result[i]);
+                        }
+                    }
+                    dbo.collection('pqobjactivities').find().toArray(function(err, result){
+                        for(i in result){
+                            var c = result[i]["name"].toUpperCase();
+                            if (c.includes(name.toUpperCase())){
+                                mcqlist.push(result[i]);
+                            }
+                        }
+                        dbo.collection('pqscqactivities').find().toArray(function(err, result){
+                            for(i in result){
+                                var c = result[i]["name"].toUpperCase();
+                                if (c.includes(name.toUpperCase())){
+                                    scqlist.push(result[i]);
+                                }
+                            }
+                            db.close();
+                            var data = {essay: esslist, MCQ: mcqlist, SCQ: scqlist };
+                            res.json(data)
+                        });
+                    });
+                });
+            });
+        }else if(name != "" && date != "All" && type === "All" ){
+            MongoClient.connect(dbURIAuth, function(err, db) {
+                var dbo = db.db(dbname); // use dbname from Zconfig file 
+                dbo.collection('pqessactivities').find({year: date}).toArray(function(err, result){
+                    for(i in result){
+                        var c = result[i]["name"].toUpperCase();
+                        if (c.includes(name.toUpperCase())){
+                            esslist.push(result[i]);
+                        }
+                    }
+                    dbo.collection('pqobjactivities').find({year: date}).toArray(function(err, result){
+                        for(i in result){
+                            var c = result[i]["name"].toUpperCase();
+                            if (c.includes(name.toUpperCase())){
+                                mcqlist.push(result[i]);
+                            }
+                        }
+                        dbo.collection('pqscqactivities').find({year: date}).toArray(function(err, result){
+                            for(i in result){
+                                var c = result[i]["name"].toUpperCase();
+                                if (c.includes(name.toUpperCase())){
+                                    scqlist.push(result[i]);
+                                }
+                            }
+                            db.close();
+                            var data = {essay: esslist, MCQ: mcqlist, SCQ: scqlist };
+                            res.json(data)
+                        });
+                    });
+                });
+            });
+        }else if(name != "" && date != "All" && type != "All" ){
+            if(type === "Essay"){
+                MongoClient.connect(dbURIAuth, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection('pqessactivities').find({year: date}).toArray(function(err, result){
+                        for(i in result){
+                            var c = result[i]["name"].toUpperCase();
+                            if (c.includes(name.toUpperCase())){
+                                esslist.push(result[i]);
+                            }
+                        }
+                        db.close();
+                        var data = {essay: esslist };
+                        res.json(data)
+                    });
+                });
+            }else if(type === "MCQ"){
+                MongoClient.connect(dbURIAuth, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection('pqobjactivities').find({year: date}).toArray(function(err, result){
+                        for(i in result){
+                            var c = result[i]["name"].toUpperCase();
+                            if (c.includes(name.toUpperCase())){
+                                mcqlist.push(result[i]);
+                            }
+                        }
+                        db.close();
+                        var data = {MCQ: mcqlist };
+                        res.json(data)
+                    });
+                });
+            }else if(type === "SCQ"){
+                MongoClient.connect(dbURIAuth, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection('pqscqactivities').find({year: date}).toArray(function(err, result){
+                        for(i in result){
+                            var c = result[i]["name"].toUpperCase();
+                            if (c.includes(name.toUpperCase())){
+                                scqlist.push(result[i]);
+                            }
+                        }
+                        db.close();
+                        var data = {SCQ: scqlist };
+                        res.json(data)
+                    });
+                });
+            }
+        }else if(name != "" && date === "All" && type != "All" ){
+            if(type === "Essay"){
+                MongoClient.connect(dbURIAuth, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection('pqessactivities').find().toArray(function(err, result){
+                        for(i in result){
+                            var c = result[i]["name"].toUpperCase();
+                            if (c.includes(name.toUpperCase())){
+                                esslist.push(result[i]);
+                            }
+                        }
+                        db.close();
+                        var data = {essay: esslist };
+                        res.json(data)
+                    });
+                });
+            }else if(type === "MCQ"){
+                MongoClient.connect(dbURIAuth, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection('pqobjactivities').find().toArray(function(err, result){
+                        for(i in result){
+                            var c = result[i]["name"].toUpperCase();
+                            if (c.includes(name.toUpperCase())){
+                                mcqlist.push(result[i]);
+                            }
+                        }
+                        db.close();
+                        var data = {MCQ: mcqlist };
+                        res.json(data)
+                    });
+                });
+            }else if(type === "SCQ"){
+                MongoClient.connect(dbURIAuth, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection('pqscqactivities').find().toArray(function(err, result){
+                        for(i in result){
+                            var c = result[i]["name"].toUpperCase();
+                            if (c.includes(name.toUpperCase())){
+                                scqlist.push(result[i]);
+                            }
+                        }
+                        db.close();
+                        var data = {SCQ: scqlist };
+                        res.json(data)
+                    });
+                });
+            }
+        }
     }else{
         //no authentication
         MongoClient.connect(dbURI, function(err, db) {
@@ -913,6 +1269,363 @@ function getPQTitle(fn){
     }
 }
 
+module.exports.addSCQQuestion = function(req, res){
+    try{
+        if (dbauth === 'true'){
+            let file = req.file;
+            MongoClient.connect(dbURIAuth, function(err, db) {
+                var dbo = db.db(dbname); // use dbname from Zconfig file
+                const collection = dbo.collection(req.body.course);
+                if(!req.file) { //if file parameter is not in request
+                    var cx;
+                    helper.nextID(req.body.course, function(e){
+                        if(req.session.role === 'Admin' || req.session.role === 'SuperAdmin'){
+                            cx = e;
+                            collection.insertOne({
+                                _id: cx,
+                                course: req.body.course,
+                                subCourse: req.body.subCourse,
+                                topic: req.body.topic,
+                                question: req.body.Question,
+                                option1: req.body.opt1,
+                                option2: req.body.opt2,
+                                option3: req.body.opt3,
+                                option4: req.body.opt4,
+                                option5: req.body.opt5,
+                                answer: req.body.ans,
+                                picture: "No Picture",
+                                contributor: req.session.name,
+                                approved: "true",
+                                category: 'General',
+                                difficulty: 0,
+                                approvedBy: req.session.name,
+                                version: 1,
+                                isDuplicate: 'No'
+                            },function(err, result){
+                                if (err){
+                                    db.close();
+                                    var string = encodeURIComponent('Error saving Question');
+                                    res.redirect('/add_scq_que/?valid=' + string);
+                                }
+                                if(result.result.n = 1){
+                                    dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                        helper.level(req.session.name);
+                                        db.close(); //close database connection
+                                        var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                        res.redirect('/add_scq_que/?valid=' + string);
+                                    })
+                                }
+            
+                            })
+                        }else{ // if not admin
+                            cx = e;
+                            collection.insertOne({
+                                _id: cx,
+                                course: req.body.course,
+                                subCourse: req.body.subCourse,
+                                topic: req.body.topic,
+                                question: req.body.Question,
+                                option1: req.body.opt1,
+                                option2: req.body.opt2,
+                                option3: req.body.opt3,
+                                option4: req.body.opt4,
+                                option5: req.body.opt5,
+                                answer: req.body.ans,
+                                picture: "No Picture",
+                                contributor: req.session.name,
+                                approved: "false",
+                                category: 'General',
+                                difficulty: 0,
+                                approvedBy: req.session.name,
+                                version: 1,
+                                isDuplicate: 'No'
+                            },function(err, result){
+                                if (err){
+                                    db.close();
+                                    var string = encodeURIComponent('Error saving Question');
+                                    res.redirect('/add_scq_que/?valid=' + string);
+                                }
+                                if(result.result.n = 1){
+                                    dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                        helper.level(req.session.name);
+                                        db.close(); //close database connection
+                                        var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                        res.redirect('/add_scq_que/?valid=' + string);
+                                    })
+                                }
+            
+                            })
+                        }
+                    });
+                } else {
+                    helper.getBase64Data(file.originalname, function(data){
+                        //data is base64 string of image uploaded
+                        //var dt = data;
+                        var cx;
+                        helper.nextID(req.body.course, function(e){
+                            cx = e;
+                            if(req.session.role === 'Admin' || req.session.role === 'SuperAdmin'){
+                                collection.insertOne({
+                                    _id: cx,
+                                    course: req.body.course,
+                                    subCourse: req.body.subCourse,
+                                    topic: req.body.topic,
+                                    question: req.body.Question,
+                                    option1: req.body.opt1,
+                                    option2: req.body.opt2,
+                                    option3: req.body.opt3,
+                                    option4: req.body.opt4,
+                                    option5: req.body.opt5,
+                                    answer: req.body.ans,
+                                    picture: data,
+                                    contributor: req.session.name,
+                                    approved: "true",
+                                    category: 'General',
+                                    difficulty: 0,
+                                    approvedBy: req.session.name,
+                                    version: 1,
+                                    isDuplicate: 'No'
+                                },function(err, result){
+                                    if (err){
+                                        db.close();
+                                        helper.deleteFile(file.originalname);
+                                        var string = encodeURIComponent('Error saving Question');
+                                        res.redirect('/add_scq_que/?valid=' + string);
+                                    }
+                                    if(result.result.n = 1){
+                                        dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                            helper.level(req.session.name);
+                                            helper.deleteFile(file.originalname);
+                                            db.close(); //close database connection
+                                            var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                            res.redirect('/add_scq_que/?valid=' + string);
+                                        })
+                                    }
+                                })
+                            }else{ //if not admin
+                                collection.insertOne({
+                                    _id: cx,
+                                    course: req.body.course,
+                                    subCourse: req.body.subCourse,
+                                    topic: req.body.topic,
+                                    question: req.body.Question,
+                                    option1: req.body.opt1,
+                                    option2: req.body.opt2,
+                                    option3: req.body.opt3,
+                                    option4: req.body.opt4,
+                                    option5: req.body.opt5,
+                                    answer: req.body.ans,
+                                    picture: data,
+                                    contributor: req.session.name,
+                                    approved: "false",
+                                    category: 'General',
+                                    difficulty: 0,
+                                    approvedBy: req.session.name,
+                                    version: 1,
+                                    isDuplicate: 'No'
+                                },function(err, result){
+                                    if (err){
+                                        db.close();
+                                        helper.deleteFile(file.originalname);
+                                        var string = encodeURIComponent('Error saving Question');
+                                        res.redirect('/add_scq_que/?valid=' + string);
+                                    }
+                                    if(result.result.n = 1){
+                                        dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                            helper.level(req.session.name);
+                                            helper.deleteFile(file.originalname);
+                                            db.close(); //close database connection
+                                            var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                            res.redirect('/add_scq_que/?valid=' + string);
+                                        })
+                                    }
+                                })
+                            }
+                        });
+                    })
+                }
+            });
+        }else{
+            //no db auth
+            MongoClient.connect(dbURI, function(err, db) {
+                var dbo = db.db(dbname); // use dbname from Zconfig file
+                const collection = dbo.collection(req.body.course);
+                if(!req.file) { //if file parameter is not in request
+                    var cx;
+                    helper.nextID(req.body.course, function(e){
+                        if(req.session.role === 'Admin' || req.session.role === 'SuperAdmin'){
+                            cx = e;
+                            collection.insertOne({
+                                _id: cx,
+                                course: req.body.course,
+                                subCourse: req.body.subCourse,
+                                topic: req.body.topic,
+                                question: req.body.Question,
+                                option1: req.body.opt1,
+                                option2: req.body.opt2,
+                                option3: req.body.opt3,
+                                option4: req.body.opt4,
+                                option5: req.body.opt5,
+                                answer: req.body.ans,
+                                picture: "No Picture",
+                                contributor: req.session.name,
+                                approved: "true",
+                                category: 'General',
+                                difficulty: 0,
+                                approvedBy: req.session.name,
+                                version: 1,
+                                isDuplicate: 'No'
+                            },function(err, result){
+                                if (err){
+                                    db.close();
+                                    var string = encodeURIComponent('Error saving Question');
+                                    res.redirect('/add_scq_que/?valid=' + string);
+                                }
+                                if(result.result.n = 1){
+                                    dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                        helper.level(req.session.name);
+                                        db.close(); //close database connection
+                                        var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                        res.redirect('/add_scq_que/?valid=' + string);
+                                    })
+                                }
+            
+                            })
+                        }else{ // if not admin
+                            cx = e;
+                            collection.insertOne({
+                                _id: cx,
+                                course: req.body.course,
+                                subCourse: req.body.subCourse,
+                                topic: req.body.topic,
+                                question: req.body.Question,
+                                option1: req.body.opt1,
+                                option2: req.body.opt2,
+                                option3: req.body.opt3,
+                                option4: req.body.opt4,
+                                option5: req.body.opt5,
+                                answer: req.body.ans,
+                                picture: "No Picture",
+                                contributor: req.session.name,
+                                approved: "false",
+                                category: 'General',
+                                difficulty: 0,
+                                approvedBy: req.session.name,
+                                version: 1,
+                                isDuplicate: 'No'
+                            },function(err, result){
+                                if (err){
+                                    db.close();
+                                    var string = encodeURIComponent('Error saving Question');
+                                    res.redirect('/add_scq_que/?valid=' + string);
+                                }
+                                if(result.result.n = 1){
+                                    dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                        helper.level(req.session.name);
+                                        db.close(); //close database connection
+                                        var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                        res.redirect('/add_scq_que/?valid=' + string);
+                                    })
+                                }
+            
+                            })
+                        }
+                    });
+                } else {
+                    helper.getBase64Data(file.originalname, function(data){
+                        //data is base64 string of image uploaded
+                        //var dt = data;
+                        var cx;
+                        helper.nextID(req.body.course, function(e){
+                            cx = e;
+                            if(req.session.role === 'Admin' || req.session.role === 'SuperAdmin'){
+                                collection.insertOne({
+                                    _id: cx,
+                                    course: req.body.course,
+                                    subCourse: req.body.subCourse,
+                                    topic: req.body.topic,
+                                    question: req.body.Question,
+                                    option1: req.body.opt1,
+                                    option2: req.body.opt2,
+                                    option3: req.body.opt3,
+                                    option4: req.body.opt4,
+                                    option5: req.body.opt5,
+                                    answer: req.body.ans,
+                                    picture: data,
+                                    contributor: req.session.name,
+                                    approved: "true",
+                                    category: 'General',
+                                    difficulty: 0,
+                                    approvedBy: req.session.name,
+                                    version: 1,
+                                    isDuplicate: 'No'
+                                },function(err, result){
+                                    if (err){
+                                        db.close();
+                                        helper.deleteFile(file.originalname);
+                                        var string = encodeURIComponent('Error saving Question');
+                                        res.redirect('/add_scq_que/?valid=' + string);
+                                    }
+                                    if(result.result.n = 1){
+                                        dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                            helper.level(req.session.name);
+                                            helper.deleteFile(file.originalname);
+                                            db.close(); //close database connection
+                                            var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                            res.redirect('/add_scq_que/?valid=' + string);
+                                        })
+                                    }
+                                })
+                            }else{ //if not admin
+                                collection.insertOne({
+                                    _id: cx,
+                                    course: req.body.course,
+                                    subCourse: req.body.subCourse,
+                                    topic: req.body.topic,
+                                    question: req.body.Question,
+                                    option1: req.body.opt1,
+                                    option2: req.body.opt2,
+                                    option3: req.body.opt3,
+                                    option4: req.body.opt4,
+                                    option5: req.body.opt5,
+                                    answer: req.body.ans,
+                                    picture: data,
+                                    contributor: req.session.name,
+                                    approved: "false",
+                                    category: 'General',
+                                    difficulty: 0,
+                                    approvedBy: req.session.name,
+                                    version: 1,
+                                    isDuplicate: 'No'
+                                },function(err, result){
+                                    if (err){
+                                        db.close();
+                                        helper.deleteFile(file.originalname);
+                                        var string = encodeURIComponent('Error saving Question');
+                                        res.redirect('/add_scq_que/?valid=' + string);
+                                    }
+                                    if(result.result.n = 1){
+                                        dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                                            helper.level(req.session.name);
+                                            helper.deleteFile(file.originalname);
+                                            db.close(); //close database connection
+                                            var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                            res.redirect('/add_scq_que/?valid=' + string);
+                                        })
+                                    }
+                                })
+                            }
+                        });
+                    })
+                }
+            });
+        }
+    }catch(e){
+        var string = encodeURIComponent(`Caught Error Adding Question`);
+        res.redirect('/add_scq_que/?valid=' + string);
+    }
+    
+}
 
 module.exports.saveQuestion = async function(req, res){
     //console.log(req.body);
@@ -1398,6 +2111,67 @@ module.exports.Approve = function(req, res){
                 db.close(); //close database connection
             })
         });
+    }
+}
+
+module.exports.SCQqforApproval = function(req, res){
+    //console.log(req.body);
+    var cdata = [];
+    try{
+        if(req.body.noOfQ === ''){
+            console.log("no question number")
+        }else{
+            if (dbauth === 'true'){
+                MongoClient.connect(dbURIAuth, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection(req.body.course).find({approved: 'false', subCourse:req.body.subcourse, topic:req.body.topic}).toArray(function(err, result){
+                        if (err) throw err;
+                        if(result.length === 0){
+                            console.log("not found")
+                        }else{
+                            if(parseInt(req.body.noOfQ) > result.length){
+                                for(i=0; i < result.length; i++){
+                                    cdata.push(result[i]);
+                                }
+                            }else{
+                                for(i=0; i < parseInt(req.body.noOfQ); i++){
+                                    cdata.push(result[i]);
+                                }
+                            }
+                        }
+                        res.render('admin_apr_scq2', {data:cdata});
+                        db.close();
+                    });
+                    
+                });
+            }else{
+                //db auth not in use
+                MongoClient.connect(dbURI, function(err, db) {
+                    var dbo = db.db(dbname); // use dbname from Zconfig file 
+                    dbo.collection(req.body.course).find({approved: 'false', subCourse:req.body.subcourse, topic:req.body.topic}).toArray(function(err, result){
+                        if (err) throw err;
+                        if(result.length === 0){
+                            console.log("not found")
+                        }else{
+                            if(parseInt(req.body.noOfQ) > result.length){
+                                for(i=0; i < result.length; i++){
+                                    cdata.push(result[i]);
+                                }
+                            }else{
+                                for(i=0; i < parseInt(req.body.noOfQ); i++){
+                                    cdata.push(result[i]);
+                                }
+                            }
+                        }
+                        res.render('admin_apr_scq2', {data:cdata});
+                        db.close();
+                    });
+                    
+                });
+            }
+        }
+    }catch(e){
+        console.log(e);
     }
 }
 

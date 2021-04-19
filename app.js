@@ -21,7 +21,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-      expires: 604800
+      expires: new Date(Date.now() + (2 * 86400 * 1000)) 
   }
 }));
 

@@ -3,11 +3,14 @@ doctype html
 html
   head
     block header
+
     title= title
     meta(name="viewport" content="width=device-width, initial-scale=1")
     link(rel='stylesheet', href='/stylesheets/bootstrap/css/bootstrap.min.css')
     link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous")
     link(rel='stylesheet', href='/stylesheets/style.css')
+
+
     nav.navbar.navbar-expand-lg.navbar-dark.bg-primary(style={"color":"teal"})
       a.navbar-brand(href='/') 
         img(src="/images/logo.png", height="30", width="30")
@@ -21,7 +24,11 @@ html
           li.nav-item.active
             a.nav-link(style={'font-family': 'Calisto MT'}, href='/dashboard') Dashboard
           li.nav-item.active
-            a.nav-link(style={'font-family': 'Calisto MT'}, href='/add_question') Add Questions
+            a.nav-link(href="/add_question" style={ "color":"white", 'font-family': 'Calisto MT'}) Add MCQ Questions
+          li.nav-item.active
+            a.nav-link(href="/add_scq_que" style={ "color":"white", 'font-family': 'Calisto MT'}) Add SCQ Questions
+          li.nav-item.active
+            a.nav-link(style={'font-family': 'Calisto MT'}, href='/uploads') Upload File
           li.nav-item.active
             a.nav-link(style={'font-family': 'Calisto MT'}, href='/reg_pq') Register PQ
           li.nav-item.active

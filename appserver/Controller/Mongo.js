@@ -87,6 +87,84 @@ module.exports.delSC = async function(cname, subc, fn){
     }
 }
 
+module.exports.getAllCourses = async function(req, res){
+    if (dbauth === 'true'){ // if user has specified database authentication
+        MongoClient.connect(dbURIAuth, function(err, db) {
+            var dbo = db.db(dbname); // use dbname from Zconfig file
+            dbo.collection('coursesactivities').find().toArray(function(err, result){ //make an array of all data in cpcactivities 
+                if (err) throw err; //if there is an error, throw it
+                try{
+                    res.json(result);
+                }catch(err){ 
+                    res.json({}) // retuen emptry object
+                }
+                db.close(); //close database connection
+            })
+        });
+    }else{
+        MongoClient.connect(dbURI, function(err, db) {
+            var dbo = db.db(dbname); // use dbname from Zconfig file
+            dbo.collection('coursesactivities').find().toArray(function(err, result){ //make an array of all data in cpcactivities 
+                if (err) throw err; //if there is an error, throw it
+                try{
+                    res.json(result);
+                }catch(err){ 
+                    res.json({}) // retuen emptry object
+                }
+                db.close(); //close database connection
+            })
+        });   
+    }
+}
+
+module.exports.getCD = async function(cname, fn){
+    if (dbauth === 'true'){ // if user has specified database authentication
+        MongoClient.connect(dbURIAuth, function(err, db) {
+            var dbo = db.db(dbname); // use dbname from Zconfig file
+            dbo.collection('coursesactivities').find().toArray(function(err, result){ //make an array of all data in cpcactivities 
+                if (err) throw err; //if there is an error, throw it
+                try{
+                    var b = []
+                    //console.log(result);
+                    for(i in result){
+                        //console.log(result[i]);
+                        if (result[i].type.trim() === cname){
+                            b.push({title: result[i].title.trim(), name:result[i].name.trim()});
+                        }
+                    }
+                    fn(b); // return the array of all data in cpcactivities
+
+                }catch(err){ 
+                    fn({}) // retuen emptry object
+                }
+                db.close(); //close database connection
+            })
+        });
+    }else{
+        MongoClient.connect(dbURI, function(err, db) {
+            var dbo = db.db(dbname); // use dbname from Zconfig file
+            dbo.collection('coursesactivities').find().toArray(function(err, result){ //make an array of all data in cpcactivities 
+                if (err) throw err; //if there is an error, throw it
+                try{
+                    var b = []
+                    //console.log(result);
+                    for(i in result){
+                        //console.log(result[i]);
+                        if (result[i].type.trim() === cname){
+                            b.push({title: result[i].title.trim(), name:result[i].name.trim()});
+                        }
+                    }
+                    fn(b); // return the array of all data in cpcactivities
+
+                }catch(err){ 
+                    fn({}) // retuen emptry object
+                }
+                db.close(); //close database connection
+            })
+        });   
+    }
+}
+
 module.exports.getSC = async function(cname, fn){
     if (dbauth === 'true'){ // if user has specified database authentication
         MongoClient.connect(dbURIAuth, function(err, db) {

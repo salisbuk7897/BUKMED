@@ -1,0 +1,173 @@
+extend layout
+
+block header
+    link(rel='stylesheet', href='/stylesheets/slider.css')
+    style.
+        form {
+            --background: white;
+            --border: rgba(0, 0, 0, 0.125);
+            --borderDark: rgba(0, 0, 0, 0.25);
+            --borderDarker: rgba(0, 0, 0, 0.5);
+            --bgColorH: 0;
+            --bgColorS: 0%;
+            --bgColorL: 98%;
+            --fgColorH: 210;
+            --fgColorS: 50%;
+            --fgColorL: 38%;
+            --shadeDark: 0.3;
+            --shadeLight: 0.7;
+            --shadeNormal: 0.5;
+            --borderRadius: 0.125rem;
+            --highlight: #306090;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--borderRadius);
+            box-shadow: 0 1rem 1rem -0.75rem var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topa{
+            width:60%;
+            margin: auto;
+            border: 1%;
+            padding: 10px;
+        }
+        .hdd{
+            font-family: 'Calisto MT';
+            font-size: 25px;
+        }
+
+        .clegend{
+            font-family: 'Calisto MT';
+        }
+        .qnu{
+            margin-top:20px; 
+            margin-right: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .qnu1{
+            width:22%;
+            margin: auto;
+            border: 1%;
+            padding: 10px;
+        }
+
+        .pp{
+            margin-top:10px;
+            margin-right: 10px;
+        }
+
+        @media screen and (max-width: 720px) {
+            body{
+                margin:0px;
+                font-family: "Times New Roman", Times, serif
+            }
+            .hdd{
+                font-family: "Times New Roman", Times, serif;
+                font-size: 16px;
+            }
+            .topa{
+                width:  100%;
+                margin: auto;
+                border: 5px;
+                padding: 1%;
+            }
+            .clegend{
+                font-size:25px;
+                font-family: "Times New Roman", Times, serif;
+            }
+            .qnu{
+                margin-top:20px; 
+                text-align: center;
+                font-weight: bold;
+                float:'left';
+            }
+
+            .pp{
+                margin-top:0px;
+                margin-right: 0px;
+            }
+            
+        }
+
+block content
+    div(style={"overflow":"auto", "height":"85vh"}, id='main')
+        if(data)
+            div(class='topa')
+                form
+                    .slideshow-container
+                        - for(dat of data)
+                            .mySlides.faded
+                                .row
+                                    .col-md-6
+                                        p(class='qnu') Question Number
+                                    .col-md-6
+                                        div(class='qnu1')
+                                            input(readonly type="text" class="form-control" name="qnum" value=`${dat._id}` style={'text-align':'center'} id="qnum")
+                                hr
+                                if(dat.picture === 'No Picture' )
+                                    div(class="form-group")
+                                        label(for='Question') Question
+                                        textarea.autofocus(autofocus name="Question" id=`que${dat._id}` class="md-textarea form-control" rows="3") !{dat.question}
+                                else
+                                    .row(style={"width":"98%", "margin-left":"15px"})
+                                        .col-md-9
+                                            div(class="form-group")
+                                                label(for='Question') Question
+                                                textarea.autofocus(autofocus name="Question" id=`que${dat._id}` class="md-textarea form-control" rows="3") !{dat.question}
+                                        .col-md-3
+                                            img(src=`data:image/gif;base64,${dat.picture}`, style={"height": "150px", "width":"180px"})
+                                
+                                
+                                div(class="form-group")
+                                    label(for='opt1') Option 1
+                                    input(type="text" class="form-control" name="opt1" value=`${dat.option1}` style={"margin-right": "1%"} id=`opti${dat._id}`)
+
+                                div(class="form-group")
+                                    label(for='opt2') Option 2
+                                    input(type="text" class="form-control" name="opt2" value=`${dat.option2}` style={"margin-right": "1%"} id=`optii${dat._id}`)
+
+                                div(class="form-group")
+                                    label(for='opt3') Option 3
+                                    input(type="text" class="form-control" name="opt3" value=`${dat.option3}` style={"margin-right": "1%"} id=`optiii${dat._id}`)
+
+                                div(class="form-group")
+                                    label(for='opt4') Option 4
+                                    input(type="text" class="form-control" name="opt4" value=`${dat.option4}` style={"margin-right": "1%"} id=`optiv${dat._id}`)
+
+                                .row
+                                    .col-md-9
+                                        div(class="form-group")
+                                            label(for='opt5') Option 5
+                                            input(type="text" class="form-control" name="opt5" value=`${dat.option5}` style={"margin-right": "1%"} id=`optv${dat._id}`)
+                                    .col-md-3
+                                        div(class="form-group")
+                                            label(for='ans') Answer
+                                            input(class="form-control" value=`${dat.answer}` style={"margin-right": "10px"}, id=`ans${dat._id}` name="ans")
+                                                
+                                .row
+                                    .col-md-2
+                                        a(href="javascript:plusSlides(-1)" style={"width":"100%", "margin-top":"20px", } class="btn btn-primary float-right") Previous
+                                    .col-md-2
+                                        a(href=`javascript:deleteadscq(${dat._id},"${dat.course}")` class='btn btn-danger float-right' id="rmf3b", style={"width":"100%", "margin-top":"20px"}) Delete
+                                    .col-md-3
+                                        a(href=`javascript:MaApprscq(${dat._id},"${dat.course}")` class='btn btn-primary float-right' id="rmf3b", style={"width":"100%", "margin-top":"20px"}) Modify and Approve
+                                    .col-md-2
+                                        a(href=`javascript:approvescq(${dat._id},"${dat.course}")` class='btn btn-primary float-right' id="rmf3b", style={"width":"100%", "margin-top":"20px"}) Approve
+                                    .col.md-2
+                                        a(href="javascript:plusSlides(1)" style={"width":"100%", "margin-top":"20px"} class="btn btn-primary float-right") Next
+            h6(style={"text-align":"center"}, class="alert alert-danger", id ="ownscq1")
+            br
+
+block scripts
+    script(src='https://code.jquery.com/jquery-3.5.1.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.min.js')
+    script(src='/stylesheets/bootstrap/js/bootstrap.bundle.min.js')
+    script(src='/javascripts/slider.js')
+        

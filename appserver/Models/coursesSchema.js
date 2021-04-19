@@ -15,6 +15,7 @@ var coursesSchema = new mongoose.Schema({
     title: {type: String, required: true},
     name: {type: String, required: true},
     selected: {type: String, required: true},
+    type: {type: String, required: true},
     subCourses: [scSchema]
     
 });

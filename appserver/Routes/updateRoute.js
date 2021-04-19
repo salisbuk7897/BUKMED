@@ -31,6 +31,7 @@ router.get('/gettopics',async function(req, res){
         res.json({topics:e});
     })
 });
+router.get('/getcourses', mongo.getAllCourses)
 
 router.get('/getquestions', ctrlStatic.getAllQuestions)
 

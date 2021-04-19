@@ -1,0 +1,50 @@
+extends layout
+
+block content
+   if(msg)
+        div(class="alert alert-success" role="alert" style={'text-align':'center'}) !{msg}
+   h5(style={"margin-left":"20px","margin-top":"10px"}) Upload Past Questions from file
+   .apis
+        hr(style={"margin":"0"})
+        .row
+            .col-md-5
+                p(style={"margin-top":"10px", "margin-right": "10px", "margin-left":"30px", "font-size":"18px"}) Upload SCQ Past Question
+            .col-md-7
+                form(class="form-inline float-right" action="/upload_scq_pq_file" method="post" enctype="multipart/form-data")
+                    .form-group
+                        p(style={"margin-top":"10px", "margin-right": "10px"}) SCQ File
+                        input(type="file" class="form-control" name="scq_pq_file" style={"margin-right": "10px"})
+                        button(type='submit' class='btn btn-primary float-right' id="rmf3b") Upload
+        hr(style={"margin":"0"})
+        .row
+            .col-md-5
+                p(style={"margin-top":"10px", "margin-right": "10px", "margin-left":"30px", "font-size":"18px"}) Upload MCQ Past Question
+            .col-md-7
+                form(class="form-inline float-right" action="/upload_mcq_pq_file" method="post" enctype="multipart/form-data")
+                    .form-group
+                        p(style={"margin-top":"10px", "margin-right": "10px"}) MCQ File
+                        input(type="file" class="form-control" name="mcq_pq_file" style={"margin-right": "10px"})
+                        button(type='submit' class='btn btn-primary float-right' id="rmf3b") Upload
+        hr(style={"margin":"0"})
+        .row
+            .col-md-5
+                p(style={"margin-top":"10px", "margin-right": "10px", "margin-left":"30px", "font-size":"18px"}) Upload Essay Past Question
+            .col-md-7
+                form(class="form-inline float-right" action="/upload_ess_pq_file" method="post" enctype="multipart/form-data")
+                    .form-group
+                        p(style={"margin-top":"10px", "margin-right": "10px"}) Essay File
+                        input(type="file" class="form-control" name="ess_pq_file" style={"margin-right": "10px"})
+                        button(type='submit' class='btn btn-primary float-right' id="rmf3b") Upload
+   br
+   h5(style={"margin-left":"20px","margin-top":"10px"}) Upload Catalog Questions from file
+   .apis
+       hr(style={"margin":"0"})
+       .row
+           .col-md-5
+               p(style={"margin-top":"10px", "margin-right": "10px", "margin-left":"30px", "font-size":"18px"}) Upload Catalog Question
+           .col-md-7
+               form(class="form-inline float-right" action="/upload_scq_pq_file" method="post" enctype="multipart/form-data")
+                   .form-group
+                       p(style={"margin-top":"10px", "margin-right": "10px"}) Questions File
+                       input(type="file" class="form-control" name="question_file" style={"margin-right": "10px"})
+                       button(type='submit' class='btn btn-primary float-right' id="rmf3b") Upload

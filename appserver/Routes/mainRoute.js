@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 var ctrlStatic = require('../Controller/question');
 var regController = require('../Controller/Register');
+var filesController = require('../Controller/files');
 var login = require('../Controller/login');
 var jwt = require('../../jwt');
 // handler for fie storage in /uploads
@@ -27,6 +28,17 @@ var sessionChecker = (req, res, next) => {
       res.redirect("/log_in") //redirect to login page if user is not logged in
   }    
 };
+
+
+router.post('/upload_scq_pq_file', upload.single('scq_pq_file'),  filesController.scqpq);
+
+router.post('/upload_mcq_pq_file', upload.single('mcq_pq_file'),  filesController.mcqpq);
+
+router.post('/upload_ess_pq_file', upload.single('ess_pq_file'),  filesController.esspq);
+
+router.get('/uploads', function(req, res, next) {
+  res.render('uploads');
+});
 
 //Rnder Admin
 router.get('/admin', sessionChecker, function(req, res, next) {
@@ -89,18 +101,32 @@ router.post("/deleteadscqpq", ctrlStatic.DeleteSCQPQ); ///modify and approve thr
 
 router.post("/modifyscqpq", ctrlStatic.ModifySCQPQ); ///modify and approve through ajav in slider.js
 
+router.post("/modifyscq", ctrlStatic.ModifySCQQue); ///modify and approve through ajav in slider.js
+
+router.post("/deletescq", ctrlStatic.DeleteSCQQue); ///modify and approve through ajav in slider.js
+
 router.post('/managepq', ctrlStatic.managePQ);
 
 router.post("/apprscqpq", ctrlStatic.ApproveSCQPQ); ///approve through ajav in slider.js
+
+router.post("/apprscq", ctrlStatic.ApproveSCQQue); ///approve through ajav in slider.js
 
 router.get('/add_scqpq', /*sessionChecker,*/ ctrlStatic.getSCQPQ);
 
 router.post("/add_scqpq", upload.single('question_pic'), ctrlStatic.addSCQPQ);
 
+router.post("/add_scq_question", upload.single('question_pic'), ctrlStatic.addSCQQuestion ) 
+
 //For Adding Subcourse
 router.post('/addsc', function(req, res){
   mongo.addSubCourse(req.body.course, req.body.subCourse);
   console.log(req.body);
+});
+
+router.post('/getcd', function(req, res){
+  mongo.getCD(req.body.course, function(e){
+    res.send({sc:e});
+  })
 });
 
 router.post('/getsc', function(req, res){
@@ -134,6 +160,8 @@ router.get('/add_esspq', sessionChecker, ctrlStatic.rEssay);
 router.post('/add_esspq', ctrlStatic.addEssay);
 
 router.post("/approve", ctrlStatic.qforApproval);
+
+router.post("/approveSCQ", ctrlStatic.SCQqforApproval);
 
 router.post("/appr", ctrlStatic.Approve); ///approve through ajav in slider.js
 
@@ -181,8 +209,41 @@ router.get('/register', function(req, res, next) {
 });
 
 router.get('/add_question', sessionChecker, function(req, res, next) {
-    res.render('Questions', {data:'Notifications appear here'});
+  mongo.getCD('MCQ',  function(e){
+    //res.send({sc:e});
+    //console.log(e);
+    res.render('Questions', {data:'Notifications appear here', crs: e});
+  })
 });
+
+router.get('/add_scq_que', function(req, res){
+  try{
+    var passedVariable = req.query.valid;
+    mongo.getCD('SCQ',  function(e){
+      res.render('QuestionsSCQ', {data:passedVariable, crs: e});
+    })
+  }catch(e){
+    mongo.getCD('SCQ',  function(e){
+      res.render('QuestionsSCQ', {data:'Notifications appear here', crs: e});
+    })
+  }
+  
+});
+
+router.get('/adminapr', function(req, res, next) {
+  //res.render('admin_apr');
+  mongo.getCD('MCQ',  function(e){
+    res.render('admin_apr', {crs: e});
+  })
+});
+
+router.get('/adminapr2', function(req, res, next) {
+  //res.render('admin_apr');
+  mongo.getCD('SCQ',  function(e){
+    res.render('admin_apr_scq', {crs: e});
+  })
+});
+
 router.post('/add_question', upload.single('question_pic'),  ctrlStatic.saveQuestion)
 
 router.get('/add_objpq', sessionChecker, ctrlStatic.getPQ);
@@ -197,10 +258,6 @@ router.post("/reg_pq", ctrlStatic.registerpq);
 
 router.get('/adminque', function(req, res, next) {
   res.render('admin_que');
-});
-
-router.get('/adminapr', function(req, res, next) {
-  res.render('admin_apr');
 });
 
 router.get('/ajax', function(req, res){

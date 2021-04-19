@@ -2,8 +2,9 @@ extend layout
 
 block content
     div(class="sidenav")
-        a(href="javascript:adminque()" class="daa") Questions
-        a(href="javascript:adminapr()" class="daa") Approve
+        a(href="javascript:adminque()" class="daa") Courses
+        a(href="javascript:adminapr()" class="daa") Approve MCQ
+        a(href="javascript:adminaprscq()" class="daa") Approve SCQ
         a(href="javascript:adminupg()" class="daa") Account
 
     div(class="main", style={"overflow" : "auto"})
@@ -27,6 +28,14 @@ block scripts
         function adminapr(){
             $.ajax({
                 url: '/adminapr',
+            })
+            .done(function(e){
+                $('.main').html(e);
+            });   
+        }
+        function adminaprscq(){
+            $.ajax({
+                url: '/adminapr2',
             })
             .done(function(e){
                 $('.main').html(e);
