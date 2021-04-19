@@ -113,38 +113,38 @@ block content
                             if(dat.picture === 'No Picture' )
                                 div(class="form-group")
                                     label(for='Question') Question
-                                    textarea.autofocus(autofocus name="Question" id="que" class="md-textarea form-control" rows="3") !{dat.question}
+                                    textarea.autofocus(autofocus name="Question" id=`que${dat._id}` class="md-textarea form-control" rows="3") !{dat.question}
                             else
                                 .row(style={"width":"98%", "margin-left":"15px"})
                                     .col-md-9
                                         div(class="form-group")
                                             label(for='Question') Question
-                                            textarea.autofocus(autofocus name="Question" id="que" class="md-textarea form-control" rows="3") !{dat.question}
+                                            textarea.autofocus(autofocus name="Question" id=`que${dat._id}` class="md-textarea form-control" rows="3") !{dat.question}
                                     .col-md-3
                                         img(src=`data:image/gif;base64,${dat.picture}`, style={"height": "150px", "width":"180px"})
                             
                             
                             div(class="form-group")
                                 label(for='opt1') Option 1
-                                input(type="text" class="form-control" name="opt1" value=`${dat.option1}` style={"margin-right": "1%"} id="opt1")
+                                input(type="text" class="form-control" name="opt1" value=`${dat.option1}` style={"margin-right": "1%"} id=`opti${dat._id}`)
 
                             div(class="form-group")
                                 label(for='opt2') Option 2
-                                input(type="text" class="form-control" name="opt2" value=`${dat.option2}` style={"margin-right": "1%"} id="opt2")
+                                input(type="text" class="form-control" name="opt2" value=`${dat.option2}` style={"margin-right": "1%"} id=`opt2ii${dat._id}`)
 
                             div(class="form-group")
                                 label(for='opt3') Option 3
-                                input(type="text" class="form-control" name="opt3" value=`${dat.option3}` style={"margin-right": "1%"} id="opt3")
+                                input(type="text" class="form-control" name="opt3" value=`${dat.option3}` style={"margin-right": "1%"} id=`optiii${dat._id}`)
 
                             div(class="form-group")
                                 label(for='opt4') Option 4
-                                input(type="text" class="form-control" name="opt4" value=`${dat.option4}` style={"margin-right": "1%"} id="opt4")
+                                input(type="text" class="form-control" name="opt4" value=`${dat.option4}` style={"margin-right": "1%"} id=`optiv${dat._id}`)
 
                             .row
                                 .col-md-9
                                     div(class="form-group")
                                         label(for='opt5') Option 5
-                                        input(type="text" class="form-control" name="opt5" value=`${dat.option5}` style={"margin-right": "1%"} id="opt5")
+                                        input(type="text" class="form-control" name="opt5" value=`${dat.option5}` style={"margin-right": "1%"} id=`optv${dat._id}`)
                                 .col-md-3
                                     div(class="form-group")
                                         label(for='ans') Answer
