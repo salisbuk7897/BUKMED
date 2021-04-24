@@ -1,0 +1,6 @@
+pth; Chemical Pathology; Water and Sodium; MCQ
+Predominant water depletion ; Coma; Nephrogenic DI; Caused by osmotic diuresis; 10 hyper aldosteronism; Prolonged artificial ventilation; F; T; T; F; T
+Regarding body water; average is 40L in adults; predominantly ECF, extra vascular in infants; GIT plays an important role in H2O homeostasis; Insensible H2O loss is an average of 900mL; fluid requirement for infants is 150ml/kg per day; F; T; T; T; T
+SIADH; Hypo-osmolality of plasma; High urine osmolality relative to plasma; High plasma osmolality relative to urine; Cancer of brondus; Treatment includes fluid restriction and saline administration; T; T; F; T; T
+Factors that control ADH release; ECF osmolality; Hypovolaemia increases release; Sulphonylureas; Carbamazipine; Barbiturates; T; T; T; T; T
+The following are regarded as obsolete; Mmol/L; umol/L; g/L; mg/100ml; meq/dl; F; F; F; T; F

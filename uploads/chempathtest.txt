@@ -1,0 +1,6 @@
+ChemPath Test (Trial); 2021; MCQ
+Ideal tumour markers; Specific to particular tissue of origin; Should be released atleast periodically; Should be detected early to prevent disease; Can be used in prognostication; None of the above; T; F; F; T; F
+Proteinuria; Causes include glomerular damage; Selective proteinuria PSI > 0.1; Microalbuminuria is protein of > 300mg/24 hours; Severe proteinuria is 1 - 2g/day; None of the above; T; F; F; F; F
+POCT advantages; Increase turn around time; Larger volume of Sample is required; Improve patient Outcome; Reduce Clinic Visit; Greater patient Management; F; F; T; T; T
+Growth Hormone Excess; Gigantism; Thyromegaly; Increase Risk of Hypertension; Diabetes Mellitus; None Of The Above; T; T; T; T; F
+OGTT Sample most 2 important results are taken at; 0 & 180 minutes; 30 & 60 minutes; 60 & 120 minutes; 0 & 120 minutes; 60 & 180 minutes; F; F; F; T; F

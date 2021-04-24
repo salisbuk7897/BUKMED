@@ -36,7 +36,11 @@ router.post('/upload_mcq_pq_file', upload.single('mcq_pq_file'),  filesControlle
 
 router.post('/upload_ess_pq_file', upload.single('ess_pq_file'),  filesController.esspq);
 
-router.get('/uploads', function(req, res, next) {
+router.post('/upload_que_file', upload.single('question_file'),  filesController.que);
+
+
+
+router.get('/uploads', sessionChecker, function(req, res, next) {
   res.render('uploads');
 });
 
@@ -209,14 +213,23 @@ router.get('/register', function(req, res, next) {
 });
 
 router.get('/add_question', sessionChecker, function(req, res, next) {
-  mongo.getCD('MCQ',  function(e){
-    //res.send({sc:e});
-    //console.log(e);
-    res.render('Questions', {data:'Notifications appear here', crs: e});
-  })
+  try{
+    var passedVariable = req.query.valid;
+    mongo.getCD('MCQ',  function(e){
+      //res.send({sc:e});
+      //console.log(e);
+      res.render('Questions', {data:passedVariable, crs: e});
+    })
+  }catch(e){
+    mongo.getCD('MCQ',  function(e){
+      //res.send({sc:e});
+      //console.log(e);
+      res.render('Questions', {data:'Notifications appear here', crs: e});
+    })
+  }
 });
 
-router.get('/add_scq_que', function(req, res){
+router.get('/add_scq_que', sessionChecker, function(req, res){
   try{
     var passedVariable = req.query.valid;
     mongo.getCD('SCQ',  function(e){

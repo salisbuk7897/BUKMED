@@ -1336,7 +1336,7 @@ module.exports.addSCQQuestion = function(req, res){
                                 approved: "false",
                                 category: 'General',
                                 difficulty: 0,
-                                approvedBy: req.session.name,
+                                approvedBy: "None",
                                 version: 1,
                                 isDuplicate: 'No'
                             },function(err, result){
@@ -1420,7 +1420,7 @@ module.exports.addSCQQuestion = function(req, res){
                                     approved: "false",
                                     category: 'General',
                                     difficulty: 0,
-                                    approvedBy: req.session.name,
+                                    approvedBy: "None",
                                     version: 1,
                                     isDuplicate: 'No'
                                 },function(err, result){
@@ -1646,7 +1646,7 @@ module.exports.saveQuestion = async function(req, res){
                                 course: req.body.course,
                                 subCourse: req.body.subCourse,
                                 topic: req.body.topic,
-                                questionType: req.body.qType,
+                                questionType: "MCQ",
                                 question: req.body.Question,
                                 option1: req.body.opt1,
                                 option2: req.body.opt2,
@@ -1669,13 +1669,17 @@ module.exports.saveQuestion = async function(req, res){
                             },function(err, result){
                                 if (err){
                                     db.close();
-                                    res.render('Questions', {data:'Error saving Question'});
+                                    //res.render('Questions', {data:'Error saving Question'});
+                                    var string = encodeURIComponent('Error saving Question');
+                                    res.redirect('/add_question/?valid=' + string);
                                 }
                                 if(result.result.n = 1){
                                     dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
                                         helper.level(req.session.name);
                                         db.close(); //close database connection
-                                        res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                        //res.render('Questions', {data:});
+                                        var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                        res.redirect('/add_question/?valid=' + string);
                                     })
                                 }
             
@@ -1687,7 +1691,7 @@ module.exports.saveQuestion = async function(req, res){
                                 course: req.body.course,
                                 subCourse: req.body.subCourse,
                                 topic: req.body.topic,
-                                questionType: req.body.qType,
+                                questionType: "MCQ",
                                 question: req.body.Question,
                                 option1: req.body.opt1,
                                 option2: req.body.opt2,
@@ -1710,13 +1714,15 @@ module.exports.saveQuestion = async function(req, res){
                             },function(err, result){
                                 if (err){
                                     db.close();
-                                    res.render('Questions', {data:'Error saving Question'});
+                                    var string = encodeURIComponent('Error saving Question');
+                                    res.redirect('/add_question/?valid=' + string);
                                 }
                                 if(result.result.n = 1){
                                     dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
                                     
                                         db.close(); //close database connection
-                                        res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                        var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                        res.redirect('/add_question/?valid=' + string);
                                     })
                                 }
             
@@ -1737,7 +1743,7 @@ module.exports.saveQuestion = async function(req, res){
                                     course: req.body.course,
                                     subCourse: req.body.subCourse,
                                     topic: req.body.topic,
-                                    questionType: req.body.qType,
+                                    questionType: "MCQ",
                                     question: req.body.Question,
                                     option1: req.body.opt1,
                                     option2: req.body.opt2,
@@ -1761,14 +1767,16 @@ module.exports.saveQuestion = async function(req, res){
                                     if (err){
                                         db.close();
                                         helper.deleteFile(file.originalname);
-                                        res.render('Questions', {data:'Error saving Question'});
+                                        var string = encodeURIComponent('Error saving Question');
+                                        res.redirect('/add_question/?valid=' + string);
                                     }
                                     if(result.result.n = 1){
                                         dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
                                             helper.level(req.session.name);
                                             helper.deleteFile(file.originalname);
                                             db.close(); //close database connection
-                                            res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                            var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                            res.redirect('/add_question/?valid=' + string);
                                         })
                                     }
                                 })
@@ -1778,7 +1786,7 @@ module.exports.saveQuestion = async function(req, res){
                                     course: req.body.course,
                                     subCourse: req.body.subCourse,
                                     topic: req.body.topic,
-                                    questionType: req.body.qType,
+                                    questionType: "MCQ",
                                     question: req.body.Question,
                                     option1: req.body.opt1,
                                     option2: req.body.opt2,
@@ -1802,13 +1810,15 @@ module.exports.saveQuestion = async function(req, res){
                                     if (err){
                                         db.close();
                                         helper.deleteFile(file.originalname);
-                                        res.render('Questions', {data:'Error saving Question'});
+                                        var string = encodeURIComponent('Error saving Question');
+                                        res.redirect('/add_question/?valid=' + string);
                                     }
                                     if(result.result.n = 1){
                                         dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
                                             helper.deleteFile(file.originalname);
                                             db.close(); //close database connection
-                                            res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                            var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                            res.redirect('/add_question/?valid=' + string);
                                         })
                                     }
                                 })
@@ -1857,13 +1867,15 @@ module.exports.saveQuestion = async function(req, res){
                             },function(err, result){
                                 if (err){
                                     db.close();
-                                    res.render('Questions', {data:'Error saving Question'});
+                                    var string = encodeURIComponent('Error saving Question');
+                                    res.redirect('/add_question/?valid=' + string);
                                 }
                                 if(result.result.n = 1){
                                     dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
                                         helper.level(req.session.name);
                                         db.close(); //close database connection
-                                        res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                        var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                        res.redirect('/add_question/?valid=' + string);
                                     })
                                 }
             
@@ -1898,13 +1910,15 @@ module.exports.saveQuestion = async function(req, res){
                             },function(err, result){
                                 if (err){
                                     db.close();
-                                    res.render('Questions', {data:'Error saving Question'});
+                                    var string = encodeURIComponent('Error saving Question');
+                                    res.redirect('/add_question/?valid=' + string);
                                 }
                                 if(result.result.n = 1){
                                     dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
                                         
                                         db.close(); //close database connection
-                                        res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                        var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                        res.redirect('/add_question/?valid=' + string);
                                     })
                                 }
             
@@ -1949,14 +1963,16 @@ module.exports.saveQuestion = async function(req, res){
                                     if (err){
                                         db.close();
                                         helper.deleteFile(file.originalname);
-                                        res.render('Questions', {data:'Error saving Question'});
+                                        var string = encodeURIComponent('Error saving Question');
+                                        res.redirect('/add_question/?valid=' + string);
                                     }
                                     if(result.result.n = 1){
                                         dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
                                             helper.level(req.session.name);
                                             helper.deleteFile(file.originalname);
                                             db.close(); //close database connection
-                                            res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                            var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                            res.redirect('/add_question/?valid=' + string);
                                         })
                                     }
                                 })
@@ -1990,13 +2006,15 @@ module.exports.saveQuestion = async function(req, res){
                                     if (err){
                                         db.close();
                                         helper.deleteFile(file.originalname);
-                                        res.render('Questions', {data:'Error saving Question'});
+                                        var string = encodeURIComponent('Error saving Question');
+                                        res.redirect('/add_question/?valid=' + string);
                                     }
                                     if(result.result.n = 1){
                                         dbo.collection('users').updateOne({username:(req.session.name).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
                                             helper.deleteFile(file.originalname);
                                             db.close(); //close database connection
-                                            res.render('Questions', {data:`Question ${cx} saved Successfully`});
+                                            var string = encodeURIComponent(`Question ${cx} saved Successfully`);
+                                            res.redirect('/add_question/?valid=' + string);
                                         })
                                     }
                                 })

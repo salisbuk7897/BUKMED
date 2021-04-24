@@ -3,7 +3,7 @@
     "appport": "2020",
     "httptype": "http",
     "mongourl": "localhost",
-    "dbname": "QueBank",
+    "dbname": "QueBank1",
     "mongoport": "27017",
     "useDbAuth": "true",
     "dbUser": "myUserAdmin",

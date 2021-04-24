@@ -786,3 +786,442 @@ async function saveESSAYtoDB(pastq, c, question, label, owner){
         };
     });
 }
+
+// SAVE MCQ OR SCQ catalog questions FROM FILE
+module.exports.que = async function(req, res){
+    try {
+        if(!req.file) { //if file parameter is not in request
+            res.send({
+                status: false,
+                message: 'No file uploaded'
+            });
+        } else {
+            //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+            let file = req.file;
+            await screenQue(file, async function(data){
+                //res.render("uploads", {msg: data})
+                if(data === "OK"){
+                    getcrs(file, function(d){
+                        saveQue(d, file, req.session.name,  req.session.role, function(data2){
+                            res.render("uploads", {msg: data2})
+                        })  
+                    })
+                }else{
+                    res.render("uploads", {msg: data})
+                }
+            });
+        }
+    } catch (err) {
+        res.status(500).send(err);
+        console.log(err)
+    }
+    //res.render("uploads", {msg:'Successful'})
+}
+
+async function screenQue(file, fn){
+    var i = 0;
+    var heading = "NO";
+    var check = "OK";
+    var ErrorNumber = 0;
+    var type;
+    const readline = require('readline');
+    //const fileStream = fs.createReadStream('input.txt');
+
+    const rl = readline.createInterface({
+        input: fs.createReadStream(path.join(__dirname,`../../uploads/${file.originalname}`))
+    }); 
+
+    for await (const line of rl) {
+        if (i >= 1 && line != ""){
+            if(type.toUpperCase() === "MCQ"){
+                try{
+                    //console.log(i)
+                    var que = line.split(";");
+                    var question = que[0];
+                    var opt1 = que[1].trim();
+                    var opt2 = que[2].trim();
+                    var opt3 = que[3].trim();
+                    var opt4 = que[4].trim();
+                    var opt5 = que[5].trim();
+                    var ans1 = que[6].trim();
+                    var ans2 = que[7].trim();
+                    var ans3 = que[8].trim();
+                    var ans4 = que[9].trim();
+                    var ans5 = que[10].trim();
+                    if(question != "" && opt1 != "" && opt2 != "" && opt3 != "" && opt4 != "" && opt5 != "" && ans1 != "" && ans2 != "" && ans3 != "" && ans4 != "" && ans5 != ""){ //Check if answer is part of options too
+                        //console.log(`q - ${question}, 1 - ${opt1}, 2 - ${opt2}, 3 - ${opt3}, 4 - ${opt4}, 5 - ${opt5}, ans - ${ans},`);
+                        i = i + 1;
+                    }else{
+                        check = "Error";
+                        ErrorNumber = i;
+                        break;
+                    }
+                }catch{
+                    check = "Error";
+                    ErrorNumber = i;
+                    break;
+                }
+            }else if(type.toUpperCase() === "SCQ"){
+                try{
+                    //console.log(i)
+                    var que = line.split(";");
+                    var question = que[0].trim();
+                    var opt1 = que[1].trim();
+                    var opt2 = que[2].trim();
+                    var opt3 = que[3].trim();
+                    var opt4 = que[4].trim();
+                    var opt5 = que[5].trim();
+                    var ans = que[6].trim();
+                    if(question != "" && opt1 != "" && opt2 != "" && opt3 != "" && opt4 != "" && opt5 != "" && ans != ""){ //Check if answer is part of options too
+                        //console.log(`q - ${question}, 1 - ${opt1}, 2 - ${opt2}, 3 - ${opt3}, 4 - ${opt4}, 5 - ${opt5}, ans - ${ans},`);
+                        i = i + 1;
+                    }else{
+                        check = "Error";
+                        ErrorNumber = i;
+                        break;
+                    }
+                }catch{
+                    check = "Error";
+                    ErrorNumber = i;
+                    break;
+                }
+            }
+            
+        }else{
+            if(line != ""){
+                try{
+                    var hd = line.split(";");
+                    var course = hd[0].trim();
+                    var subCourse = hd[1].trim();
+                    var topic = hd[2].trim();
+                    type = hd[3].trim()
+                    console.log(`c ${course}, sc ${subCourse}, t ${topic}, type ${type}`)
+                    if(course != "" && subCourse != "" && topic != "" && type != ""){
+                        try{
+                            var extra = hd[4].trim();
+                            if(extra != ""){
+                                heading = "Excess"
+                                break;
+                            }else{
+                                heading = "YES"
+                                i = i + 1;
+                            }
+                        }catch{
+                            heading = "YES"
+                            i = i + 1;
+                        }  
+                    }else{
+                        heading = "Error";
+                        break;
+                        
+                    }
+                }catch(e){
+                    heading = "Error";
+                    break;
+                }
+            }
+        }
+    }
+
+    if(heading === "YES" && check === "OK"){
+        fn("OK")
+    }else if(heading === "Error"){
+        fn("No/Wrong Header line");
+    }else if(heading === "Excess"){
+        fn("Too Many Parameters! Please Correct Header Line");
+    }else if(heading === "NO"){
+        fn("No Header line");
+    }else if(check === "Error"){
+        fn(`Error on Question number ${ErrorNumber}`);
+    }
+}
+
+async function getcrs(file, fn){
+    var i = 0;
+    const rl = readline.createInterface({
+        input: fs.createReadStream(path.join(__dirname,`../../uploads/${file.originalname}`))
+    });
+    for await (const line of rl) {
+        if (i >= 1 && line != ""){
+            
+        }else if(i == 0){
+            try{
+                var hd = line.split(";");
+                course = hd[0].trim();
+                console.log(`crs ${course}`);
+                fn(course);
+                break;
+                
+            }catch(e){
+                
+            }
+        }else{
+
+        }
+    }
+}
+
+async function saveQue(crs,file, owner, session, fn){
+    var type;
+    var course;
+    var subCourse;
+    var topic;
+    var i = 0;
+    var dz;
+    var xz = 0;
+    var ez;
+    await helper.nextID(crs.toLowerCase(), async function(e){
+        //console.log(`e ${e}`);
+        dz = e
+        //console.log(`dz ${dz}`);
+        const rl = readline.createInterface({
+            input: fs.createReadStream(path.join(__dirname,`../../uploads/${file.originalname}`))
+        });
+        for await (const line of rl) {
+            if (i >= 1 && line != ""){
+                if(type.toUpperCase() === "MCQ"){
+                    await parseMCQ(dz, line, course, subCourse, topic, owner, session);
+                    i = i + 1;
+                    dz = dz + 1;
+                }else if(type.toUpperCase() === "SCQ"){
+                    await parseSCQ(dz, line, course, subCourse, topic, owner, session);
+                    i = i + 1;
+                    dz = dz + 1;
+                    //await saveSCQQuetoDB(course, subCourse, topic, question, opt1, opt2, opt3, opt4, opt5, ans, owner );
+                }
+            }else if(i == 0){
+                try{
+                    var hd = line.split(";");
+                    course = hd[0].trim();
+                    subCourse = hd[1].trim();
+                    topic = hd[2].trim();
+                    type = hd[3].trim()
+                    i = i + 1
+                }catch(e){
+                    
+                }
+            }else{
+    
+            }
+        }
+        
+    })
+    fn("Past Question Saved Successfully");
+}
+
+async function parseMCQ(e, line, course, subCourse, topic, owner, session){
+    var que = line.split(";");
+    var question = que[0].trim();
+    var opt1 = que[1].trim();
+    var opt2 = que[2].trim();
+    var opt3 = que[3].trim();
+    var opt4 = que[4].trim();
+    var opt5 = que[5].trim();
+    var ans1 = que[6].trim();
+    var ans2 = que[7].trim();
+    var ans3 = que[8].trim();
+    var ans4 = que[9].trim();
+    var ans5 = que[10].trim();
+
+    await saveMCQQuetoDB(e, course.toLowerCase(), subCourse, topic, "MCQ", question, opt1, opt2, opt3, opt4, opt5, ans1, ans2, ans3, ans4, ans5, owner, session, function(res){
+        //console.log(`e ${res}`);
+        if(e === 'Error'){
+            //break;
+            fn("Failed to save Questions")
+        }
+        helper.updnum(course, 1);
+    });
+}
+
+async function parseSCQ(e, line, course, subCourse, topic, owner, session){
+    var que = line.split(";");
+    var question = que[0].trim();
+    var opt1 = que[1].trim();
+    var opt2 = que[2].trim();
+    var opt3 = que[3].trim();
+    var opt4 = que[4].trim();
+    var opt5 = que[5].trim();
+    var ans = que[6].trim();
+
+    await saveSCQQuetoDB(e, course.toLowerCase(), subCourse, topic, question, opt1, opt2, opt3, opt4, opt5, ans, owner, session, function(res){
+        console.log(`e ${res}`);
+        if(e === 'Error'){
+            //break;
+            fn("Failed to save Questions")
+        }
+        helper.updnum(course, 1);
+    });
+}
+
+async function saveSCQQuetoDB(e, course, subCourse, topic, question, opt1, opt2, opt3, opt4, opt5, ans, owner, session, fn ){
+    MongoClient.connect(dbURIAuth, function(err, db) {
+        var dbo = db.db(dbname); // use dbname from Zconfig file
+        const collection = dbo.collection(course);
+        var cx;
+        if(session === 'Admin' || session === 'SuperAdmin'){
+            //cx = e;
+            collection.insertOne({
+                _id: e,
+                course: course,
+                subCourse: subCourse,
+                topic: topic,
+                question: question,
+                option1: opt1,
+                option2: opt2,
+                option3: opt3,
+                option4: opt4,
+                option5: opt5,
+                answer: ans,
+                picture: "No Picture",
+                contributor: owner,
+                approved: "true",
+                category: 'General',
+                difficulty: 0,
+                approvedBy: owner,
+                version: 1,
+                isDuplicate: 'No'
+            },function(err, result){
+                if (err){
+                    db.close();
+                    fn('Error');
+                }
+                if(result.result.n = 1){
+                    dbo.collection('users').updateOne({username:(owner).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                        helper.level(owner);
+                        db.close(); //close database connection
+                        fn("OK");
+                    })
+                }
+
+            })
+        }else{ // if not admin
+            collection.insertOne({
+                _id: e,
+                course: course,
+                subCourse: subCourse,
+                topic: topic,
+                question: question,
+                option1: opt1,
+                option2: opt2,
+                option3: opt3,
+                option4: opt4,
+                option5: opt5,
+                answer: ans,
+                picture: "No Picture",
+                contributor: owner,
+                approved: "false",
+                category: 'General',
+                difficulty: 0,
+                approvedBy: "None",
+                version: 1,
+                isDuplicate: 'No'
+            },function(err, result){
+                if (err){
+                    db.close();
+                    fn("Error")
+                }
+                if(result.result.n = 1){
+                    dbo.collection('users').updateOne({username:(owner).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                        helper.level(owner);
+                        db.close(); //close database connection
+                        fn("OK")
+                    })
+                }
+
+            })
+        }
+    });
+    
+}
+
+async function saveMCQQuetoDB(e, course, subCourse, topic, qt, question, opt1, opt2, opt3, opt4, opt5, ans1, ans2, ans3, ans4, ans5, owner, session, fn){
+    MongoClient.connect(dbURIAuth, function(err, db) {
+        var dbo = db.db(dbname); // use dbname from Zconfig file
+        const collection = dbo.collection(course);
+        var cx;
+        if(session === 'Admin' || session === 'SuperAdmin'){
+            //cx = e;
+            collection.insertOne({
+                _id: e,
+                course: course,
+                subCourse: subCourse,
+                topic: topic,
+                questionType: qt,
+                question: question,
+                option1: opt1,
+                option2: opt2,
+                option3: opt3,
+                option4: opt4,
+                option5: opt5,
+                answer1: ans1,
+                answer2: ans2,
+                answer3: ans3,
+                answer4: ans4,
+                answer5: ans5,
+                picture: "No Picture",
+                category: 'General',
+                difficulty: 0,
+                contributor: owner,
+                approved: 'true',
+                approvedBy: owner,
+                version: 1,
+                isDuplicate: 'No'
+            },function(err, result){
+                if (err){
+                    db.close();
+                    console.log(err);
+                    fn('Error');
+                }
+                if(result.result.n = 1){
+                    dbo.collection('users').updateOne({username:(owner).toUpperCase()} ,{$inc: {noOfQ:1, qApproved:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                        helper.level(owner);
+                        db.close(); //close database connection
+                        fn("OK");
+                    })
+                }
+
+            })
+        }else{ // if not admin
+            //cx = e;
+            collection.insertOne({
+                _id: e,
+                course: course,
+                subCourse: subCourse,
+                topic: topic,
+                questionType: qt,
+                question: question,
+                option1: opt1,
+                option2: opt2,
+                option3: opt3,
+                option4: opt4,
+                option5: opt5,
+                answer1: ans1,
+                answer2: ans2,
+                answer3: ans3,
+                answer4: ans4,
+                answer5: ans5,
+                picture: "No Picture",
+                category: 'General',
+                difficulty: 0,
+                contributor: owner,
+                approved: 'false',
+                approvedBy: 'None',
+                version: 1,
+                isDuplicate: 'No'
+            },function(err, result){
+                if (err){
+                    db.close();
+                    fn('Error');
+                }
+                if(result.result.n = 1){
+                    dbo.collection('users').updateOne({username:(owner).toUpperCase()} ,{$inc: {noOfQ:1}}, function(err, result){ //make an array of all data in cpcactivities 
+                    
+                        db.close(); //close database connection
+                        fn("OK");
+                    })
+                }
+
+            })
+        }
+    });
+}

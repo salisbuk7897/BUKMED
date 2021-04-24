@@ -76,7 +76,7 @@ module.exports.getPQ = function(req, res){
         MongoClient.connect(dbURIAuth, function(err, db) {
             var dbo = db.db(dbname); // use dbname from Zconfig file
              
-            if(req.body.type === 'mcq'){
+            if(req.body.type.toUpperCase() === 'MCQ'){
                 dbo.collection('pqobjactivities').find({name: req.body.name}).toArray(function(err, result){
                     if(req.body.version < result[0]['version']){
                         db.close();
@@ -86,7 +86,7 @@ module.exports.getPQ = function(req, res){
                         res.send("No New Version Available");
                     }
                 });
-            }else if(req.body.type === 'scq'){
+            }else if(req.body.type.toUpperCase() === 'SCQ'){
                 dbo.collection('pqscqactivities').find({name: req.body.name}).toArray(function(err, result){
                     if(req.body.version < result[0]['version']){
                         db.close();
@@ -97,7 +97,7 @@ module.exports.getPQ = function(req, res){
                     }
                 });
 
-            }else if(req.body.type === 'essay'){
+            }else if(req.body.type.toUpperCase() === 'ESSAY'){
                 dbo.collection('pqessactivities').find({name: req.body.name}).toArray(function(err, result){
                     if(req.body.version < result[0]['version']){
                         db.close();

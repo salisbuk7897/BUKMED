@@ -1,5 +1,5 @@
-Pharmacology MCQ oyo; 2020; MCQ
-
+phm; Pharmacology; Antiadrenergic; MCQ
 The main mechanism of most drugs absorption in GI tract is:;Active transport (carrier-mediated diffusion); Filtration (aqueous diffusion); Endocytosis and exocytosis; Passive diffusion (lipid diffusion); Pinocytosis; T; F; T; F; T
-
+Bioavailability depends on:; Rheological parameters of blood; Amount of a substance obtained orally and quantity of intakes; Extent of absorption and hepatic first-pass effect; Glomerular filtration rate; Tubular secretion rate; F; T; F; T; F
+The main mechanism of most drugs absorption in GI tract is:;Active transport (carrier-mediated diffusion); Filtration (aqueous diffusion); Endocytosis and exocytosis; Passive diffusion (lipid diffusion); Pinocytosis; T; F; T; F; T
 Bioavailability depends on:; Rheological parameters of blood; Amount of a substance obtained orally and quantity of intakes; Extent of absorption and hepatic first-pass effect; Glomerular filtration rate; Tubular secretion rate; F; T; F; T; F

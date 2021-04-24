@@ -39,7 +39,7 @@ router.get('/getpqs', ctrlStatic.getPQUpdates);
 
 router.post('/jwtgetpqs', jwt.authenticateToken, ctrlStatic.getPQUpdates)
 
-router.post('/app_dashboard', jwt.authenticateToken, jwt.getDash)
+router.post('/app_dashboard', jwt.authenticateToken, jwt.getDash)   
 
 router.post('/app_register', regController.Appregister);
 

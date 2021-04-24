@@ -1,4 +1,4 @@
-Pharmacology SCQ oxo; 2020; SCQ
+phm; Pharmacology; Antiadrenergic; SCQ
 
 The main mechanism of most drugs absorption in GI tract is:;Active transport (carrier-mediated diffusion); Filtration (aqueous diffusion); Endocytosis and exocytosis; Passive diffusion (lipid diffusion); Pinocytosis; D
 

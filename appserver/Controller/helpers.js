@@ -38,21 +38,58 @@ module.exports.level = function(name){
     });
 }
 
+async function getnum(sq, fn){
+    MongoClient.connect(dbURIAuth, function(err, db) {
+        var dbo = db.db(dbname); // use dbname from Zconfig file 
+        var sd = dbo.collection('counters').updateOne({_id: sq},{$inc:{sequence_value:1}});
+        var b ;
+        dbo.collection('counters').find({_id: sq}).toArray(function(err, result){
+            console.log(result);
+            b = parseInt(result[0].sequence_value);
+            if(b == 0){
+                b = b + 1;
+            }
+            //console.log(`sd:  ${b}`);
+            db.close();
+            fn(b);
+        });
+         
+    });
+}
+
+module.exports.getIDNum = async function(sq, fn){
+    MongoClient.connect(dbURIAuth, function(err, db) {
+        var dbo = db.db(dbname); // use dbname from Zconfig file 
+        var b ;
+        dbo.collection('counters').find({_id: sq}).toArray(function(err, result){
+            console.log(result);
+            b = parseInt(result[0].sequence_value);
+            //console.log(`sd:  ${b}`);
+            db.close();
+            fn(b);
+        });
+         
+    });
+}
+
+module.exports.updnum = async function(sq, num){
+    MongoClient.connect(dbURIAuth, function(err, db) {
+        var dbo = db.db(dbname); // use dbname from Zconfig file 
+        var sd = dbo.collection('counters').updateOne({_id: sq},{$inc:{sequence_value:num}});
+        var b ;
+        dbo.collection('counters').find({_id: sq}).toArray(function(err, result){
+            console.log(` upd ${result}`);
+            //fn(b);
+        });
+         
+    });
+}
+
 module.exports.nextID = async function(sq, fn){
     if (dbauth === 'true'){
-        MongoClient.connect(dbURIAuth, function(err, db) {
-            var dbo = db.db(dbname); // use dbname from Zconfig file 
-            var sd = dbo.collection('counters').updateOne({_id: sq},{$inc:{sequence_value:1}});
-            var b ;
-            dbo.collection('counters').find({_id: sq}).toArray(function(err, result){
-                console.log(result);
-                b = parseInt(result[0].sequence_value);
-                //console.log(`sd:  ${b}`);
-                db.close();
-                fn(b);
-            });
-             
-        });
+        await getnum(sq, function(e){
+            fn(e);
+        })
     }else{
         MongoClient.connect(dbURI, function(err, db) {
             var dbo = db.db(dbname); // use dbname from Zconfig file 

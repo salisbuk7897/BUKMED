@@ -1,0 +1,6 @@
+pth; Chemical Pathology; Liver Disease; MCQ
+Markers for biliary cirrhosis include; ALT; 5’ glucosidase; Gamma glutamyl Transferase; ALT; ALP; F; T; T; F; T
+About Aminotransferase; ALT is cytosolic; ALT increases 75 times in liver injury; The ratio of AST to ALT is greater than 1 in Cirrhosis; in Acetaminophen induced hepatitis, Amino Transferase increase by 85 times; ALT increases by 7 times the upper limit in liver injury; T; F; T; T; T
+About Alkaline Phosphatase; Mostly found in cytosol; mainly used investigation of hepatic and bone disease; has a half life of 7 days; is synthesize by liver in response to biliary tree obstruction; increase in ALP indicate liver cirrhosis; F; T; T; T; F
+On Liver Function Test; 5’ nucleotidase increases 3 - 5 folds in hepatobiliary; GGT has the highest concentration in renal tissue; majority of GGT in serum comes from renal tissue; GGT is a sensitive indicator of hepatobiliary disease; None of the Above; T; T; T; F; F
+On Liver synthetic function; inflammatory conditions increases the synthesis of Albumin; Prothrombin Time is a better indicator of liver synthetic function than Albumin; Albumin has a half life of 3 weeks; Albumin is exclusively synthesized by the liver; hypoalbuminemia is always due to hepatobiliary disease condition; F; T; T; T; F
