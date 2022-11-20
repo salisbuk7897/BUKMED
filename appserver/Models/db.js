@@ -26,7 +26,9 @@ var allCourses = [
     ["pth", "Pathology", "Not Selected", "MCQ"],
     ["phm", "Pharmacology", "Not Selected", "SCQ"],
     ["mdc", "Medicine", "Not Selected", "SCQ"],
-    ["sgy", "Surgery", "Not Selected", "MCQ"]]
+    ["sgy", "Surgery", "Not Selected", "MCQ"],
+    ["obg", "Obstetrics & Gynecology", "Not Selected", "MCQ"],
+    ["pea", "Paediatrics", "Not Selected", "MCQ"]]
 
 if (dbauth === 'true'){
     //mongoose.connect(`mongodb://${dbuser}:${dbpwd}@${mongourl}:${mongoport}/${dbname}`,{auth:{authdb:"admin"}, useNewUrlParser: true, useUnifiedTopology: true });

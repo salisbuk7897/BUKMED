@@ -1,0 +1,9 @@
+# Node Modules
+node_modules
+
+# config file
+qconfig.json
+.qconfig.json
+./qconfig.json
+
+
